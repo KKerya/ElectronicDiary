@@ -1,12 +1,21 @@
-package com.kirillkabylov.NauJava.model;
+package com.kirillkabylov.NauJava.domain;
 
 public abstract class User {
-    private long id;
+    private Long id;
     private String login;
     private String fullName;
     private String password;
 
-    public long getId(){
+    public User(){}
+
+    public User(long id, String login, String fullName, String password) {
+        this.id = id;
+        this.login = login;
+        this.fullName = fullName;
+        this.password = password;
+    }
+
+    public Long getId(){
         return id;
     }
 
