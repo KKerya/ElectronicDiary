@@ -1,13 +1,10 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
-
-import java.time.LocalDateTime;
 
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
@@ -59,24 +56,24 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateSubject(Long id, String  newSubjectName){
+    public void updateSubject(Long id, String newSubjectName) {
         Teacher teacher = teacherRepository.read(id);
         teacher.getSubject().setName(newSubjectName);
         teacherRepository.update(teacher);
     }
 
     @Override
-    public void addGrade(Student student, Subject subject, int value, Teacher teacher){
+    public void addGrade(Student student, Subject subject, int value, Teacher teacher) {
         gradeService.addGrade(student, subject, value, teacher);
     }
 
     @Override
-    public void deleteGrade(Student student, Subject subject, int value, Teacher teacher){
+    public void deleteGrade(Student student, Subject subject, int value, Teacher teacher) {
         gradeService.deleteGrade(student, subject, value, teacher);
     }
 
     @Override
-    public void deleteGrade(Grade grade){
+    public void deleteGrade(Grade grade) {
         gradeService.deleteGrade(grade);
     }
 

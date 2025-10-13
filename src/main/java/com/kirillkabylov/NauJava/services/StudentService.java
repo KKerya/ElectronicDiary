@@ -1,10 +1,8 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
 
-public interface StudentSerivce {
+public interface StudentService {
     void createStudent(Long id, String login, String fullName, String password, String groupName);
 
     Student findById(Long id);

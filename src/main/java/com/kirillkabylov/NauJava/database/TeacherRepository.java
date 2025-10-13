@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TeacherRepository extends MemoryRepository<Teacher> {
     @Autowired
-    public TeacherRepository(List<Teacher> teacherContainer){
+    public TeacherRepository(List<Teacher> teacherContainer) {
         super(teacherContainer);
     }
 }

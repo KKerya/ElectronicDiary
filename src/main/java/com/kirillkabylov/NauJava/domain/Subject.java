@@ -4,12 +4,12 @@ public class Subject {
     private Long id;
     private String name;
 
-    public Subject(Long id, String name){
+    public Subject(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
@@ -17,11 +17,11 @@ public class Subject {
         this.id = id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 }

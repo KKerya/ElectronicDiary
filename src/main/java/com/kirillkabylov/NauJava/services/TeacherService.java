@@ -5,8 +5,7 @@ import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 
-public interface TeacherService
-{
+public interface TeacherService {
     void createTeacher(Long id, String login, String fullName, String password, Subject subject);
 
     Teacher findById(Long id);

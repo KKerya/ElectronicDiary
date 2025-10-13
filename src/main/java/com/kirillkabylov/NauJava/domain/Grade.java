@@ -12,7 +12,8 @@ public class Grade {
     private Teacher teacher;
     private LocalDateTime date;
 
-    public Grade() {}
+    public Grade() {
+    }
 
     public Grade(Student student, Subject subject, Teacher teacher, int value, LocalDateTime date) {
         this.value = value;

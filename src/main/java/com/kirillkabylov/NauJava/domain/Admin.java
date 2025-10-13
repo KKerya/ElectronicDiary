@@ -1,4 +1,4 @@
 package com.kirillkabylov.NauJava.domain;
 
-public class Admin extends User{
+public class Admin extends User {
 }

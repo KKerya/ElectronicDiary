@@ -6,7 +6,8 @@ public abstract class User {
     private String fullName;
     private String password;
 
-    public User(){}
+    public User() {
+    }
 
     public User(long id, String login, String fullName, String password) {
         this.id = id;
@@ -15,35 +16,35 @@ public abstract class User {
         this.password = password;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getLogin(){
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(String login){
+    public void setLogin(String login) {
         this.login = login;
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName){
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 

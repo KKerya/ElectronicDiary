@@ -16,12 +16,12 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void addGrade(Student student, Subject subject, int value, Teacher teacher){
+    public void addGrade(Student student, Subject subject, int value, Teacher teacher) {
         gradeRepository.create(new Grade(student, subject, teacher, value, LocalDateTime.now()));
     }
 
     @Override
-    public void deleteGrade(Student student, Subject subject, int value, Teacher teacher){
+    public void deleteGrade(Student student, Subject subject, int value, Teacher teacher) {
         Grade grade = gradeRepository.findAll().stream()
                 .filter(g -> g.getStudent().equals(student) &&
                         g.getSubject().equals(subject) &&
@@ -29,13 +29,13 @@ public class GradeServiceImpl implements GradeService {
                         g.getTeacher().equals(teacher))
                 .findFirst()
                 .orElse(null);
-        if (grade != null){
+        if (grade != null) {
             gradeRepository.delete(grade.getId());
         }
     }
 
     @Override
-    public void deleteGrade(Grade grade){
+    public void deleteGrade(Grade grade) {
         gradeRepository.delete(grade.getId());
     }
 

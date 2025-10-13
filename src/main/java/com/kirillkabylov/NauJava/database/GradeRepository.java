@@ -1,15 +1,14 @@
 package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
-import com.kirillkabylov.NauJava.exception.DublicateUserNameException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GradeRepository implements CrudRepository<Grade, Long>{
+public class GradeRepository implements CrudRepository<Grade, Long> {
     private final List<Grade> gradeContainer = new ArrayList<>();
 
-    public void create(Grade entity){
+    public void create(Grade entity) {
         gradeContainer.add(entity);
     }
 

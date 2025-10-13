@@ -1,18 +1,18 @@
 package com.kirillkabylov.NauJava.database;
 
-import java.util.List;
-import java.util.ArrayList;
 import com.kirillkabylov.NauJava.domain.User;
+
+import java.util.List;
 
 public abstract class MemoryRepository<T extends User> implements CrudRepository<T, Long> {
     private List<T> storage;
 
-    public MemoryRepository(List<T> storage){
+    public MemoryRepository(List<T> storage) {
         this.storage = storage;
     }
 
     @Override
-    public void create(T entity){
+    public void create(T entity) {
         storage.add(entity);
     }
 

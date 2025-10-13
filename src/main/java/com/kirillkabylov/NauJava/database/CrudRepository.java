@@ -1,8 +1,6 @@
 package com.kirillkabylov.NauJava.database;
 
-import com.kirillkabylov.NauJava.exception.DublicateUserNameException;
-
-public interface CrudRepository<T, ID>{
+public interface CrudRepository<T, ID> {
     void create(T entity);
 
     T read(ID id);
