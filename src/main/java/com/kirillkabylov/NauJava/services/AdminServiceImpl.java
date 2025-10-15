@@ -18,18 +18,18 @@ public class AdminServiceImpl implements AdminService {
     private final LessonRepository lessonRepository;
 
     @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository, LessonRepository lessonRepository){
+    public AdminServiceImpl(AdminRepository adminRepository, LessonRepository lessonRepository) {
         this.adminRepository = adminRepository;
         this.lessonRepository = lessonRepository;
     }
 
     @Override
-    public void createAdmin(long id, String login, String fullName, String password){
-        adminRepository.create( new Admin(id, login, fullName, password));
+    public void createAdmin(long id, String login, String fullName, String password) {
+        adminRepository.create(new Admin(id, login, fullName, password));
     }
 
     @Override
-    public void addLesson(long id, String groupName, String subject, String teacher, LocalDateTime startTime, String room){
+    public void addLesson(long id, String groupName, String subject, String teacher, LocalDateTime startTime, String room) {
         lessonRepository.create(new Lesson(id, groupName, subject, teacher, startTime, room));
     }
 }

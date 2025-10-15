@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class LessonRepository implements CrudRepository<Lesson, Long> {
     private final List<Lesson> lessonContainer;
 
-    public LessonRepository(List<Lesson> lessonContainer){
+    public LessonRepository(List<Lesson> lessonContainer) {
         this.lessonContainer = lessonContainer;
     }
 

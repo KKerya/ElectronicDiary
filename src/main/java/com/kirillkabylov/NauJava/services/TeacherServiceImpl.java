@@ -69,7 +69,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addGrade(Long id,Long studentId, String subject, int value, Long teacherId) {
+    public void addGrade(Long id, Long studentId, String subject, int value, Long teacherId) {
         gradeService.addGrade(id, studentId, subject, value, teacherId);
     }
 
@@ -99,8 +99,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void printAllTeachers(){
-        for (Teacher teacher : teacherRepository.findAll()){
+    public void printAllTeachers() {
+        for (Teacher teacher : teacherRepository.findAll()) {
             System.out.println(teacher);
         }
     }

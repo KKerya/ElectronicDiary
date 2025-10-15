@@ -3,10 +3,11 @@ package com.kirillkabylov.NauJava.services;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
+
 import java.time.LocalDateTime;
 
 public interface GradeService {
-    void addGrade(Long id,Long studentId, String subject, int value, Long teacherId);
+    void addGrade(Long id, Long studentId, String subject, int value, Long teacherId);
 
     void addGrade(Long id, int value, Student student, String subject, Teacher teacher);
 

@@ -34,7 +34,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void addGrade(Long id, Long studentId, String subject, int value, Long teacherId) {
-        Grade grade = new Grade(id, value, studentRepository.read(studentId), subject, teacherRepository.read(teacherId),  LocalDateTime.now());
+        Grade grade = new Grade(id, value, studentRepository.read(studentId), subject, teacherRepository.read(teacherId), LocalDateTime.now());
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
         }
