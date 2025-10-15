@@ -23,8 +23,8 @@ public class CommandConfig {
         {
             try (Scanner scanner = new Scanner(System.in)) {
                 List<String> commands = List.of(
-                        "student create [id] [логин] [полное имя] [пароль] [класс]",
-                        "teacher create [id] [логин] [полное имя] [пароль] [предмет]",
+                        "student create [id] [логин] [имя] [фамилие] [пароль] [класс]",
+                        "teacher create [id] [логин] [имя] [фамилие] [пароль] [предмет]",
                         "admin create [id] [логин] [полное имя] [пароль]",
                         "teacher/student delete [id пользователя]",
                         "teacher/student find [id пользователя]",
