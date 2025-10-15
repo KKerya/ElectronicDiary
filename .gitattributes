@@ -1,2 +1,6 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+* text=auto
+*.java text charset=utf-8
+*.properties text charset=utf-8
