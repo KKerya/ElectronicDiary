@@ -21,7 +21,7 @@ public class Teacher extends User {
 
     @Override
     public String toString() {
-        return getFullName() + " ??????????????: " + subject;
+        return getFullName() + " Предмет: " + subject;
     }
 
 }
