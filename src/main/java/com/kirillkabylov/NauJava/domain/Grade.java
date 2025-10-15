@@ -1,13 +1,14 @@
 package com.kirillkabylov.NauJava.domain;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Grade {
     private Long id;
     private Integer value;
 
     private Student student;
-    private Subject subject;
+    private String subject;
 
     private Teacher teacher;
     private LocalDateTime date;
@@ -15,12 +16,19 @@ public class Grade {
     public Grade() {
     }
 
-    public Grade(Student student, Subject subject, Teacher teacher, int value, LocalDateTime date) {
+    public Grade(Long id, int value, Student student, String subject, Teacher teacher, LocalDateTime date) {
+        this.id = id;
         this.value = value;
         this.student = student;
         this.subject = subject;
         this.teacher = teacher;
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        return subject + ": " + value + "\n" + "???????????????????? ????????????????????????????: " + teacher + " ??????????: " + date + "(" + date.format(formatter) + ")";
     }
 
     public Long getId() {
@@ -47,11 +55,11 @@ public class Grade {
         this.student = student;
     }
 
-    public Subject getSubject() {
+    public String getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
 

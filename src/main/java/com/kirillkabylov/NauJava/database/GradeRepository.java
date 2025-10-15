@@ -1,12 +1,18 @@
 package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
-
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import java.util.List;
 
+@Component
 public class GradeRepository implements CrudRepository<Grade, Long> {
-    private final List<Grade> gradeContainer = new ArrayList<>();
+    private final List<Grade> gradeContainer;
+
+    @Autowired
+    public GradeRepository(List<Grade> gradeContainer) {
+        this.gradeContainer = gradeContainer;
+    }
 
     public void create(Grade entity) {
         gradeContainer.add(entity);

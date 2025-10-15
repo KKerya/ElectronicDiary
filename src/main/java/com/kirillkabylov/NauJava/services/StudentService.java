@@ -16,4 +16,12 @@ public interface StudentService {
     void updateFullName(Long id, String newName);
 
     void updateGroupName(Long id, String newGroupName);
+
+    void printAllStudents();
+
+    void printGrades(Long studentId, String subject);
+
+    void printAllGrades(Long studentId);
+
+    void checkSchedule(Long studentId);
 }

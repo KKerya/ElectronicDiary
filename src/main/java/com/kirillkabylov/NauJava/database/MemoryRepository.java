@@ -5,7 +5,7 @@ import com.kirillkabylov.NauJava.domain.User;
 import java.util.List;
 
 public abstract class MemoryRepository<T extends User> implements CrudRepository<T, Long> {
-    private List<T> storage;
+    private final List<T> storage;
 
     public MemoryRepository(List<T> storage) {
         this.storage = storage;

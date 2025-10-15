@@ -1,22 +1,27 @@
 package com.kirillkabylov.NauJava.domain;
 
 public class Teacher extends User {
-    private Subject subject;
+    private String subject;
 
     public Teacher() {
     }
 
-    public Teacher(long id, String login, String fullName, String password, Subject subject) {
+    public Teacher(long id, String login, String fullName, String password, String subject) {
         super(id, login, fullName, password);
         this.subject = subject;
     }
 
-    public Subject getSubject() {
+    public String getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    @Override
+    public String toString(){
+        return getFullName() + " ??????????????: " + subject;
     }
 
 }
