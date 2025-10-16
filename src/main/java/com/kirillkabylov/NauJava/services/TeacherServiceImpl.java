@@ -1,17 +1,16 @@
 package com.kirillkabylov.NauJava.services;
 
+import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
-@Scope(value = BeanDefinition.SCOPE_SINGLETON)
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final GradeService gradeService;
@@ -29,7 +28,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher findById(Long id) {
-        return teacherRepository.read(id);
+        Optional<Teacher> teacher = teacherRepository.read(id);
+        if (teacher.isPresent()) {
+            return teacher.get();
+        }
+        throw new UserNotFoundException(id);
     }
 
     @Override
@@ -38,31 +41,24 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateLogin(Long id, String newLogin) {
-        Teacher teacher = teacherRepository.read(id);
-        teacher.setLogin(newLogin);
-        teacherRepository.update(teacher);
-    }
+    public void updateTeacher(Long id, String field, String newValue) {
+        Optional<Teacher> teacher = teacherRepository.read(id);
+        if (teacher.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
 
-    @Override
-    public void updateFullName(Long id, String newFullName) {
-        Teacher teacher = teacherRepository.read(id);
-        teacher.setFullName(newFullName);
-        teacherRepository.update(teacher);
-    }
+        switch (field) {
+            case "login" -> teacher.get().setLogin(newValue);
+            case "password" -> teacher.get().setPassword(newValue);
+            case "fullName" -> teacher.get().setFullName(newValue);
+            case "Subject" -> teacher.get().setSubject(newValue);
+            default -> {
+                System.out.println("Неизвестное поле: " + field);
+                return;
+            }
+        }
 
-    @Override
-    public void updatePassword(Long id, String newPassword) {
-        Teacher teacher = teacherRepository.read(id);
-        teacher.setPassword(newPassword);
-        teacherRepository.update(teacher);
-    }
-
-    @Override
-    public void updateSubject(Long id, String newSubjectName) {
-        Teacher teacher = teacherRepository.read(id);
-        teacher.setSubject(newSubjectName);
-        teacherRepository.update(teacher);
+        teacherRepository.update(teacher.get());
     }
 
     @Override

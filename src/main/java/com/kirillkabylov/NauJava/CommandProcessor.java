@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Component
@@ -49,24 +50,16 @@ public class CommandProcessor {
                 System.out.println("Студент успешно удален...");
             }
             case "find" -> {
-                Student student = studentService.findById(Long.valueOf(cmd[2]));
-                System.out.println(student);
+                Optional<Student> student = studentService.findById(Long.valueOf(cmd[2]));
+                if (student.isPresent()) {
+                    System.out.println(student.get());
+                } else {
+                    System.out.println("Пользователь не найден");
+                }
             }
-            case "updateLogin" -> {
-                studentService.updateLogin(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Логин успешно обновлен...");
-            }
-            case "updateFullName" -> {
-                studentService.updateFullName(Long.valueOf(cmd[2]), cmd[3] + cmd[4]);
-                System.out.println("Имя и фамилие успешно обновлено...");
-            }
-            case "updateGroupName" -> {
-                studentService.updateGroupName(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Класс успешно обновлен...");
-            }
-            case "updatePassword" -> {
-                studentService.updatePassword(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Пароль успешно обновлен...");
+            case "update" -> {
+                studentService.updateStudent(Long.valueOf(cmd[2]), cmd[3], cmd[4]);
+                System.out.println(cmd[4] + " успешно обновлен...");
             }
             case "printAll" -> {
                 studentService.printAllStudents();
@@ -103,17 +96,9 @@ public class CommandProcessor {
                 Teacher teacher = teacherService.findById(Long.valueOf(cmd[2]));
                 System.out.println(teacher);
             }
-            case "updateLogin" -> {
-                teacherService.updateLogin(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Логин успешно обновлен...");
-            }
-            case "updateFullName" -> {
-                teacherService.updateFullName(Long.valueOf(cmd[2]), cmd[3] + cmd[4]);
-                System.out.println("Имя и фамилие успешно обновлено...");
-            }
-            case "updateSubject" -> {
-                teacherService.updateSubject(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Предмет успешно обновлен...");
+            case "update" -> {
+                teacherService.updateTeacher(Long.valueOf(cmd[1]), cmd[2], cmd[3]);
+                System.out.println(cmd[4] + " успешно обновлен...");
             }
             case "addGrade" -> {
                 teacherService.addGrade(Long.valueOf(cmd[2]), Long.valueOf(cmd[3]), cmd[4], Integer.parseInt(cmd[5]), Long.valueOf(cmd[6]));
@@ -122,10 +107,6 @@ public class CommandProcessor {
             case "deleteGrade" -> {
                 teacherService.deleteGrade(Long.valueOf(cmd[2]), cmd[3], Integer.parseInt(cmd[4]), LocalDateTime.parse(cmd[5]));
                 System.out.println("Оценка успешно удалена...");
-            }
-            case "updatePassword" -> {
-                teacherService.updatePassword(Long.valueOf(cmd[2]), cmd[3]);
-                System.out.println("Пароль успешно обновлен...");
             }
             case "printAll" -> {
                 teacherService.printAllTeachers();

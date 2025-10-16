@@ -5,14 +5,11 @@ import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.domain.Admin;
 import com.kirillkabylov.NauJava.domain.Lesson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-@Scope(value = BeanDefinition.SCOPE_SINGLETON)
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final LessonRepository lessonRepository;

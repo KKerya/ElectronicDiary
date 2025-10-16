@@ -14,9 +14,5 @@ public class GradeNotNullRule implements GradeRule {
         if (grade.getTeacher() == null) {
             throw new IllegalArgumentException("Значение учителя не может быть null");
         }
-        //Не знаю как лучше
-//        if (grade.getStudent() == null || grade.getSubject() == null || grade.getTeacher() == null) {
-//            throw new IllegalArgumentException("Значение студента/предмета/учителя не может быть null");
-//        }
     }
 }

@@ -1,17 +1,16 @@
 package com.kirillkabylov.NauJava.services;
 
+import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.domain.Lesson;
 import com.kirillkabylov.NauJava.domain.Student;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Scope(value = BeanDefinition.SCOPE_SINGLETON)
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -31,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findById(Long id) {
+    public Optional<Student> findById(Long id) {
         return studentRepository.read(id);
     }
 
@@ -41,31 +40,24 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateLogin(Long id, String newLogin) {
-        Student student = studentRepository.read(id);
-        student.setLogin(newLogin);
-        studentRepository.update(student);
-    }
+    public void updateStudent(Long id, String field, String newValue) {
+        Optional<Student> student = studentRepository.read(id);
+        if (student.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
 
-    @Override
-    public void updateFullName(Long id, String fullName) {
-        Student student = studentRepository.read(id);
-        student.setFullName(fullName);
-        studentRepository.update(student);
-    }
+        switch (field) {
+            case "login" -> student.get().setLogin(newValue);
+            case "password" -> student.get().setPassword(newValue);
+            case "fullName" -> student.get().setFullName(newValue);
+            case "groupName" -> student.get().setGroupName(newValue);
+            default -> {
+                System.out.println("Неизвестное поле: " + field);
+                return;
+            }
+        }
 
-    @Override
-    public void updatePassword(Long id, String newPassword) {
-        Student student = studentRepository.read(id);
-        student.setPassword(newPassword);
-        studentRepository.update(student);
-    }
-
-    @Override
-    public void updateGroupName(Long id, String newGroupName) {
-        Student student = studentRepository.read(id);
-        student.setGroupName(newGroupName);
-        studentRepository.update(student);
+        studentRepository.update(student.get());
     }
 
     @Override
@@ -87,12 +79,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void checkSchedule(Long studentId) {
-        Student student = studentRepository.read(studentId);
-        if (student == null) {
-            System.out.println("Студент не найден");
+        Optional<Student> student = studentRepository.read(studentId);
+        if (student.isEmpty()) {
+            throw new UserNotFoundException(studentId);
         }
 
-        String groupName = student.getGroupName();
+        String groupName = student.get().getGroupName();
         List<Lesson> lessons = lessonRepository.findByGroupName(groupName);
 
         if (lessons.isEmpty()) {

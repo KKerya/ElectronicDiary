@@ -13,13 +13,7 @@ public interface TeacherService {
 
     void deleteById(Long id);
 
-    void updateLogin(Long id, String newLogin);
-
-    void updatePassword(Long id, String newPassword);
-
-    void updateFullName(Long id, String newName);
-
-    void updateSubject(Long id, String newSubjectName);
+    void updateTeacher(Long id, String field, String newValue);
 
     void addGrade(Long id, Long studentId, String subject, int value, Long teacherId);
 

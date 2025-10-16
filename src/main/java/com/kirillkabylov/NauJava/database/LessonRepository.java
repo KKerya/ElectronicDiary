@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.domain.Lesson;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -14,31 +15,32 @@ public class LessonRepository implements CrudRepository<Lesson, Long> {
         this.lessonContainer = lessonContainer;
     }
 
-    public void create(Lesson entity) {
+    public Lesson create(Lesson entity) {
         lessonContainer.add(entity);
+        return entity;
     }
 
     @Override
-    public Lesson read(Long id) {
+    public Optional<Lesson> read(Long id) {
         return lessonContainer.stream()
                 .filter(x -> x.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
-    public void update(Lesson entity) {
+    public Lesson update(Lesson entity) {
         for (int i = 0; i < lessonContainer.size(); i++) {
             if (lessonContainer.get(i).getId().equals(entity.getId())) {
                 lessonContainer.set(i, entity);
-                return;
+                return entity;
             }
         }
+        return null;
     }
 
     @Override
-    public void delete(Long id) {
-        lessonContainer.removeIf(x -> x.getId().equals(id));
+    public boolean delete(Long id) {
+        return lessonContainer.removeIf(x -> x.getId().equals(id));
     }
 
     public List<Lesson> findAll() {

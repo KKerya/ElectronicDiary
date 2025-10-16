@@ -1,5 +1,6 @@
 package com.kirillkabylov.NauJava.services;
 
+import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
 import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
@@ -8,16 +9,14 @@ import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.rules.GradeRule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
-@Scope(value = BeanDefinition.SCOPE_SINGLETON)
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final List<GradeRule> gradeRules;
@@ -34,7 +33,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void addGrade(Long id, Long studentId, String subject, int value, Long teacherId) {
-        Grade grade = new Grade(id, value, studentRepository.read(studentId), subject, teacherRepository.read(teacherId), LocalDateTime.now());
+        Grade grade = new Grade(id, value, studentRepository.read(studentId).get(), subject, teacherRepository.read(teacherId).get(), LocalDateTime.now());
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
         }
@@ -52,30 +51,22 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void deleteGrade(Long studentId, String subject, int value, LocalDateTime dateTime) {
-        Grade grade = gradeRepository.findAll().stream()
+        gradeRepository.findAll().stream()
                 .filter(g -> g.getStudent().getId().equals(studentId) &&
                         g.getSubject().equals(subject) &&
                         g.getValue() == value &&
                         g.getDate().equals(dateTime))
-                .findFirst()
-                .orElse(null);
-        if (grade != null) {
-            gradeRepository.delete(grade.getId());
-        }
+                .findFirst().ifPresent(grade -> gradeRepository.delete(grade.getId()));
     }
 
     @Override
     public void deleteGrade(Student student, String subject, int value, LocalDateTime dateTime) {
-        Grade grade = gradeRepository.findAll().stream()
+        gradeRepository.findAll().stream()
                 .filter(g -> g.getStudent().equals(student) &&
                         g.getSubject().equals(subject) &&
                         g.getValue() == value &&
                         g.getDate().equals(dateTime))
-                .findFirst()
-                .orElse(null);
-        if (grade != null) {
-            gradeRepository.delete(grade.getId());
-        }
+                .findFirst().ifPresent(grade -> gradeRepository.delete(grade.getId()));
     }
 
     @Override
@@ -121,17 +112,22 @@ public class GradeServiceImpl implements GradeService {
             }
             grade.setValue(newValue);
             gradeRepository.update(grade);
+        } else {
+            throw new GradeNotFoundException();
         }
     }
 
     @Override
     public void changeGrade(Long gradeId, int newValue) {
-        Grade grade = gradeRepository.read(gradeId);
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade);
+        Optional<Grade> grade = gradeRepository.read(gradeId);
+        if (grade.isEmpty()) {
+            throw new GradeNotFoundException();
         }
-        grade.setValue(newValue);
-        gradeRepository.update(grade);
+        for (GradeRule rule : gradeRules) {
+            rule.validate(grade.orElse(null));
+        }
+        grade.get().setValue(newValue);
+        gradeRepository.update(grade.orElse(null));
     }
 
     @Override

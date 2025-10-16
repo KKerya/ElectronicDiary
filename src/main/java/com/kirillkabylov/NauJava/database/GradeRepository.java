@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class GradeRepository implements CrudRepository<Grade, Long> {
@@ -15,31 +16,32 @@ public class GradeRepository implements CrudRepository<Grade, Long> {
         this.gradeContainer = gradeContainer;
     }
 
-    public void create(Grade entity) {
+    public Grade create(Grade entity) {
         gradeContainer.add(entity);
+        return entity;
     }
 
     @Override
-    public Grade read(Long id) {
+    public Optional<Grade> read(Long id) {
         return gradeContainer.stream()
                 .filter(x -> x.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
-    public void update(Grade entity) {
+    public Grade update(Grade entity) {
         for (int i = 0; i < gradeContainer.size(); i++) {
             if (gradeContainer.get(i).getId().equals(entity.getId())) {
                 gradeContainer.set(i, entity);
-                return;
+                return entity;
             }
         }
+        return null;
     }
 
     @Override
-    public void delete(Long id) {
-        gradeContainer.removeIf(x -> x.getId().equals(id));
+    public boolean delete(Long id) {
+        return gradeContainer.removeIf(x -> x.getId().equals(id));
     }
 
     public List<Grade> findAll() {
