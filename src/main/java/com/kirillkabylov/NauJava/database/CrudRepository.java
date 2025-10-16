@@ -1,11 +1,13 @@
 package com.kirillkabylov.NauJava.database;
 
+import java.util.Optional;
+
 public interface CrudRepository<T, ID> {
-    void create(T entity);
+    T create(T entity);
 
-    T read(ID id);
+    Optional<T> read(ID id);
 
-    void update(T entity);
+    T update(T entity);
 
-    void delete(ID id);
+    boolean delete(ID id);
 }
