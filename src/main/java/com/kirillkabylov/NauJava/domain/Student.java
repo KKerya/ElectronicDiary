@@ -1,14 +1,20 @@
 package com.kirillkabylov.NauJava.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "tbl_students")
 public class Student extends User {
+    @Column
     private String groupName;
 
     public Student() {
     }
 
-    public Student(long id, String login, String fullName, String password, String groupName) {
-        super(id, login, fullName, password);
+    public Student(String login, String fullName, String password, String groupName) {
+        super(login, fullName, password);
         this.groupName = groupName;
     }
 

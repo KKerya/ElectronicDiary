@@ -1,23 +1,38 @@
 package com.kirillkabylov.NauJava.domain;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "tbl_grades")
 public class Grade {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private Integer value;
 
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
+
+    @Column
     private String subject;
 
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
+
+    @Column
     private LocalDateTime date;
 
     public Grade() {
     }
 
-    public Grade(Long id, int value, Student student, String subject, Teacher teacher, LocalDateTime date) {
-        this.id = id;
+    public Grade(int value, Student student, String subject, Teacher teacher, LocalDateTime date) {
         this.value = value;
         this.student = student;
         this.subject = subject;
@@ -33,10 +48,6 @@ public class Grade {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getValue() {

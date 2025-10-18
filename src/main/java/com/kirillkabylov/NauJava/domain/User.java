@@ -1,16 +1,27 @@
 package com.kirillkabylov.NauJava.domain;
 
+import jakarta.persistence.*;
+
+@MappedSuperclass
 public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
+
+    @Column
     private String login;
+
+    @Column
     private String fullName;
+
+    @Column
     private String password;
 
     public User() {
     }
 
-    public User(long id, String login, String fullName, String password) {
-        this.id = id;
+    public User(String login, String fullName, String password) {
         this.login = login;
         this.fullName = fullName;
         this.password = password;
@@ -18,10 +29,6 @@ public abstract class User {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getLogin() {

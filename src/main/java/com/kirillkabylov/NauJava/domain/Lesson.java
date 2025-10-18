@@ -1,20 +1,35 @@
 package com.kirillkabylov.NauJava.domain;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "tbl_lessons")
 public class Lesson {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String groupName;
+
+    @Column
     private String subject;
-    private String teacher;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private Teacher teacher;
+
+    @Column
     private LocalDateTime startTime;
+
     @Value("${lesson.max-duration:45}")
-    private int durationMinutes;
+    private int durationMinutes = 45;
+
     private String room;
 
-    public Lesson(Long id, String groupName, String subject, String teacher, LocalDateTime startTime, String room){
-        this.id = id;
+    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room){
         this.groupName = groupName;
         this.subject = subject;
         this.teacher = teacher;
@@ -34,7 +49,7 @@ public class Lesson {
         return subject;
     }
 
-    public String getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
@@ -50,10 +65,6 @@ public class Lesson {
         return room;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
@@ -62,7 +73,7 @@ public class Lesson {
         this.subject = subject;
     }
 
-    public void setTeacher(String teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 
