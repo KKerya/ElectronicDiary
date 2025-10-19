@@ -26,4 +26,5 @@ public interface TeacherRepository extends CrudRepository<Teacher, Long> {
      * @param fullName имя учителя
      */
     List<Teacher> findByFullName(String fullName);
+
 }

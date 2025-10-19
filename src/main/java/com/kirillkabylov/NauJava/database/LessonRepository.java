@@ -12,5 +12,5 @@ public interface LessonRepository extends CrudRepository<Lesson, Long> {
      * @param fullName имя учителя
      */
     @Query("SELECT lesson FROM Lesson lesson WHERE lesson.teacher.fullName = :fullName")
-    List<Lesson> findCoursesByTeacherName(@Param("fullName") String fullName);
+    List<Lesson> findLessonByTeacherName(@Param("fullName") String fullName);
 }
