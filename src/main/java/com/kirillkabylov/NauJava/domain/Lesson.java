@@ -1,4 +1,5 @@
 package com.kirillkabylov.NauJava.domain;
+
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -29,7 +30,23 @@ public class Lesson {
 
     private String room;
 
-    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room){
+    public Lesson() {
+    }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "id=" + id +
+                ", groupName='" + groupName + '\'' +
+                ", subject='" + subject + '\'' +
+                ", teacher=" + teacher +
+                ", startTime=" + startTime +
+                ", durationMinutes=" + durationMinutes +
+                ", room='" + room + '\'' +
+                '}';
+    }
+
+    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
         this.groupName = groupName;
         this.subject = subject;
         this.teacher = teacher;

@@ -28,6 +28,11 @@ public class Student extends User {
 
     @Override
     public String toString() {
-        return getFullName() + " " + groupName;
+        return "Teacher{" +
+                "id=" + getId() +
+                ", login='" + getLogin() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", groupName='" + getGroupName() + '\'' +
+                '}';
     }
 }

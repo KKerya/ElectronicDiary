@@ -42,8 +42,14 @@ public class Grade {
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        return subject + ": " + value + "\n" + "Преподаватель: " + teacher + " Время: " + date + "(" + date.format(formatter) + ")";
+        return "Grade{" +
+                "id=" + id +
+                ", value=" + value +
+                ", student=" + student +
+                ", subject='" + subject + '\'' +
+                ", teacher=" + teacher +
+                ", date=" + date +
+                '}';
     }
 
     public Long getId() {
