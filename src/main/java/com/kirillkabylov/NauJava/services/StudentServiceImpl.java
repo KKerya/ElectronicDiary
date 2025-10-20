@@ -9,7 +9,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.Optional;
@@ -31,16 +30,17 @@ public class StudentServiceImpl implements StudentService {
     /**
      * Удаляет студента и все его оценки
      * Transaction операция
+     *
      * @param student студент
      */
     @Override
-    public void deleteStudent(Student student){
+    public void deleteStudent(Student student) {
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             gradeService.deleteAllGrades(student);
             studentRepository.delete(student);
-        }
-        catch (DataAccessException ex){
+            transactionManager.commit(status);
+        } catch (DataAccessException ex) {
             transactionManager.rollback(status);
             throw ex;
         }
@@ -48,9 +48,10 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * Создать нового студента
-     * @param login логин
-     * @param fullName полное имя (ФИО)
-     * @param password пароль
+     *
+     * @param login     логин
+     * @param fullName  полное имя (ФИО)
+     * @param password  пароль
      * @param groupName номер класса
      */
     @Override
@@ -61,6 +62,7 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * Находит студента по id
+     *
      * @param id id
      */
     @Override
@@ -70,8 +72,9 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * Обновляет поле студента
-     * @param id id Студента
-     * @param field поле для обновление
+     *
+     * @param id       id Студента
+     * @param field    поле для обновление
      * @param newValue новое значение поля
      */
     @Override
