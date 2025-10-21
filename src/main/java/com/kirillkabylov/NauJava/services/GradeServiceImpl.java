@@ -1,6 +1,7 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
+import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
@@ -8,7 +9,6 @@ import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.rules.GradeRule;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Реализация сервиса для управления оценками.
+ * Сервис предоставляет операции для создания, удаления, нахождения и смены оценки
+ * взаимодействуя с {@link GradeRepository} для выполнения операций с базой данных.
+ */
 @Service
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
@@ -28,77 +33,49 @@ public class GradeServiceImpl implements GradeService {
         this.gradeRules = gradeRules;
     }
 
-    /**
-     * Создает оценку
-     * @param student студент
-     * @param value оценка
-     * @param subject предмет
-     * @param teacher учитель
-     */
+
     @Override
-    public void addGrade(Student student, int value, String subject, Teacher teacher) {
-        Grade grade = new Grade(value, student, subject, teacher, LocalDateTime.now());
+    public void addGrade(Student student, int value, String subject, Teacher teacher, LocalDateTime dateTime) {
+        Grade grade = new Grade(value, student, subject, teacher, dateTime);
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
         }
         gradeRepository.save(grade);
     }
 
-    /**
-     * Находит оценку студента
-     * @param student студент
-     * @param subject предмет
-     * @param value значение оценки
-     * @param dateTime время
-     * @return grade
-     */
-    public Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime){
-        Optional<Grade> grade =  gradeRepository.findByStudentAndSubjectAndValueAndDate(student, subject, value, dateTime);
-        if (grade.isEmpty()){
+    @Override
+    public Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime) {
+        Optional<Grade> grade = gradeRepository.findByStudentAndSubjectAndValueAndDate(student, subject, value, dateTime);
+        if (grade.isEmpty()) {
             throw new GradeNotFoundException();
         }
         return grade.get();
     }
 
-    /**
-     * Удаляет оценку студента
-     * @param student студент
-     * @param subject предмет
-     * @param value значение оценки
-     * @param dateTime время
-     */
     @Override
-    public void deleteGrade(Student student, String subject, int value, LocalDateTime dateTime) {
+    public Grade findById(long id){
+        return gradeRepository.findById(id).orElseThrow( () -> new UserNotFoundException(id));
+    }
+
+    @Override
+    public void deleteGradeFromStudent(Student student, String subject, int value, LocalDateTime dateTime) {
         gradeRepository.delete(findGrade(student, subject, value, dateTime));
     }
 
-    /**
-     * Удаляет все оценки студента
-     * @param student студент
-     */
     @Override
-    public void deleteAllGrades(Student student){
+    public void deleteAllGradesFromStudent(Student student) {
         gradeRepository.deleteAllByStudent(student);
     }
 
-    /**
-     * Удаляет оценку студента
-     * @param grade ссылка на оценку
-     */
     @Override
-    public void deleteGrade(Grade grade) {
+    public void deleteGradeFromStudent(Grade grade) {
         gradeRepository.delete(grade);
     }
 
-    /**
-     * Меняет оценку
-     * @param grade оценка
-     * @param newValue новое значение оценки
-     */
     @Override
-    public void changeGrade(Grade grade, int newValue) {
+    public void changeGradeValue(Grade grade, int newValue) {
         Optional<Grade> newGrade = gradeRepository.findById(grade.getId());
-        if (newGrade.isEmpty()){
+        if (newGrade.isEmpty()) {
             throw new GradeNotFoundException();
         }
         newGrade.get().setValue(newValue);

@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface TeacherRepositoryCustom {
     /**
-     * Находит всех учителей с заданным предметом
-     * @param field поле по которому делаем поиск
-     * @param value значение которое должно быть у поля
+     * Выполняет поиск всех преподавателей по значению указанного поля.
+     * Использует Criteria API
+     * @param field поле поиска
+     * @param value значение поля
      */
     List<Teacher> findByField(String field, String value);
 }

@@ -109,7 +109,6 @@ class StudentServiceImplTest {
     private final StudentRepository studentRepository;
     private final GradeRepository gradeRepository;
     private final StudentService studentService;
-    private final EntityManager entityManager;
 
     @Autowired
     public StudentServiceImplTest(TeacherRepository teacherRepository,
@@ -121,7 +120,6 @@ class StudentServiceImplTest {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentService = studentService;
-        this.entityManager = entityManager;
     }
 
     /**

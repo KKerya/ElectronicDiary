@@ -20,12 +20,6 @@ public class TeacherRepositoryImpl implements TeacherRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-    /**
-     * Выполняет поиск всех преподавателей по значению указанного поля.
-     * Использует Criteria API
-     * @param field поле поиска
-     * @param value значение поля
-     */
     @Override
     public List<Teacher> findByField(String field, String value) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();

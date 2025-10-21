@@ -1,6 +1,7 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
+import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.domain.Student;
@@ -11,33 +12,38 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для управления cтудентами.
+ * Сервис предоставляет операции для создания, удаления, обновления и нахождения студента
+ * взаимодействуя с {@link StudentRepository} для выполнения операций с базой данных.
+ */
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final GradeService gradeService;
     private final PlatformTransactionManager transactionManager;
-
+    private final Map<String, UserUpdateCommand<Student>> commands;
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, GradeService gradeService, LessonRepository lessonRepository, PlatformTransactionManager transactionManager) {
+    public StudentServiceImpl(StudentRepository studentRepository,
+                              GradeService gradeService,
+                              LessonRepository lessonRepository,
+                              PlatformTransactionManager transactionManager,
+                              Map<String, UserUpdateCommand<Student>> commands) {
         this.studentRepository = studentRepository;
         this.gradeService = gradeService;
         this.transactionManager = transactionManager;
+        this.commands = commands;
     }
 
-    /**
-     * Удаляет студента и все его оценки
-     * Transaction операция
-     *
-     * @param student студент
-     */
     @Override
     public void deleteStudent(Student student) {
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
-            gradeService.deleteAllGrades(student);
+            gradeService.deleteAllGradesFromStudent(student);
             studentRepository.delete(student);
             transactionManager.commit(status);
         } catch (DataAccessException ex) {
@@ -46,54 +52,25 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    /**
-     * Создать нового студента
-     *
-     * @param login     логин
-     * @param fullName  полное имя (ФИО)
-     * @param password  пароль
-     * @param groupName номер класса
-     */
     @Override
     public void createStudent(String login, String fullName, String password, String groupName) {
         Student newStudent = new Student(login, fullName, password, groupName);
         studentRepository.save(newStudent);
     }
 
-    /**
-     * Находит студента по id
-     *
-     * @param id id
-     */
     @Override
     public Optional<Student> findById(Long id) {
         return studentRepository.findById(id);
     }
 
-    /**
-     * Обновляет поле студента
-     *
-     * @param id       id Студента
-     * @param field    поле для обновление
-     * @param newValue новое значение поля
-     */
     @Override
     public void updateStudent(Long id, String field, String newValue) {
-        Optional<Student> student = studentRepository.findById(id);
-        if (student.isEmpty()) {
-            throw new UserNotFoundException(id);
+        Student student = studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        UserUpdateCommand<Student> command = commands.get(field);
+        if (command == null) {
+            throw new IllegalArgumentException("Неизвестное поле: " + field);
         }
-
-        switch (field) {
-            case "login" -> student.get().setLogin(newValue);
-            case "password" -> student.get().setPassword(newValue);
-            case "fullName" -> student.get().setFullName(newValue);
-            case "groupName" -> student.get().setGroupName(newValue);
-            default -> {
-                throw new IllegalArgumentException("Неизвестное поле: " + field);
-            }
-        }
-
-        studentRepository.save(student.get());
+        command.execute(student, newValue);
+        studentRepository.save(student);
     }
 }

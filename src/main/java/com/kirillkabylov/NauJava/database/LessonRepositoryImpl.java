@@ -16,11 +16,6 @@ public class LessonRepositoryImpl implements LessonRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-    /**
-     * Находит все занятия данного учителя
-     * Использует Criteria API
-     * @param fullName имя учителя
-     */
     @Override
     public List<Lesson> findLessonByTeacherName(String fullName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -7,13 +7,56 @@ import com.kirillkabylov.NauJava.domain.Teacher;
 import java.time.LocalDateTime;
 
 public interface GradeService {
-    void addGrade(Student student, int value, String subject, Teacher teacher);
+    /**
+     * Создает оценку
+     * @param student студент
+     * @param value оценка
+     * @param subject предмет
+     * @param teacher учитель
+     */
+    void addGrade(Student student, int value, String subject, Teacher teacher, LocalDateTime dateTime);
 
-    void deleteGrade(Student student, String subject, int value, LocalDateTime dateTime);
+    /**
+     * Находит оценку студента
+     * @param student студент
+     * @param subject предмет
+     * @param value значение оценки
+     * @param dateTime время
+     * @return grade
+     */
+    Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime);
 
-    void deleteAllGrades(Student student);
+    /**
+     * Находит оценку студента по id
+     * @param id id
+     */
+    Grade findById(long id);
 
-    void deleteGrade(Grade grade);
+    /**
+     * Удаляет оценку студента
+     * @param student студент
+     * @param subject предмет
+     * @param value значение оценки
+     * @param dateTime время
+     */
+    void deleteGradeFromStudent(Student student, String subject, int value, LocalDateTime dateTime);
 
-    void changeGrade(Grade grade, int newValue);
+    /**
+     * Удаляет все оценки студента
+     * @param student студент
+     */
+    void deleteAllGradesFromStudent(Student student);
+
+    /**
+     * Удаляет оценку студента
+     * @param grade ссылка на оценку
+     */
+    void deleteGradeFromStudent(Grade grade);
+
+    /**
+     * Меняет оценку
+     * @param grade    оценка
+     * @param newValue новое значение оценки
+     */
+    void changeGradeValue(Grade grade, int newValue);
 }
