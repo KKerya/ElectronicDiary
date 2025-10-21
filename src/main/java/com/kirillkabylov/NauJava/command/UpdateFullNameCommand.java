@@ -8,7 +8,7 @@ import com.kirillkabylov.NauJava.domain.User;
  */
 public class UpdateFullNameCommand<T extends User> implements UserUpdateCommand<T> {
     @Override
-    public void execute(T user, String newValue) {
-        user.setFullName(newValue);
+    public void execute(T user, Object newValue) {
+        user.setFullName((String) newValue);
     }
 }

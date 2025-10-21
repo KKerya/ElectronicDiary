@@ -57,7 +57,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateTeacher(Long id, String field, String newValue) {
+    public void updateTeacher (Long id, String field, Object newValue) {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         UserUpdateCommand<Teacher> command = commands.get(field);
         if (command == null) {

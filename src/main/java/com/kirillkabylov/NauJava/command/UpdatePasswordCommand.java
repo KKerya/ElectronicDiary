@@ -8,7 +8,7 @@ import com.kirillkabylov.NauJava.domain.User;
  */
 public class UpdatePasswordCommand<T extends User> implements UserUpdateCommand<T> {
     @Override
-    public void execute(T user, String newValue) {
-        user.setPassword(newValue);
+    public void execute(T user, Object newValue) {
+        user.setPassword((String) newValue);
     }
 }

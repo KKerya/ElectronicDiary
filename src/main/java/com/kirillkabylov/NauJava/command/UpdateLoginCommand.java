@@ -8,7 +8,7 @@ import com.kirillkabylov.NauJava.domain.User;
  */
 public class UpdateLoginCommand<T extends User> implements UserUpdateCommand<T> {
     @Override
-    public void execute(T user, String newValue) {
-        user.setLogin(newValue);
+    public void execute(T user, Object newValue) {
+        user.setLogin((String) newValue);
     }
 }

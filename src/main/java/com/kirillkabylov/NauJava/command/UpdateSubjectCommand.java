@@ -7,7 +7,7 @@ import com.kirillkabylov.NauJava.domain.Teacher;
  */
 public class UpdateSubjectCommand implements UserUpdateCommand<Teacher> {
     @Override
-    public void execute(Teacher user, String newValue) {
-        user.setSubject(newValue);
+    public void execute(Teacher user, Object newValue) {
+        user.setSubject((String)newValue);
     }
 }

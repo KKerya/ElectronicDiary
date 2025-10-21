@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
+import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -53,8 +54,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void createStudent(String login, String fullName, String password, String groupName) {
-        Student newStudent = new Student(login, fullName, password, groupName);
+    public void createStudent(String login, String fullName, String password, Group group) {
+        Student newStudent = new Student(login, fullName, password, group);
         studentRepository.save(newStudent);
     }
 
@@ -64,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudent(Long id, String field, String newValue) {
+    public void updateStudent(Long id, String field, Object newValue) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         UserUpdateCommand<Student> command = commands.get(field);
         if (command == null) {

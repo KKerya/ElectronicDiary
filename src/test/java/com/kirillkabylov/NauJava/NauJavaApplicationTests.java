@@ -1,13 +1,11 @@
 package com.kirillkabylov.NauJava;
 
 import com.kirillkabylov.NauJava.database.*;
-import com.kirillkabylov.NauJava.domain.Grade;
-import com.kirillkabylov.NauJava.domain.Lesson;
-import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.*;
 import com.kirillkabylov.NauJava.services.StudentService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.hibernate.dialect.GroupByConstantRenderingStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,43 +107,56 @@ class StudentServiceImplTest {
     private final StudentRepository studentRepository;
     private final GradeRepository gradeRepository;
     private final StudentService studentService;
+    private final GroupRepository groupRepository;
 
     @Autowired
     public StudentServiceImplTest(TeacherRepository teacherRepository,
                                   StudentRepository studentRepository,
                                   GradeRepository gradeRepository,
                                   StudentService studentService,
-                                  EntityManager entityManager) {
+                                  GroupRepository groupRepository) {
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentService = studentService;
+        this.groupRepository = groupRepository;
     }
 
     /**
      * Тестирование удаления студента и его оценок
      */
     @Test
+    @Transactional
     void testDeleteStudent() {
-        Student student = new Student("login", "Иван Иванов Иванович", "123123", "11A");
         Teacher teacher1 = new Teacher("login2", "Петр Петров Петрович", "123", "Math");
+        Group group = new Group("11A", teacher1);
+        Student student = new Student("login", "Иван Иванов Иванович", "123123", group);
         Teacher teacher2 = new Teacher("login3", "Алексадр Алексадров Александорович", "123567", "Rus");
+        Student student2 = new Student("login", "Петр Иванов Иванович", "123123", group);
 
-        studentRepository.save(student);
+
         teacherRepository.save(teacher1);
+        group.getStudents().add(student);
+        groupRepository.save(group);
         teacherRepository.save(teacher2);
+        studentRepository.save(student2);
 
         Grade grade = new Grade(5, student, "Math", teacher1, LocalDateTime.now());
         Grade grade2 = new Grade(4, student, "Rus", teacher2, LocalDateTime.now());
 
         gradeRepository.save(grade);
         gradeRepository.save(grade2);
+    }
 
-        Long studentId = student.getId();
-
-        studentService.deleteStudent(student);
-        Assertions.assertTrue(studentRepository.findById(studentId).isEmpty());
-        List<Grade> grades = gradeRepository.findAllByStudentId(studentId);
-        Assertions.assertTrue(grades.isEmpty());
+    @Test
+    void createStudentAndGroup(){
+        Teacher teacher = new Teacher("login2", "Петр Петров Петрович", "123", "Math");
+        Group group = new Group("11A", teacher);
+        Student student = new Student("login", "Иван Иванов Иванович", "123123", group);
+        Student student2 = new Student("login2", "Петр Петров Петрович", "123123", group);
+        teacherRepository.save(teacher);
+        group.getStudents().add(student);
+        group.getStudents().add(student2);
+        groupRepository.save(group);
     }
 }

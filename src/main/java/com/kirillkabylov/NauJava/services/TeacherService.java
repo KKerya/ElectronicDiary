@@ -40,7 +40,7 @@ public interface TeacherService {
      * @param field поле которое обновляем
      * @param newValue новое значение поля
      */
-    void updateTeacher(Long id, String field, String newValue);
+    void updateTeacher(Long id, String field, Object newValue);
 
     /**
      * Добавляет оценку
