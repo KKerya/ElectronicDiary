@@ -25,7 +25,7 @@ public class Lesson {
     @Column
     private LocalDateTime startTime;
 
-    @Value("${lesson.max-duration:45}")
+//    @Value("${lesson.max-duration:45}")
     private int durationMinutes = 45;
 
     private String room;

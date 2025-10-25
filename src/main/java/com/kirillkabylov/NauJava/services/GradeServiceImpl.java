@@ -44,8 +44,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime) {
-        Optional<Grade> grade = gradeRepository.findByStudentAndSubjectAndValueAndDate(student, subject, value, dateTime);
+    public Grade findGrade(long studentId, String subject, int value, LocalDateTime dateTime) {
+        Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectAndValueAndDate(studentId, subject, value, dateTime);
         if (grade.isEmpty()) {
             throw new GradeNotFoundException();
         }
@@ -58,8 +58,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void deleteGradeFromStudent(Student student, String subject, int value, LocalDateTime dateTime) {
-        gradeRepository.delete(findGrade(student, subject, value, dateTime));
+    public void deleteGradeFromStudent(long studentId, String subject, int value, LocalDateTime dateTime) {
+        gradeRepository.delete(findGrade(studentId, subject, value, dateTime));
     }
 
     @Override

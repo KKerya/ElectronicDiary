@@ -2,8 +2,11 @@ package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Teacher;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
 import java.util.List;
 
+@RepositoryRestResource
 public interface TeacherRepository extends CrudRepository<Teacher, Long> {
     /**
      * Находит всех учителей с заданным именем и предметом
