@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +35,4 @@ public class GradeController {
     {
        return gradeRepository.findByStudentIdAndSubjectAndValueAndDate(studentId, subject, value, date).orElseThrow(GradeNotFoundException::new);
     }
-
 }

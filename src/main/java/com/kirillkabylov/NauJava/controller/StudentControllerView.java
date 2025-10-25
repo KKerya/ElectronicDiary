@@ -3,9 +3,7 @@ package com.kirillkabylov.NauJava.controller;
 import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
-import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -27,7 +25,7 @@ public class StudentControllerView {
     private GroupRepository groupRepository;
 
     @GetMapping("/list")
-    public String studentListView(Model model){
+    public String studentListView(Model model) {
         Iterable<Student> students = studentRepository.findAll();
         if (!students.iterator().hasNext()) {
             throw new ResourceNotFoundException("No students found");

@@ -9,20 +9,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class ExceptionControllerAdvice
-{
+public class ExceptionControllerAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError exception(Exception e)
-    {
+    public ApiError exception(Exception e) {
         return ApiError.create(e);
     }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError exception(ResourceNotFoundException e)
-    {
+    public ApiError exception(ResourceNotFoundException e) {
         return ApiError.create(e);
     }
 }
