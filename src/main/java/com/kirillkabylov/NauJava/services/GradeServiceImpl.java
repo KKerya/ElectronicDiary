@@ -1,6 +1,7 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
+import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
@@ -16,141 +17,68 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Реализация сервиса для управления оценками.
+ * Сервис предоставляет операции для создания, удаления, нахождения и смены оценки
+ * взаимодействуя с {@link GradeRepository} для выполнения операций с базой данных.
+ */
 @Service
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final List<GradeRule> gradeRules;
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
 
     @Autowired
     public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.gradeRepository = gradeRepository;
         this.gradeRules = gradeRules;
-        this.studentRepository = studentRepository;
-        this.teacherRepository = teacherRepository;
     }
 
+
     @Override
-    public void addGrade(Long id, Long studentId, String subject, int value, Long teacherId) {
-        Grade grade = new Grade(id, value, studentRepository.read(studentId).get(), subject, teacherRepository.read(teacherId).get(), LocalDateTime.now());
+    public void addGrade(Student student, int value, String subject, Teacher teacher, LocalDateTime dateTime) {
+        Grade grade = new Grade(value, student, subject, teacher, dateTime);
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
         }
-        gradeRepository.create(grade);
+        gradeRepository.save(grade);
     }
 
     @Override
-    public void addGrade(Long id, int value, Student student, String subject, Teacher teacher) {
-        Grade grade = new Grade(id, value, student, subject, teacher, LocalDateTime.now());
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade);
-        }
-        gradeRepository.create(grade);
-    }
-
-    @Override
-    public void deleteGrade(Long studentId, String subject, int value, LocalDateTime dateTime) {
-        gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().getId().equals(studentId) &&
-                        g.getSubject().equals(subject) &&
-                        g.getValue() == value &&
-                        g.getDate().equals(dateTime))
-                .findFirst().ifPresent(grade -> gradeRepository.delete(grade.getId()));
-    }
-
-    @Override
-    public void deleteGrade(Student student, String subject, int value, LocalDateTime dateTime) {
-        gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().equals(student) &&
-                        g.getSubject().equals(subject) &&
-                        g.getValue() == value &&
-                        g.getDate().equals(dateTime))
-                .findFirst().ifPresent(grade -> gradeRepository.delete(grade.getId()));
-    }
-
-    @Override
-    public void deleteGrade(Long gradeId) {
-        gradeRepository.delete(gradeId);
-    }
-
-    @Override
-    public void deleteGrade(Grade grade) {
-        gradeRepository.delete(grade.getId());
-    }
-
-    @Override
-    public void changeGrade(Long studentId, String subject, int value, LocalDateTime dateTime, int newValue) {
-        Grade grade = gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().getId().equals(studentId) &&
-                        g.getSubject().equals(subject) &&
-                        g.getValue() == value &&
-                        g.getDate().equals(dateTime))
-                .findFirst()
-                .orElse(null);
-        if (grade != null) {
-            for (GradeRule rule : gradeRules) {
-                rule.validate(grade);
-            }
-            grade.setValue(newValue);
-            gradeRepository.update(grade);
-        }
-    }
-
-    @Override
-    public void changeGrade(Student student, String subject, int value, LocalDateTime dateTime, int newValue) {
-        Grade grade = gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().equals(student) &&
-                        g.getSubject().equals(subject) &&
-                        g.getValue() == value &&
-                        g.getDate().equals(dateTime))
-                .findFirst()
-                .orElse(null);
-        if (grade != null) {
-            for (GradeRule rule : gradeRules) {
-                rule.validate(grade);
-            }
-            grade.setValue(newValue);
-            gradeRepository.update(grade);
-        } else {
-            throw new GradeNotFoundException();
-        }
-    }
-
-    @Override
-    public void changeGrade(Long gradeId, int newValue) {
-        Optional<Grade> grade = gradeRepository.read(gradeId);
+    public Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime) {
+        Optional<Grade> grade = gradeRepository.findByStudentAndSubjectAndValueAndDate(student, subject, value, dateTime);
         if (grade.isEmpty()) {
             throw new GradeNotFoundException();
         }
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade.orElse(null));
+        return grade.get();
+    }
+
+    @Override
+    public Grade findById(long id){
+        return gradeRepository.findById(id).orElseThrow( () -> new UserNotFoundException(id));
+    }
+
+    @Override
+    public void deleteGradeFromStudent(Student student, String subject, int value, LocalDateTime dateTime) {
+        gradeRepository.delete(findGrade(student, subject, value, dateTime));
+    }
+
+    @Override
+    public void deleteAllGradesFromStudent(Student student) {
+        gradeRepository.deleteAllByStudent(student);
+    }
+
+    @Override
+    public void deleteGradeFromStudent(Grade grade) {
+        gradeRepository.delete(grade);
+    }
+
+    @Override
+    public void changeGradeValue(Grade grade, int newValue) {
+        Optional<Grade> newGrade = gradeRepository.findById(grade.getId());
+        if (newGrade.isEmpty()) {
+            throw new GradeNotFoundException();
         }
-        grade.get().setValue(newValue);
-        gradeRepository.update(grade.orElse(null));
-    }
-
-    @Override
-    public void changeGrade(Grade grade, int newValue) {
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade);
-        }
-        grade.setValue(newValue);
-        gradeRepository.update(grade);
-    }
-
-    @Override
-    public void printGradesByStudent(Long studentId, String subject) {
-        gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().getId().equals(studentId) &&
-                        g.getSubject().equals(subject))
-                .forEach(System.out::println);
-    }
-
-    @Override
-    public void printAllGradesByStudent(Long studentId) {
-        gradeRepository.findAll().stream()
-                .filter(g -> g.getStudent().getId().equals(studentId))
-                .forEach(System.out::println);
+        newGrade.get().setValue(newValue);
+        gradeRepository.save(newGrade.get());
     }
 }

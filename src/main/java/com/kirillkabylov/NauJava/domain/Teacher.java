@@ -1,13 +1,18 @@
 package com.kirillkabylov.NauJava.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tbl_teachers")
 public class Teacher extends User {
+    @Column
     private String subject;
 
     public Teacher() {
     }
 
-    public Teacher(long id, String login, String fullName, String password, String subject) {
-        super(id, login, fullName, password);
+    public Teacher(String login, String fullName, String password, String subject) {
+        super(login, fullName, password);
         this.subject = subject;
     }
 
@@ -21,7 +26,11 @@ public class Teacher extends User {
 
     @Override
     public String toString() {
-        return getFullName() + " Предмет: " + subject;
+        return "Teacher{" +
+                "id=" + getId() +
+                ", login='" + getLogin() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", subject='" + getSubject() + '\'' +
+                '}';
     }
-
 }

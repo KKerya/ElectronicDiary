@@ -1,100 +1,84 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
+import com.kirillkabylov.NauJava.command.UserUpdateCommand;
+import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
+import com.kirillkabylov.NauJava.domain.Lesson;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Map;
 
+/**
+ * Реализация сервиса для управления учителями.
+ * Сервис предоставляет операции для создания, удаления, обновления и нахождения учителя, добавление оценки и создание занятия
+ * взаимодействуя с {@link LessonRepository} для выполнения операций с базой данных.
+ */
 @Service
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
+    private final LessonRepository lessonRepository;
     private final GradeService gradeService;
+    private final Map<String, UserUpdateCommand<Teacher>> commands;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, GradeService gradeService) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository,
+                              LessonRepository lessonRepository,
+                              GradeService gradeService,
+                              Map<String, UserUpdateCommand<Teacher>> commands) {
         this.teacherRepository = teacherRepository;
+        this.lessonRepository = lessonRepository;
         this.gradeService = gradeService;
+        this.commands = commands;
     }
 
     @Override
-    public void createTeacher(Long id, String login, String fullName, String password, String subject) {
-        Teacher newTeacher = new Teacher(id, login, fullName, password, subject);
-        teacherRepository.create(newTeacher);
+    public void createTeacher(String login, String fullName, String password, String subject) {
+        Teacher newTeacher = new Teacher(login, fullName, password, subject);
+        teacherRepository.save(newTeacher);
     }
 
     @Override
     public Teacher findById(Long id) {
-        Optional<Teacher> teacher = teacherRepository.read(id);
-        if (teacher.isPresent()) {
-            return teacher.get();
+        return teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Override
+    public void deleteTeacher(Long id) {
+        teacherRepository.delete(findById(id));
+    }
+
+    @Override
+    public void deleteTeacher(Teacher teacher) {
+        teacherRepository.delete(teacher);
+    }
+
+    @Override
+    public void updateTeacher (Long id, String field, Object newValue) {
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        UserUpdateCommand<Teacher> command = commands.get(field);
+        if (command == null) {
+            throw new IllegalArgumentException("Неизвестное поле: " + field);
         }
-        throw new UserNotFoundException(id);
+        command.execute(teacher, newValue);
+        teacherRepository.save(teacher);
     }
 
     @Override
-    public void deleteById(Long id) {
-        teacherRepository.delete(id);
-    }
-
-    @Override
-    public void updateTeacher(Long id, String field, String newValue) {
-        Optional<Teacher> teacher = teacherRepository.read(id);
-        if (teacher.isEmpty()) {
-            throw new UserNotFoundException(id);
-        }
-
-        switch (field) {
-            case "login" -> teacher.get().setLogin(newValue);
-            case "password" -> teacher.get().setPassword(newValue);
-            case "fullName" -> teacher.get().setFullName(newValue);
-            case "Subject" -> teacher.get().setSubject(newValue);
-            default -> {
-                System.out.println("Неизвестное поле: " + field);
-                return;
-            }
-        }
-
-        teacherRepository.update(teacher.get());
-    }
-
-    @Override
-    public void addGrade(Long id, Long studentId, String subject, int value, Long teacherId) {
-        gradeService.addGrade(id, studentId, subject, value, teacherId);
-    }
-
-    @Override
-    public void addGrade(Long id, int value, Student student, String subject, Teacher teacher) {
-        gradeService.addGrade(id, value, student, subject, teacher);
-    }
-
-    @Override
-    public void deleteGrade(Long studentId, String subject, int value, LocalDateTime dateTime) {
-        gradeService.deleteGrade(studentId, subject, value, dateTime);
-    }
-
-    @Override
-    public void deleteGrade(Student student, String subject, int value, LocalDateTime dateTime) {
-        gradeService.deleteGrade(student, subject, value, dateTime);
-    }
-
-    @Override
-    public void deleteGrade(Long gradeId) {
-        gradeService.deleteGrade(gradeId);
+    public void addGrade(int value, Student student, String subject, Teacher teacher, LocalDateTime dateTime) {
+        gradeService.addGrade(student, value, subject, teacher, dateTime);
     }
 
     @Override
     public void deleteGrade(Grade grade) {
-        gradeService.deleteGrade(grade);
+        gradeService.deleteGradeFromStudent(grade);
     }
 
     @Override
-    public void printAllTeachers() {
-        for (Teacher teacher : teacherRepository.findAll()) {
-            System.out.println(teacher);
-        }
+    public void addLesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
+        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime, room));
     }
 }

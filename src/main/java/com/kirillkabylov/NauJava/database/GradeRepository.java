@@ -1,51 +1,46 @@
 package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.kirillkabylov.NauJava.domain.Student;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class GradeRepository implements CrudRepository<Grade, Long> {
-    private final List<Grade> gradeContainer;
+public interface GradeRepository extends CrudRepository<Grade, Long> {
+    Optional<Grade> findByStudentAndSubjectAndValueAndDate(
+            Student student,
+            String subject,
+            int value,
+            LocalDateTime date
+    );
 
-    @Autowired
-    public GradeRepository(List<Grade> gradeContainer) {
-        this.gradeContainer = gradeContainer;
-    }
+    /**
+     * Удаляет все оценки студента
+     * @param student студент
+     */
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Grade grade WHERE grade.student = :student")
+    void deleteAllByStudent(@Param("student") Student student);
 
-    public Grade create(Grade entity) {
-        gradeContainer.add(entity);
-        return entity;
-    }
+    /**
+     * Находит все оценки для заданного студента
+     * @param student студент, для которого ищем оценки
+     * @return список всех оценок студента
+     */
+    List<Grade> findAllByStudent(Student student);
 
-    @Override
-    public Optional<Grade> read(Long id) {
-        return gradeContainer.stream()
-                .filter(x -> x.getId().equals(id))
-                .findFirst();
-    }
-
-    @Override
-    public Grade update(Grade entity) {
-        for (int i = 0; i < gradeContainer.size(); i++) {
-            if (gradeContainer.get(i).getId().equals(entity.getId())) {
-                gradeContainer.set(i, entity);
-                return entity;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean delete(Long id) {
-        return gradeContainer.removeIf(x -> x.getId().equals(id));
-    }
-
-    public List<Grade> findAll() {
-        return gradeContainer;
-    }
-
+    /**
+     * Находит все оценки для заданного студента
+     * @param studentId id студента, для которого ищем оценки
+     * @return список всех оценок студента
+     */
+    @Query("SELECT grade FROM Grade grade WHERE grade.student.id = :studentId")
+    List<Grade> findAllByStudentId(Long studentId);
 }
