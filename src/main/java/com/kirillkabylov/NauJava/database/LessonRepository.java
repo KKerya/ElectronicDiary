@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-//@RepositoryRestResource
+@RepositoryRestResource
 public interface LessonRepository extends CrudRepository<Lesson, Long> {
     /**
      * Находит все занятии для учителя с заданным именем
