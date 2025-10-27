@@ -18,12 +18,6 @@ public class StudentControllerView {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private TeacherRepository teacherRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
-
     @GetMapping("/list")
     public String studentListView(Model model) {
         Iterable<Student> students = studentRepository.findAll();
