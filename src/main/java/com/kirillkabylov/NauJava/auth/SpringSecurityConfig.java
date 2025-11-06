@@ -26,11 +26,7 @@ public class SpringSecurityConfig {
                     .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
-                .logout((form) -> form
-                        .logoutUrl("/logout")
-                        .permitAll());
+                .formLogin(Customizer.withDefaults());
         return httpSecurity.build();
-
     }
 }

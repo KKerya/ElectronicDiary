@@ -32,12 +32,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void createUser(String login, String fullName, String password) {
+        if(userRepository.findByLogin(login).isPresent()){
+            throw new RuntimeException("Пользователь с таким логином уже существует");
+        }
         UserEntity user = new UserEntity(login, fullName, passwordEncoder.encode(password));
         userRepository.save(user);
     }
 
     @Override
     public void createUser(UserEntity user) {
+        if(userRepository.findByLogin(user.getLogin()).isPresent()){
+            throw new RuntimeException("Пользователь с таким логином уже существует");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
