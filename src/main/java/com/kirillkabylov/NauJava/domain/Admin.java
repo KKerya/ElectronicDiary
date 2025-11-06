@@ -3,7 +3,7 @@ package com.kirillkabylov.NauJava.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tbl_admins")
+@DiscriminatorValue("ADMIN")
 public class Admin extends UserEntity {
     public Admin() {
     }

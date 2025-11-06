@@ -14,6 +14,8 @@ public interface UserService {
      */
     public void createUser(String login, String fullName, String password);
 
+    void createUser(UserEntity user);
+
     /**
      * Находит пользователей по имени
      * @param fullname полное имя

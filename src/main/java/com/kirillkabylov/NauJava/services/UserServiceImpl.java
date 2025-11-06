@@ -12,22 +12,33 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void createUser(String login, String fullName, String password) {
-        UserEntity user = new UserEntity(login, fullName, password);
+        UserEntity user = new UserEntity(login, fullName, passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void createUser(UserEntity user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -40,10 +51,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return users;
     }
 
+    public UserEntity findByLogin(String login){
+        return userRepository.findByLogin(login).orElseThrow( () -> new UserNotFoundException(login));
+    }
+
+
     @Override
-    public UserDetails loadUserByUsername(String username){
-        UserEntity appUser = userRepository.findByFullName(username).getFirst();
-        return new User(appUser.getFullName(), appUser.getPassword(), mapRoles(appUser));
+    public UserDetails loadUserByUsername(String userLogin){
+        UserEntity appUser = findByLogin(userLogin);
+        return new User(appUser.getLogin(), appUser.getPassword(), mapRoles(appUser));
     }
 
     public Collection<GrantedAuthority> mapRoles(UserEntity appUser){
