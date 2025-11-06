@@ -60,8 +60,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> findById(Long id) {
-        return studentRepository.findById(id);
+    public Student findById(Long id) {
+        return studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override

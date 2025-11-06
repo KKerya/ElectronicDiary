@@ -1,4 +1,4 @@
-package com.kirillkabylov.NauJava;
+package com.kirillkabylov.NauJava.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

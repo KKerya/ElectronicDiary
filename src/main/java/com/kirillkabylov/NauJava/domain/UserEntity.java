@@ -2,8 +2,9 @@ package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
 
-@MappedSuperclass
-public abstract class User {
+@Entity
+@Table(name = "tbl_users")
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -18,10 +19,10 @@ public abstract class User {
     @Column
     private String password;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String login, String fullName, String password) {
+    public UserEntity(String login, String fullName, String password) {
         this.login = login;
         this.fullName = fullName;
         this.password = password;

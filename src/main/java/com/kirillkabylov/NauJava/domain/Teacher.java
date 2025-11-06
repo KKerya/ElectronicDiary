@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tbl_teachers")
-public class Teacher extends User {
+public class Teacher extends UserEntity {
     @Column
     private String subject;
 

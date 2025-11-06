@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tbl_students")
-public class Student extends User {
+public class Student extends UserEntity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
