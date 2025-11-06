@@ -21,4 +21,10 @@ public interface UserService {
      * @param fullname полное имя
      */
     public List<UserEntity> findByFullName(String fullname);
+
+    /**
+     * Находит пользователя по логину
+     * @param login логин
+     */
+    UserEntity findByLogin(String login);
 }

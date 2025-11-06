@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return users;
     }
 
+    @Override
     public UserEntity findByLogin(String login){
         return userRepository.findByLogin(login).orElseThrow( () -> new UserNotFoundException(login));
     }
