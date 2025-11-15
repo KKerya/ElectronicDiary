@@ -14,7 +14,7 @@ public interface TeacherService {
      * @param password пароль
      * @param subject предмет
      */
-    void createTeacher(String login, String fullName, String password, String subject);
+    Teacher createTeacher(String login, String fullName, String password, String subject);
 
     /**
      * Находит учителя по id

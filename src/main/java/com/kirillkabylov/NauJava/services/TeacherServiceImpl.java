@@ -36,12 +36,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void createTeacher(String login, String fullName, String password, String subject) {
+    public Teacher createTeacher(String login, String fullName, String password, String subject) {
         if (teacherRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Учитель с таким логином уже существует");
         }
         Teacher newTeacher = new Teacher(login, fullName, password, subject);
         teacherRepository.save(newTeacher);
+        return newTeacher;
     }
 
     @Override
@@ -87,6 +88,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void addLesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
-        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime, room));
+        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime));
     }
 }
