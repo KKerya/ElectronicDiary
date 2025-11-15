@@ -21,7 +21,7 @@ public class LessonController {
     }
 
     @GetMapping
-    public List<Lesson> getLessonByTeacherName(@RequestParam String name) {
+    public List<Lesson> getLessonsByTeacherName(@RequestParam String name) {
         return lessonRepository.findLessonByTeacherName(name);
     }
 }

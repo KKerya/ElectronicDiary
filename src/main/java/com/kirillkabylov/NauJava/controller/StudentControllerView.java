@@ -1,15 +1,16 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
-import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.dto.StudentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 
 @Controller
@@ -18,19 +19,21 @@ public class StudentControllerView {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private TeacherRepository teacherRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
-
     @GetMapping("/list")
     public String studentListView(Model model) {
-        Iterable<Student> students = studentRepository.findAll();
-        if (!students.iterator().hasNext()) {
+        List<Student> students = (List<Student>) studentRepository.findAll();
+        if (students.isEmpty()) {
             throw new ResourceNotFoundException("No students found");
         }
-        model.addAttribute("students", students);
+        List<StudentDto> studentsDto = students.stream()
+                .map(s -> new StudentDto(
+                        s.getId(),
+                        s.getFullName(),
+                        s.getGroup().getGroupName()
+                ))
+                .toList();
+
+        model.addAttribute("students", studentsDto);
         return "studentList.html";
     }
 }
