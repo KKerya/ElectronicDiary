@@ -33,28 +33,31 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public Long createReport(){
+    public Long createReport() {
         Report report = new Report();
         reportRepository.save(report);
         return report.getId();
     }
 
     @Override
-    public String getReportContent(Long reportId){
-        return reportRepository.findById(reportId)
-                .map(Report::getContent)
-                .orElse(null);
+    public String getReportContent(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Отчет не найден"));
+        return switch (report.getStatus()) {
+            case Report.ReportStatus.COMPLETED -> report.getContent();
+            case Report.ReportStatus.CREATED -> "Отчет формируется";
+            case Report.ReportStatus.ERROR -> "Отчет сформировался с ошибкой";
+        };
     }
 
     @Override
-    public CompletableFuture<ReportDto> generateReportAsync(Long reportId){
-        return CompletableFuture.supplyAsync( () -> {
-            Report report = reportRepository.findById(reportId).orElseThrow(()-> new RuntimeException("Отчет не найден"));
+    public CompletableFuture<ReportDto> generateReportAsync(Long reportId) {
+        return CompletableFuture.supplyAsync(() -> {
+            Report report = reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Отчет не найден"));
             long totalStartTime = System.currentTimeMillis();
-            try{
+            try {
                 final long[] userCount = new long[1];
                 final long[] timeUsers = new long[1];
-                Thread userThread = new Thread(()-> {
+                Thread userThread = new Thread(() -> {
                     long start = System.currentTimeMillis();
                     userCount[0] = userRepository.count();
                     timeUsers[0] = System.currentTimeMillis() - start;
@@ -74,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
                 try {
                     userThread.join();
                     studentThread.join();
-                } catch (InterruptedException e){
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     report.setStatus(Report.ReportStatus.ERROR);
                     reportRepository.save(report);
@@ -104,7 +107,7 @@ public class ReportServiceImpl implements ReportService {
                         totalElapsed
                 );
                 return reportDto;
-            } catch (Exception e){
+            } catch (Exception e) {
                 report.setStatus(Report.ReportStatus.ERROR);
                 reportRepository.save(report);
             }
