@@ -31,7 +31,7 @@ public class Student extends User {
                 "id=" + getId() +
                 ", login='" + getLogin() + '\'' +
                 ", fullName='" + getFullName() + '\'' +
-                ", groupName='" + getGroup() + '\'' +
+                ", group='" + getGroup() + '\'' +
                 '}';
     }
 }

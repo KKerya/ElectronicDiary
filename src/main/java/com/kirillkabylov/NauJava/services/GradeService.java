@@ -18,13 +18,13 @@ public interface GradeService {
 
     /**
      * Находит оценку студента
-     * @param student студент
+     * @param studentId id студента
      * @param subject предмет
      * @param value значение оценки
      * @param dateTime время
      * @return grade
      */
-    Grade findGrade(Student student, String subject, int value, LocalDateTime dateTime);
+    Grade findGrade(long studentId, String subject, int value, LocalDateTime dateTime);
 
     /**
      * Находит оценку студента по id
@@ -34,12 +34,12 @@ public interface GradeService {
 
     /**
      * Удаляет оценку студента
-     * @param student студент
+     * @param studentId id студента
      * @param subject предмет
      * @param value значение оценки
      * @param dateTime время
      */
-    void deleteGradeFromStudent(Student student, String subject, int value, LocalDateTime dateTime);
+    void deleteGradeFromStudent(long studentId, String subject, int value, LocalDateTime dateTime);
 
     /**
      * Удаляет все оценки студента

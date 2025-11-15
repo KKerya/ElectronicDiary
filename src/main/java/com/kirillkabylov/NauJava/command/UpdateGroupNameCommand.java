@@ -2,7 +2,6 @@ package com.kirillkabylov.NauJava.command;
 
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.User;
 
 /**
  * Обновление класса у студента
