@@ -1,12 +1,10 @@
 package com.kirillkabylov.NauJava;
 
-import com.kirillkabylov.NauJava.database.GroupRepository;
-import com.kirillkabylov.NauJava.database.StudentRepository;
-import com.kirillkabylov.NauJava.database.TeacherRepository;
-import com.kirillkabylov.NauJava.database.UserRepository;
+import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
+import com.kirillkabylov.NauJava.services.AdminService;
 import com.kirillkabylov.NauJava.services.StudentService;
 import com.kirillkabylov.NauJava.services.TeacherService;
 import com.kirillkabylov.NauJava.services.UserService;
@@ -19,15 +17,21 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DataInitializer implements CommandLineRunner {
-
+    private final UserRepository userRepository;
+    private final AdminService adminService;
+    private final AdminRepository adminRepository;
     private final UserService userService;
     private final StudentService studentService;
     private final GroupRepository groupRepository;
     private final TeacherService teacherService;
 
     @Autowired
-    public DataInitializer(UserService userService, StudentService studentService,
-                           GroupRepository groupRepository, TeacherService teacherService) {
+    public DataInitializer(UserRepository userRepository, AdminService adminService, AdminRepository adminRepository,
+                           UserService userService, StudentService studentService, GroupRepository groupRepository,
+                           TeacherService teacherService) {
+        this.userRepository = userRepository;
+        this.adminService = adminService;
+        this.adminRepository = adminRepository;
         this.userService = userService;
         this.studentService = studentService;
         this.groupRepository = groupRepository;
@@ -36,13 +40,18 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        userService.createUser("TestUser1", "Alica Alisovna", "123123");
-        userService.createUser("TestUser2", "Ivan Ivanov", "123123");
+        if (userRepository.count() == 0) {
+            userService.createUser("TestUser1", "Alica Alisovna", "123123");
+            userService.createUser("TestUser2", "Ivan Ivanov", "123123");
 
-        Teacher teacher= teacherService.createTeacher("TeacherLogin", "Teacher Teacher", "123123", "Math");
+            Teacher teacher = teacherService.createTeacher("TeacherLogin", "Teacher Teacher", "123123", "Math");
 
-        Group group = new Group("11A", teacher);
-        groupRepository.save(group);
-        studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123123", group);
+            Group group = new Group("11A", teacher);
+            groupRepository.save(group);
+            studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123123", group);
+        }
+        if (adminRepository.count() == 0){
+            adminService.createAdmin("TestAdmin", "Admin", "123123");
+        }
     }
 }

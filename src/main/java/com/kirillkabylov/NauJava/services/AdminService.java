@@ -7,12 +7,11 @@ import java.time.LocalDateTime;
 public interface AdminService {
     /**
      * Создает админа
-     * @param id id
      * @param login логин
      * @param fullName полное имя (ФИО)
      * @param password пароль
      */
-    void createAdmin(long id, String login, String fullName, String password);
+    void createAdmin(String login, String fullName, String password);
 
     /**
      * Удаляет админа

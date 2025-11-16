@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.AdminRepository;
 import com.kirillkabylov.NauJava.domain.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,15 +17,20 @@ import java.util.Optional;
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository) {
+    public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void createAdmin(long id, String login, String fullName, String password) {
-        adminRepository.save(new Admin(login, fullName, password));
+    public void createAdmin(String login, String fullName, String password) {
+        if (adminRepository.findByLogin(login).isPresent()){
+            throw new RuntimeException("Админ с таким логином уже существует");
+        }
+        adminRepository.save(new Admin(login, fullName, passwordEncoder.encode(password)));
     }
 
     @Override
