@@ -23,6 +23,12 @@ public interface TeacherService {
     Teacher findById(Long id);
 
     /**
+     * Находит учителя по логину
+     * @param login
+     */
+    Teacher findByLogin(String login);
+
+    /**
      * Удаляет учителя по id
      * @param id id
      */

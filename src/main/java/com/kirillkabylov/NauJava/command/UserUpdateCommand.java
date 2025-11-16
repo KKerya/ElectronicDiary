@@ -1,8 +1,8 @@
 package com.kirillkabylov.NauJava.command;
 
-import com.kirillkabylov.NauJava.domain.User;
+import com.kirillkabylov.NauJava.domain.UserEntity;
 
-public interface UserUpdateCommand<Type1 extends User> {
+public interface UserUpdateCommand<Type1 extends UserEntity> {
     /*
      Думал сделать UserUpdateCommand<Type1 extends User, Type2>
      void execute(Type1 user, Type2 newValue);

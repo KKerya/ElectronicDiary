@@ -28,7 +28,7 @@ public interface StudentService {
      * Находит студента по id
      * @param id id
      */
-    Optional<Student> findById(Long id);
+    Student findById(Long id);
 
     /**
      * Обновляет поле студента

@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource
 public interface TeacherRepository extends CrudRepository<Teacher, Long> {
@@ -26,4 +27,10 @@ public interface TeacherRepository extends CrudRepository<Teacher, Long> {
      * @param fullName имя учителя
      */
     List<Teacher> findByFullName(String fullName);
+
+    /**
+     * Находит учителя по логину
+     * @param login логин
+     */
+    Optional<Teacher> findByLogin(String login);
 }

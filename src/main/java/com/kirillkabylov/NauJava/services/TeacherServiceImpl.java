@@ -37,6 +37,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void createTeacher(String login, String fullName, String password, String subject) {
+        if (teacherRepository.findByLogin(login).isPresent()){
+            throw new RuntimeException("Учитель с таким логином уже существует");
+        }
         Teacher newTeacher = new Teacher(login, fullName, password, subject);
         teacherRepository.save(newTeacher);
     }
@@ -44,6 +47,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher findById(Long id) {
         return teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Override
+    public Teacher findByLogin(String login){
+        return teacherRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException(login));
     }
 
     @Override

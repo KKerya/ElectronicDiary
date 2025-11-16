@@ -55,13 +55,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void createStudent(String login, String fullName, String password, Group group) {
+        if (studentRepository.findByLogin(login).isPresent()){
+            throw new RuntimeException("Студент с таким логином уже существует");
+        }
         Student newStudent = new Student(login, fullName, password, group);
         studentRepository.save(newStudent);
     }
 
     @Override
-    public Optional<Student> findById(Long id) {
-        return studentRepository.findById(id);
+    public Student findById(Long id) {
+        return studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
