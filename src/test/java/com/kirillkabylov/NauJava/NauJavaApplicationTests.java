@@ -106,19 +106,16 @@ class StudentServiceImplTest {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final GradeRepository gradeRepository;
-    private final StudentService studentService;
     private final GroupRepository groupRepository;
 
     @Autowired
     public StudentServiceImplTest(TeacherRepository teacherRepository,
                                   StudentRepository studentRepository,
                                   GradeRepository gradeRepository,
-                                  StudentService studentService,
                                   GroupRepository groupRepository) {
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
-        this.studentService = studentService;
         this.groupRepository = groupRepository;
     }
 

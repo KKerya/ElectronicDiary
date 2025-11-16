@@ -12,4 +12,6 @@ public interface ReportService {
     String getReportContent(Long reportId);
 
     CompletableFuture<ReportDto> generateReportAsync(Long reportId);
+
+    ReportDto parseReportContent(String content);
 }

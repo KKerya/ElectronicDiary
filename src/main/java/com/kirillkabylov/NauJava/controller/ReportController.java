@@ -1,11 +1,13 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.dto.ReportDto;
+import com.kirillkabylov.NauJava.services.ReportService;
 import com.kirillkabylov.NauJava.services.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Контроллер для работы с отчетами.
@@ -16,33 +18,44 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class ReportController {
-    private final ReportServiceImpl reportServiceImpl;
+    private final ReportService reportService;
 
     @Autowired
-    public ReportController(ReportServiceImpl reportServiceImpl) {
-        this.reportServiceImpl = reportServiceImpl;
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @GetMapping("/report/start")
+    public String startReport(Model model) {
+        Long reportId = reportService.createReport();
+        reportService.generateReportAsync(reportId); // Запуск без .get()
+        model.addAttribute("reportId", reportId);
+        return "reportStarted";
     }
 
     /**
      *  Обрабатывает GET-запрос на отображение отчета.
      */
-    @GetMapping("/view/report")
-    public String viewReport(Model model) {
-
-
-        Long reportId = reportServiceImpl.createReport();
+    @GetMapping("/report/view")
+    public String viewReport(@RequestParam("id") Long reportId, Model model) throws InterruptedException {
 
         ReportDto reportDto;
-        try {
-            reportDto = reportServiceImpl.generateReportAsync(reportId).get();
-        } catch (Exception e) {
-            model.addAttribute("error", "Не удалось сформировать отчет");
-            return "reportView";
-        }
 
-        if (reportDto == null) {
-            model.addAttribute("error", "Отчет не был сформирован");
-            return "reportView";
+        try {
+            String content = reportService.getReportContent(reportId);
+
+            if (!content.contains(";")) {
+                model.addAttribute("message", content);
+                model.addAttribute("reportId", reportId);
+                return "reportStatus";
+            }
+
+            reportDto = reportService.parseReportContent(content);
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Не удалось получить отчет");
+            model.addAttribute("reportId", reportId);
+            return "reportStatus";
         }
 
         model.addAttribute("userCount", reportDto.userCount());
@@ -51,6 +64,6 @@ public class ReportController {
         model.addAttribute("timeEntities", reportDto.timeEntities());
         model.addAttribute("totalTime", reportDto.totalTime());
 
-        return "report";
+        return "report"; // нормальная страница с отчетом
     }
 }

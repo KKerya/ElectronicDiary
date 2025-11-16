@@ -114,4 +114,18 @@ public class ReportServiceImpl implements ReportService {
             return null;
         });
     }
+
+    @Override
+    public ReportDto parseReportContent(String content) {
+        String[] parts = content.split(";");
+
+        long userCount = Long.parseLong(parts[0].split(":")[1]);
+        long studentCount = Long.parseLong(parts[1].split(":")[1]);
+        long timeUsers = Long.parseLong(parts[2].split(":")[1]);
+        long timeStudents = Long.parseLong(parts[3].split(":")[1]);
+        long totalTime = Long.parseLong(parts[4].split(":")[1]);
+
+        List<Student> students = (List<Student>) studentRepository.findAll();
+        return new ReportDto(userCount, students, timeUsers, timeStudents, totalTime);
+    }
 }
