@@ -8,6 +8,7 @@ import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Lesson;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,24 +25,28 @@ public class TeacherServiceImpl implements TeacherService {
     private final LessonRepository lessonRepository;
     private final GradeService gradeService;
     private final Map<String, UserUpdateCommand<Teacher>> commands;
+    private final PasswordEncoder passwordEncoder;
 
     public TeacherServiceImpl(TeacherRepository teacherRepository,
                               LessonRepository lessonRepository,
                               GradeService gradeService,
-                              Map<String, UserUpdateCommand<Teacher>> commands) {
+                              Map<String, UserUpdateCommand<Teacher>> commands,
+                              PasswordEncoder passwordEncoder) {
         this.teacherRepository = teacherRepository;
         this.lessonRepository = lessonRepository;
         this.gradeService = gradeService;
         this.commands = commands;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void createTeacher(String login, String fullName, String password, String subject) {
+    public Teacher createTeacher(String login, String fullName, String password, String subject) {
         if (teacherRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Учитель с таким логином уже существует");
         }
-        Teacher newTeacher = new Teacher(login, fullName, password, subject);
+        Teacher newTeacher = new Teacher(login, fullName, passwordEncoder.encode(password), subject);
         teacherRepository.save(newTeacher);
+        return newTeacher;
     }
 
     @Override
@@ -87,6 +92,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void addLesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
-        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime, room));
+        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime));
     }
 }

@@ -78,9 +78,9 @@ class LessonRepositoryImplTest {
         entityManager.persist(teacher1);
         entityManager.persist(teacher2);
 
-        Lesson lesson1 = new Lesson("11A", "Math", teacher1, LocalDateTime.now(), "101");
-        Lesson lesson2 = new Lesson("11B", "Math", teacher1, LocalDateTime.now(), "102");
-        Lesson lesson3 = new Lesson("11A", "Rus", teacher2, LocalDateTime.now(), "201");
+        Lesson lesson1 = new Lesson("11A", "Math", teacher1, LocalDateTime.now());
+        Lesson lesson2 = new Lesson("11B", "Math", teacher1, LocalDateTime.now());
+        Lesson lesson3 = new Lesson("11A", "Rus", teacher2, LocalDateTime.now());
 
         entityManager.persist(lesson1);
         entityManager.persist(lesson2);
@@ -106,19 +106,16 @@ class StudentServiceImplTest {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final GradeRepository gradeRepository;
-    private final StudentService studentService;
     private final GroupRepository groupRepository;
 
     @Autowired
     public StudentServiceImplTest(TeacherRepository teacherRepository,
                                   StudentRepository studentRepository,
                                   GradeRepository gradeRepository,
-                                  StudentService studentService,
                                   GroupRepository groupRepository) {
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
-        this.studentService = studentService;
         this.groupRepository = groupRepository;
     }
 

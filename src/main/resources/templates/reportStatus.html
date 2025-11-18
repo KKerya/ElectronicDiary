@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Статус отчёта</title>
+</head>
+<body>
+
+<h2>Статус отчёта</h2>
+
+<p th:if="${message}" th:text="${message}"></p>
+
+<p th:if="${error}" th:text="${error}"></p>
+
+<form method="get" th:action="@{/report/view}">
+    <input type="hidden" name="id" th:value="${reportId}">
+    <button type="submit">Обновить</button>
+</form>
+
+</body>
+</html>

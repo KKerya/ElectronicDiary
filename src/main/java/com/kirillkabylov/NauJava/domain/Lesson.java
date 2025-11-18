@@ -25,10 +25,8 @@ public class Lesson {
     @Column
     private LocalDateTime startTime;
 
-//    @Value("${lesson.max-duration:45}")
-    private int durationMinutes = 45;
-
-    private String room;
+    @Value("${lesson.max-duration:45}")
+    private int durationMinutes;
 
     public Lesson() {
     }
@@ -42,16 +40,14 @@ public class Lesson {
                 ", teacher=" + teacher +
                 ", startTime=" + startTime +
                 ", durationMinutes=" + durationMinutes +
-                ", room='" + room + '\'' +
                 '}';
     }
 
-    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
+    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime) {
         this.groupName = groupName;
         this.subject = subject;
         this.teacher = teacher;
         this.startTime = startTime;
-        this.room = room;
     }
 
     public Long getId() {
@@ -78,10 +74,6 @@ public class Lesson {
         return durationMinutes;
     }
 
-    public String getRoom() {
-        return room;
-    }
-
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
@@ -96,9 +88,5 @@ public class Lesson {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
     }
 }

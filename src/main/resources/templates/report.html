@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отчёт</title>
+</head>
+<body>
+<h1>Статистический отчёт</h1>
+
+<p>Количество пользователей: <span th:text="${userCount}"></span></p>
+<p>Время подсчёта пользователей: <span th:text="${timeUsers}"></span> мс</p>
+<p>Время получения списка сущностей: <span th:text="${timeEntities}"></span> мс</p>
+<p>Общее время формирования отчёта: <span th:text="${totalTime}"></span> мс</p>
+
+<h2>Список студентов</h2>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Группа</th>
+    </tr>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.fullName}"></td>
+        <td th:text="${student.group.groupName}"></td>
+    </tr>
+</table>
+</body>
+</html>

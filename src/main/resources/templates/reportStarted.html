@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчёт запущен</title>
+</head>
+<body>
+<h1>Формирование отчёта запущено</h1>
+
+<p>
+    Ваш отчёт с ID:
+    <strong th:text="${reportId}"></strong>
+    начал формироваться.
+</p>
+
+<p>Вы можете проверить статус отчёта по ссылке ниже:</p>
+
+<p>
+    <a th:href="@{'/report/view?id=' + ${reportId}}">
+        Просмотреть статус отчёта
+    </a>
+</p>
+
+</body>
+</html>

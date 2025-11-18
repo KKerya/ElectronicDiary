@@ -8,6 +8,7 @@ import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -28,16 +29,19 @@ public class StudentServiceImpl implements StudentService {
     private final GradeService gradeService;
     private final PlatformTransactionManager transactionManager;
     private final Map<String, UserUpdateCommand<Student>> commands;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               GradeService gradeService,
                               LessonRepository lessonRepository,
                               PlatformTransactionManager transactionManager,
-                              Map<String, UserUpdateCommand<Student>> commands) {
+                              Map<String, UserUpdateCommand<Student>> commands,
+                              PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.gradeService = gradeService;
         this.transactionManager = transactionManager;
         this.commands = commands;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -58,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Студент с таким логином уже существует");
         }
-        Student newStudent = new Student(login, fullName, password, group);
+        Student newStudent = new Student(login, fullName, passwordEncoder.encode(password), group);
         studentRepository.save(newStudent);
     }
 
