@@ -2,9 +2,11 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TeacherService {
     /**
@@ -14,7 +16,7 @@ public interface TeacherService {
      * @param password пароль
      * @param subject предмет
      */
-    Teacher createTeacher(String login, String fullName, String password, String subject);
+    Teacher createTeacher(String login, String fullName, String password, List<Subject> subject);
 
     /**
      * Находит учителя по id

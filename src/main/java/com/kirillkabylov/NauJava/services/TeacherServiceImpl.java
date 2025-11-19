@@ -4,14 +4,12 @@ import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
-import com.kirillkabylov.NauJava.domain.Grade;
-import com.kirillkabylov.NauJava.domain.Lesson;
-import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +38,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher createTeacher(String login, String fullName, String password, String subject) {
+    public Teacher createTeacher(String login, String fullName, String password, List<Subject> subject) {
         if (teacherRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Учитель с таким логином уже существует");
         }

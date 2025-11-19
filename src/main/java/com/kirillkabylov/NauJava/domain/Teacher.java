@@ -2,26 +2,28 @@ package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("TEACHER")
 public class Teacher extends UserEntity {
-    @Column
-    private String subject;
+    @OneToMany(cascade = {CascadeType.MERGE})
+    private List<Subject> subjects;
 
     public Teacher() {
     }
 
-    public Teacher(String login, String fullName, String password, String subject) {
+    public Teacher(String login, String fullName, String password, List<Subject> subjects) {
         super(login, fullName, password);
-        this.subject = subject;
+        this.subjects = subjects;
     }
 
-    public String getSubject() {
-        return subject;
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class Teacher extends UserEntity {
                 "id=" + getId() +
                 ", login='" + getLogin() + '\'' +
                 ", fullName='" + getFullName() + '\'' +
-                ", subject='" + getSubject() + '\'' +
+                ", subject='" + getSubjects() + '\'' +
                 '}';
     }
 }

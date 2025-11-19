@@ -18,8 +18,7 @@ public class TeacherCommandConfig {
         return Map.of(
                 "login", new UpdateLoginCommand<Teacher>(),
                 "password", new UpdatePasswordCommand<Teacher>(),
-                "fullName", new UpdateFullNameCommand<Teacher>(),
-                "subject", new UpdateSubjectCommand()
+                "fullName", new UpdateFullNameCommand<Teacher>()
         );
     }
 }
