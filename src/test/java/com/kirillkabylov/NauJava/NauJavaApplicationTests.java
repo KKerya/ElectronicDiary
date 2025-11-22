@@ -35,8 +35,13 @@ class TeacherRepositoryImplTest {
      */
     @Test
     void testFindByField() {
-        Teacher teacher1 = new Teacher("login1", "Иван Иванов", "pass1", "Math");
-        Teacher teacher2 = new Teacher("login2", "Петр Петров", "pass2", "Rus");
+        Subject subject = new Subject("Rus");
+        Subject subject2 = new Subject("Math");
+        entityManager.persist(subject);
+        entityManager.persist(subject2);
+        entityManager.flush();
+        Teacher teacher1 = new Teacher("login1", "Иван Иванов", "pass1", List.of(subject));
+        Teacher teacher2 = new Teacher("login2", "Петр Петров", "pass2", List.of(subject2));
 
         entityManager.persist(teacher1);
         entityManager.persist(teacher2);
@@ -72,8 +77,8 @@ class LessonRepositoryImplTest {
      */
     @Test
     void testFindLessonByTeacherName() {
-        Teacher teacher1 = new Teacher("login1", "Иван Иванов", "pass1", "Math");
-        Teacher teacher2 = new Teacher("login2", "Петр Петров", "pass2", "Rus");
+        Teacher teacher1 = new Teacher("login1", "Иван Иванов", "pass1");
+        Teacher teacher2 = new Teacher("login2", "Петр Петров", "pass2");
 
         entityManager.persist(teacher1);
         entityManager.persist(teacher2);
@@ -125,10 +130,10 @@ class StudentServiceImplTest {
     @Test
     @Transactional
     void testDeleteStudent() {
-        Teacher teacher1 = new Teacher("login2", "Петр Петров Петрович", "123", "Math");
+        Teacher teacher1 = new Teacher("login2", "Петр Петров Петрович", "123");
         Group group = new Group("11A", teacher1);
         Student student = new Student("login", "Иван Иванов Иванович", "123123", group);
-        Teacher teacher2 = new Teacher("login3", "Алексадр Алексадров Александорович", "123567", "Rus");
+        Teacher teacher2 = new Teacher("login3", "Алексадр Алексадров Александорович", "123567");
         Student student2 = new Student("login", "Петр Иванов Иванович", "123123", group);
 
 
@@ -147,7 +152,7 @@ class StudentServiceImplTest {
 
     @Test
     void createStudentAndGroup(){
-        Teacher teacher = new Teacher("login2", "Петр Петров Петрович", "123", "Math");
+        Teacher teacher = new Teacher("login2", "Петр Петров Петрович", "123");
         Group group = new Group("11A", teacher);
         Student student = new Student("login", "Иван Иванов Иванович", "123123", group);
         Student student2 = new Student("login2", "Петр Петров Петрович", "123123", group);

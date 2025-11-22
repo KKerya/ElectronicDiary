@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Оценки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        label {
+            margin-right: 10px;
+        }
+        select, button {
+            margin-right: 10px;
+            padding: 5px 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<h1>Оценки</h1>
+
+<a class="home-link" href="/home" th:href="@{/home}">На главную</a>
+
+<form id="gradesForm">
+    <label for="subject">Предмет:</label>
+    <select name="subjectId" id="subject">
+        <option th:each="subject : ${subjects}"
+                th:value="${subject.id}"
+                th:text="${subject.name}"></option>
+    </select>
+
+    <!-- Для преподавателей показываем выбор группы -->
+    <div th:if="${isTeacher}">
+        <label for="group">Группа:</label>
+        <select name="groupId" id="group">
+            <option th:each="group : ${groups}"
+                    th:value="${group.id}"
+                    th:text="${group.groupName}"></option>
+        </select>
+    </div>
+
+    <button type="submit">Показать оценки</button>
+</form>
+
+<div id="grades-container">
+    <!-- Таблица оценок будет загружаться сюда -->
+</div>
+
+<script>
+    document.getElementById('gradesForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        const subjectId = document.getElementById('subject').value;
+        const groupSelect = document.getElementById('group');
+        const groupId = groupSelect ? groupSelect.value : '';
+
+        fetch(`/api/grades?subjectId=${subjectId}${groupId ? '&groupId=' + groupId : ''}`)
+            .then(resp => resp.json())
+            .then(data => {
+                const container = document.getElementById('grades-container');
+                if(data.length === 0){
+                    container.innerHTML = '<p>Оценок не найдено.</p>';
+                    return;
+                }
+
+                let html = '<table><thead><tr><th>Студент</th><th>Оценка</th><th>Учитель</th><th>Дата</th></tr></thead><tbody>';
+                data.forEach(g => {
+                    html += `<tr>
+                        <td>${g.student?.fullName ?? '—'}</td>
+                        <td>${g.value}</td>
+                        <td>${g.teacher?.fullName ?? '—'}</td>
+                        <td>${g.date ? new Date(g.date).toLocaleString() : '—'}</td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('grades-container').innerHTML = '<p>Ошибка при загрузке оценок</p>';
+            });
+    });
+</script>
+
+</body>
+</html>

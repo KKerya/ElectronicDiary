@@ -7,6 +7,7 @@ import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.rules.GradeRule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class GradeServiceImpl implements GradeService {
 
 
     @Override
-    public void addGrade(Student student, int value, String subject, Teacher teacher, LocalDateTime dateTime) {
+    public void addGrade(Student student, int value, Subject subject, Teacher teacher, LocalDateTime dateTime) {
         Grade grade = new Grade(value, student, subject, teacher, dateTime);
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
@@ -44,8 +45,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade findGrade(long studentId, String subject, int value, LocalDateTime dateTime) {
-        Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectAndValueAndDate(studentId, subject, value, dateTime);
+    public Grade findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
+        Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime);
         if (grade.isEmpty()) {
             throw new GradeNotFoundException();
         }
@@ -58,7 +59,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void deleteGradeFromStudent(long studentId, String subject, int value, LocalDateTime dateTime) {
+    public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime) {
         gradeRepository.delete(findGrade(studentId, subject, value, dateTime));
     }
 
@@ -80,5 +81,15 @@ public class GradeServiceImpl implements GradeService {
         }
         newGrade.get().setValue(newValue);
         gradeRepository.save(newGrade.get());
+    }
+
+    @Override
+    public List<Grade> getGradesByStudentLoginAndSubject(String login, Long subjectId){
+        return gradeRepository.findAllByStudentLoginAndSubjectId(login, subjectId);
+    }
+
+    @Override
+    public List<Grade> getGradesBySubjectAndGroup(Long subjectId, Long groupId){
+        return gradeRepository.findAllBySubjectIdAndGroup(subjectId, groupId);
     }
 }

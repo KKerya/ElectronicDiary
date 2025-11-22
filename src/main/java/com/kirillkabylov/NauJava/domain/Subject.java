@@ -23,6 +23,11 @@ public class Subject {
         this.name = name;
     }
 
+    public Subject(Teacher teacher, String name) {
+        this.teacher = teacher;
+        this.name = name;
+    }
+
     public Teacher getTeacher() {
         return teacher;
     }
@@ -37,5 +42,13 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

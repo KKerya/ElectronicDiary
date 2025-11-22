@@ -2,6 +2,7 @@ package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,13 +19,13 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
     /**
      * Находит оценку по Студенту, предмету, оценке и дате
      * @param studentId id студента
-     * @param subject предмет
+     * @param subjectId id предмета
      * @param value оценка
      * @param date время
      */
-    Optional<Grade> findByStudentIdAndSubjectAndValueAndDate(
+    Optional<Grade> findByStudentIdAndSubjectIdAndValueAndDate(
             Long studentId,
-            String subject,
+            Long subjectId,
             int value,
             LocalDateTime date
     );
@@ -52,4 +53,11 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
      */
     @Query("SELECT grade FROM Grade grade WHERE grade.student.id = :studentId")
     List<Grade> findAllByStudentId(Long studentId);
+
+    @Query("SELECT grade FROM Grade grade WHERE grade.student.login = :studentLogin AND grade.subject.id = :subjectId")
+    List<Grade> findAllByStudentLoginAndSubjectId(String studentLogin,
+                                                  Long subjectId);
+
+    @Query("SELECT grade FROM Grade grade WHERE grade.subject.id = :subjectId AND grade.student.group.id = :groupId")
+    List<Grade> findAllBySubjectIdAndGroup (Long subjectId, Long groupId);
 }

@@ -58,7 +58,7 @@ public interface TeacherService {
      * @param teacher учитель
      * @param dateTime время
      */
-    void addGrade(int value, Student student, String subject, Teacher teacher, LocalDateTime dateTime);
+    void addGrade(int value, Student student, Subject subject, Teacher teacher, LocalDateTime dateTime);
 
     /**
      * Удалить оценку

@@ -4,7 +4,6 @@ import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
-import com.kirillkabylov.NauJava.domain.UserEntity;
 import com.kirillkabylov.NauJava.services.AdminService;
 import com.kirillkabylov.NauJava.services.StudentService;
 import com.kirillkabylov.NauJava.services.TeacherService;

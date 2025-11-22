@@ -2,9 +2,11 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface GradeService {
     /**
@@ -14,7 +16,7 @@ public interface GradeService {
      * @param subject предмет
      * @param teacher учитель
      */
-    void addGrade(Student student, int value, String subject, Teacher teacher, LocalDateTime dateTime);
+    void addGrade(Student student, int value, Subject subject, Teacher teacher, LocalDateTime dateTime);
 
     /**
      * Находит оценку студента
@@ -24,7 +26,7 @@ public interface GradeService {
      * @param dateTime время
      * @return grade
      */
-    Grade findGrade(long studentId, String subject, int value, LocalDateTime dateTime);
+    Grade findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime);
 
     /**
      * Находит оценку студента по id
@@ -39,7 +41,7 @@ public interface GradeService {
      * @param value значение оценки
      * @param dateTime время
      */
-    void deleteGradeFromStudent(long studentId, String subject, int value, LocalDateTime dateTime);
+    void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime);
 
     /**
      * Удаляет все оценки студента
@@ -59,4 +61,8 @@ public interface GradeService {
      * @param newValue новое значение оценки
      */
     void changeGradeValue(Grade grade, int newValue);
+
+    List<Grade> getGradesByStudentLoginAndSubject(String login, Long subjectId);
+
+    List<Grade> getGradesBySubjectAndGroup(Long subjectId, Long groupId);
 }

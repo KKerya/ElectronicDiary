@@ -2,7 +2,9 @@ package com.kirillkabylov.NauJava;
 
 import com.kirillkabylov.NauJava.controller.LessonController;
 import com.kirillkabylov.NauJava.database.LessonRepository;
+import com.kirillkabylov.NauJava.database.SubjectRepository;
 import com.kirillkabylov.NauJava.domain.Lesson;
+import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -36,7 +38,7 @@ public class LessonControllerTest {
 
     @Test
     void getLessonsTeacherExists() {
-        Teacher teacher = new Teacher("teacher", "Name Surname", "pass", "Math");
+        Teacher teacher = new Teacher("teacher", "Name Surname", "pass");
         Lesson lesson1 = new Lesson("Group A", "Math", teacher, LocalDateTime.now());
         Lesson lesson2 = new Lesson("Group B", "Physics", teacher, LocalDateTime.now().plusHours(1));
 

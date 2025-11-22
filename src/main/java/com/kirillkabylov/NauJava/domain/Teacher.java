@@ -13,6 +13,10 @@ public class Teacher extends UserEntity {
     public Teacher() {
     }
 
+    public Teacher(String login, String fullName, String password) {
+        super(login, fullName, password);
+    }
+
     public Teacher(String login, String fullName, String password, List<Subject> subjects) {
         super(login, fullName, password);
         this.subjects = subjects;

@@ -1,11 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Главная</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .block {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-Hello
-<div id="userFullNameLabel" th:text="${fullName}"></div>
+<h1>Добро пожаловать!</h1>
+
+<!-- Блок для админа -->
+<div class="block" th:if="${isAdmin}">
+    <h2>Админский блок</h2>
+    <a href="/admin/users">Управление пользователями</a><br>
+    <a href="/admin/settings">Настройки системы</a>
+</div>
+
+<!-- Блок для преподавателя -->
+<div class="block" th:if="${isTeacher}">
+    <h2>Преподавательский блок</h2>
+    <a href="/grades">Оценки студентов</a><br>
+    <a href="/subjects">Мои предметы</a>
+</div>
+
+<!-- Блок для студента -->
+<div class="block" th:if="${isStudent}">
+    <h2>Студенческий блок</h2>
+    <a href="/grades">Мои оценки</a><br>
+    <a href="/schedule">Расписание</a>
+</div>
+
 </body>
 </html>

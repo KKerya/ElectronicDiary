@@ -79,7 +79,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addGrade(int value, Student student, String subject, Teacher teacher, LocalDateTime dateTime) {
+    public void addGrade(int value, Student student, Subject subject, Teacher teacher, LocalDateTime dateTime) {
         gradeService.addGrade(student, value, subject, teacher, dateTime);
     }
 
