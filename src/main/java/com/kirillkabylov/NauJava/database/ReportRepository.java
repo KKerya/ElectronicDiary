@@ -1,7 +1,9 @@
 package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Report;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReportRepository extends CrudRepository<Report, Long> {
+@Repository
+public interface ReportRepository extends JpaRepository<Report, Long> {
 }

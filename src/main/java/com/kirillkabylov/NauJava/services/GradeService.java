@@ -65,4 +65,8 @@ public interface GradeService {
     List<Grade> getGradesByStudentLoginAndSubject(String login, Long subjectId);
 
     List<Grade> getGradesBySubjectAndGroup(Long subjectId, Long groupId);
+
+    List<Grade> getGradesByGroup(Long groupId);
+
+    List<Grade> getGradesByStudent(String login);
 }

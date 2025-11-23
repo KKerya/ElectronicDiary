@@ -1,10 +1,10 @@
 package com.kirillkabylov.NauJava.controller;
 
+import com.kirillkabylov.NauJava.Exceptions.ResourceNotFoundException;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.dto.StudentDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

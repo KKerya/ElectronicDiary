@@ -1,20 +1,13 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
-import com.kirillkabylov.NauJava.database.UserRepository;
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.SecurityContext;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.security.Security;
 
 @Controller
 public class HomeController {
@@ -43,7 +36,8 @@ public class HomeController {
         model.addAttribute("username", username);
         model.addAttribute("isTeacher", isTeacher);
         model.addAttribute("isStudent", isStudent);
-        model.addAttribute("isAdmin", isAdmin);;
+        model.addAttribute("isAdmin", isAdmin);
+        ;
 
         return "home";
     }

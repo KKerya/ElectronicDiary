@@ -5,7 +5,7 @@ import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.GradeRepository;
 import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
-import com.kirillkabylov.NauJava.database.TeacherRepository;
+import com.kirillkabylov.NauJava.database.SubjectRepository;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -31,13 +30,16 @@ public class GradeServiceImpl implements GradeService {
     private final List<GradeRule> gradeRules;
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
+    private final SubjectRepository subjectRepository;
 
     @Autowired
-    public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules, StudentRepository studentRepository, GroupRepository groupRepository) {
+    public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules, StudentRepository studentRepository,
+                            GroupRepository groupRepository, SubjectRepository subjectRepository) {
         this.gradeRepository = gradeRepository;
         this.gradeRules = gradeRules;
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
+        this.subjectRepository = subjectRepository;
     }
 
     @Override
@@ -55,8 +57,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade findById(long id){
-        return gradeRepository.findById(id).orElseThrow( () -> new UserNotFoundException(id));
+    public Grade findById(long id) {
+        return gradeRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
@@ -87,14 +89,28 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public List<Grade> getGradesByStudentLoginAndSubject(String login, Long subjectId){
-        studentRepository.findByLogin(login).orElseThrow( () -> new EntityNotFoundException("Student with login " + login + " not found"));
+    public List<Grade> getGradesByStudentLoginAndSubject(String login, Long subjectId) {
+        studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login " + login + " not found"));
+        subjectRepository.findById(subjectId).orElseThrow(() -> new EntityNotFoundException("Subject with id - " + subjectId + " not found"));
         return gradeRepository.findAllByStudentLoginAndSubjectId(login, subjectId);
     }
 
     @Override
-    public List<Grade> getGradesBySubjectAndGroup(Long subjectId, Long groupId){
-        groupRepository.findById(groupId).orElseThrow( () -> new EntityNotFoundException("Group with id - " + groupId + " not found"));
+    public List<Grade> getGradesBySubjectAndGroup(Long subjectId, Long groupId) {
+        subjectRepository.findById(subjectId).orElseThrow(() -> new EntityNotFoundException("Subject with id - " + subjectId + " not found"));
+        groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found"));
         return gradeRepository.findAllBySubjectIdAndGroup(subjectId, groupId);
+    }
+
+    @Override
+    public List<Grade> getGradesByGroup(Long groupId) {
+        groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found"));
+        return gradeRepository.findAllByGroupId(groupId);
+    }
+
+    @Override
+    public List<Grade> getGradesByStudent(String login) {
+        studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login " + login + " not found"));
+        return gradeRepository.findAllByStudentLogin(login);
     }
 }

@@ -31,23 +31,12 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
-    @GetMapping("/student")
-    public List<Grade> getGradesByStudentId(@RequestParam Long studentId){
-        return gradeRepository.findAllByStudentId(studentId);
-    }
-
-    @GetMapping("/filter")
-    public Grade getGradeByStudentIdAndSubjectAndValueAndDate(@RequestParam Long studentId,
-                                                                    @RequestParam Long subjectId,
-                                                                    @RequestParam int value,
-                                                                    @RequestParam LocalDateTime date)
-    {
-       return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subjectId, value, date).orElseThrow(GradeNotFoundException::new);
-    }
+    @GetMapping("/grades/create")
+    public void create(){}
 
     @GetMapping("/grades")
     public List<GradeDto> getGrades(
-            @RequestParam Long subjectId,
+            @RequestParam(required = false) Long subjectId,
             @RequestParam(required = false) Long groupId,
             @AuthenticationPrincipal UserDetails user) {
 
@@ -56,10 +45,18 @@ public class GradeController {
 
         List<Grade> grades;
 
-        if(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_TEACHER")) && groupId != null) {
-            grades = gradeService.getGradesBySubjectAndGroup(subjectId, groupId);
+        if (isTeacher && groupId != null) {
+            if (subjectId != null) {
+                grades = gradeService.getGradesBySubjectAndGroup(subjectId, groupId);
+            } else {
+                grades = gradeService.getGradesByGroup(groupId);
+            }
         } else {
-            grades = gradeService.getGradesByStudentLoginAndSubject(user.getUsername(), subjectId);
+            if (subjectId != null) {
+                grades = gradeService.getGradesByStudentLoginAndSubject(user.getUsername(), subjectId);
+            } else {
+                grades = gradeService.getGradesByStudent(user.getUsername());
+            }
         }
 
         return grades.stream()

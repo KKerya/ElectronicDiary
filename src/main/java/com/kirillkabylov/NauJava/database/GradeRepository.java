@@ -2,26 +2,27 @@ package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Subject;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@RepositoryRestResource
-public interface GradeRepository extends CrudRepository<Grade, Long> {
+@Repository
+public interface GradeRepository extends JpaRepository<Grade, Long> {
     /**
      * Находит оценку по Студенту, предмету, оценке и дате
+     *
      * @param studentId id студента
      * @param subjectId id предмета
-     * @param value оценка
-     * @param date время
+     * @param value     оценка
+     * @param date      время
      */
     Optional<Grade> findByStudentIdAndSubjectIdAndValueAndDate(
             Long studentId,
@@ -32,6 +33,7 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
 
     /**
      * Удаляет все оценки студента
+     *
      * @param student студент
      */
     @Modifying
@@ -41,6 +43,7 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
 
     /**
      * Находит все оценки для заданного студента
+     *
      * @param student студент, для которого ищем оценки
      * @return список всех оценок студента
      */
@@ -48,6 +51,7 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
 
     /**
      * Находит все оценки для заданного студента
+     *
      * @param studentId id студента, для которого ищем оценки
      * @return список всех оценок студента
      */
@@ -59,5 +63,10 @@ public interface GradeRepository extends CrudRepository<Grade, Long> {
                                                   Long subjectId);
 
     @Query("SELECT grade FROM Grade grade WHERE grade.subject.id = :subjectId AND grade.student.group.id = :groupId")
-    List<Grade> findAllBySubjectIdAndGroup (Long subjectId, Long groupId);
+    List<Grade> findAllBySubjectIdAndGroup(Long subjectId, Long groupId);
+
+    List<Grade> findAllByGroupId(Long groupId);
+
+    @Query("SELECT grade FROM Grade grade WHERE grade.student.login = :login")
+    List<Grade> findAllByStudentLogin(String login);
 }
