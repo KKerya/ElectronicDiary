@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Оценки</title>
+    <link rel="stylesheet" th:href="@{/css/grades.css}">
+</head>
+<body>
+<h1>Оценки</h1>
+
+<a class="home-link" href="/home" th:href="@{/home}">На главную</a>
+
+<form id="gradesForm">
+    <label for="subject">Предмет:</label>
+    <select name="subjectId" id="subject">
+        <option th:each="subject : ${subjects}"
+                th:value="${subject.id}"
+                th:text="${subject.name}"></option>
+    </select>
+
+    <div th:if="${isTeacher}">
+        <label for="group">Группа:</label>
+        <select name="groupId" id="group">
+            <option th:each="group : ${groups}"
+                    th:value="${group.id}"
+                    th:text="${group.name}"></option>
+        </select>
+    </div>
+
+    <button type="submit">Показать оценки</button>
+</form>
+
+<div id="grades-container">
+</div>
+
+<script th:src="@{/js/grades.js}"></script>
+</body>
+</html>

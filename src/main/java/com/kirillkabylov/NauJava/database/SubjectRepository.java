@@ -1,9 +1,9 @@
 package com.kirillkabylov.NauJava.database;
 
-import com.kirillkabylov.NauJava.domain.Report;
+import com.kirillkabylov.NauJava.domain.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReportRepository extends JpaRepository<Report, Long> {
+public interface SubjectRepository extends JpaRepository<Subject, Long> {
 }

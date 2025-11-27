@@ -1,7 +1,7 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.Exceptions.ApiError;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import com.kirillkabylov.NauJava.Exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

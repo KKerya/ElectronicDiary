@@ -2,9 +2,11 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.domain.Teacher;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TeacherService {
     /**
@@ -14,19 +16,19 @@ public interface TeacherService {
      * @param password пароль
      * @param subject предмет
      */
-    Teacher createTeacher(String login, String fullName, String password, String subject);
+    Teacher createTeacher(String login, String fullName, String password, List<Subject> subject);
 
     /**
      * Находит учителя по id
      * @param id id
      */
-    Teacher findById(Long id);
+    Teacher getById(Long id);
 
     /**
      * Находит учителя по логину
      * @param login
      */
-    Teacher findByLogin(String login);
+    Teacher getByLogin(String login);
 
     /**
      * Удаляет учителя по id
@@ -51,12 +53,12 @@ public interface TeacherService {
     /**
      * Добавляет оценку
      * @param value значение оценки
-     * @param student студент
-     * @param subject предмет
-     * @param teacher учитель
+     * @param studentId id студента
+     * @param subjectId id предмета
+     * @param teacherId id учителя
      * @param dateTime время
      */
-    void addGrade(int value, Student student, String subject, Teacher teacher, LocalDateTime dateTime);
+    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime);
 
     /**
      * Удалить оценку

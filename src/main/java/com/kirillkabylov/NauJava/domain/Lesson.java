@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_lessons")
@@ -24,6 +26,9 @@ public class Lesson {
 
     @Column
     private LocalDateTime startTime;
+
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Homework> homeworkList = new ArrayList<>();
 
     @Value("${lesson.max-duration:45}")
     private int durationMinutes;
@@ -49,6 +54,17 @@ public class Lesson {
         this.teacher = teacher;
         this.startTime = startTime;
     }
+
+    public void addHomework(Homework homework) {
+        homeworkList.add(homework);
+        homework.setLesson(this);
+    }
+
+    public void removeHomework(Homework homework) {
+        homeworkList.remove(homework);
+        homework.setLesson(null);
+    }
+
 
     public Long getId() {
         return id;
@@ -89,4 +105,6 @@ public class Lesson {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
+
+    public List<Homework> getHomeworkList() { return homeworkList; }
 }

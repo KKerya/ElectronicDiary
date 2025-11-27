@@ -2,10 +2,12 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.command.UserUpdateCommand;
+import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Реализация сервиса для управления cтудентами.
@@ -30,18 +32,20 @@ public class StudentServiceImpl implements StudentService {
     private final PlatformTransactionManager transactionManager;
     private final Map<String, UserUpdateCommand<Student>> commands;
     private final PasswordEncoder passwordEncoder;
+    private final GroupRepository groupRepository;
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               GradeService gradeService,
                               LessonRepository lessonRepository,
                               PlatformTransactionManager transactionManager,
                               Map<String, UserUpdateCommand<Student>> commands,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder, GroupRepository groupRepository) {
         this.studentRepository = studentRepository;
         this.gradeService = gradeService;
         this.transactionManager = transactionManager;
         this.commands = commands;
         this.passwordEncoder = passwordEncoder;
+        this.groupRepository = groupRepository;
     }
 
     @Override
@@ -80,5 +84,15 @@ public class StudentServiceImpl implements StudentService {
         }
         command.execute(student, newValue);
         studentRepository.save(student);
+    }
+
+    @Override
+    public List<Student> getStudentByGroupId(Long groupId) {
+        return groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found")).getStudents();
+    }
+
+    @Override
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
     }
 }
