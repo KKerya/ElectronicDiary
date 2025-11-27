@@ -29,7 +29,7 @@ public class StudentControllerView {
                 .map(s -> new StudentDto(
                         s.getId(),
                         s.getFullName(),
-                        s.getGroup().getGroupName()
+                        s.getGroup().getName()
                 ))
                 .toList();
 

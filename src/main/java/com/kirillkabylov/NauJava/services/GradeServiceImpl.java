@@ -2,10 +2,7 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
 import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
-import com.kirillkabylov.NauJava.database.GradeRepository;
-import com.kirillkabylov.NauJava.database.GroupRepository;
-import com.kirillkabylov.NauJava.database.StudentRepository;
-import com.kirillkabylov.NauJava.database.SubjectRepository;
+import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
@@ -31,24 +28,31 @@ public class GradeServiceImpl implements GradeService {
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
     private final SubjectRepository subjectRepository;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
-    public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules, StudentRepository studentRepository,
-                            GroupRepository groupRepository, SubjectRepository subjectRepository) {
+    public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules,
+                            StudentRepository studentRepository, GroupRepository groupRepository,
+                            SubjectRepository subjectRepository, TeacherRepository teacherRepository) {
         this.gradeRepository = gradeRepository;
         this.gradeRules = gradeRules;
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
-    public void addGrade(Student student, int value, Subject subject, Teacher teacher, LocalDateTime dateTime) {
+    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
+        Student student = studentRepository.findById(studentId).orElseThrow( () -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow( () -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow( () -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
         Grade grade = new Grade(value, student, subject, teacher, dateTime);
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
         }
-        gradeRepository.save(grade);
+
+        return gradeRepository.save(grade);
     }
 
     @Override
@@ -105,12 +109,17 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public List<Grade> getGradesByGroup(Long groupId) {
         groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found"));
-        return gradeRepository.findAllByGroupId(groupId);
+        return gradeRepository.findAllByStudentGroupId(groupId);
     }
 
     @Override
     public List<Grade> getGradesByStudent(String login) {
         studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login " + login + " not found"));
         return gradeRepository.findAllByStudentLogin(login);
+    }
+
+    @Override
+    public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end) {
+        return gradeRepository.findGradesByGroupAndDate(groupId, start, end);
     }
 }

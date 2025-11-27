@@ -5,7 +5,6 @@ import com.kirillkabylov.NauJava.domain.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,8 +64,14 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
     @Query("SELECT grade FROM Grade grade WHERE grade.subject.id = :subjectId AND grade.student.group.id = :groupId")
     List<Grade> findAllBySubjectIdAndGroup(Long subjectId, Long groupId);
 
-    List<Grade> findAllByGroupId(Long groupId);
+    List<Grade> findAllByStudentGroupId(Long groupId);
 
     @Query("SELECT grade FROM Grade grade WHERE grade.student.login = :login")
     List<Grade> findAllByStudentLogin(String login);
+
+    @Query("SELECT grade FROM Grade grade Where grade.student.group.id = :groupId AND grade.date BETWEEN :start AND :end")
+    List<Grade> findGradesByGroupAndDate(
+            Long groupId,
+            LocalDateTime start,
+            LocalDateTime end);
 }

@@ -48,18 +48,18 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher findById(Long id) {
+    public Teacher getById(Long id) {
         return teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
-    public Teacher findByLogin(String login){
+    public Teacher getByLogin(String login){
         return teacherRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException(login));
     }
 
     @Override
     public void deleteTeacher(Long id) {
-        teacherRepository.delete(findById(id));
+        teacherRepository.delete(getById(id));
     }
 
     @Override
@@ -79,8 +79,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addGrade(int value, Student student, Subject subject, Teacher teacher, LocalDateTime dateTime) {
-        gradeService.addGrade(student, value, subject, teacher, dateTime);
+    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
+        return gradeService.createGrade(studentId, value, subjectId, teacherId, dateTime);
     }
 
     @Override

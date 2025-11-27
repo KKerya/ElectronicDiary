@@ -11,12 +11,12 @@ import java.util.List;
 public interface GradeService {
     /**
      * Создает оценку
-     * @param student студент
+     * @param studentId id студента
      * @param value оценка
-     * @param subject предмет
-     * @param teacher учитель
+     * @param subjectId id предмета
+     * @param teacherId id учителя
      */
-    void addGrade(Student student, int value, Subject subject, Teacher teacher, LocalDateTime dateTime);
+    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime);
 
     /**
      * Находит оценку студента
@@ -69,4 +69,6 @@ public interface GradeService {
     List<Grade> getGradesByGroup(Long groupId);
 
     List<Grade> getGradesByStudent(String login);
+
+    List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end);
 }

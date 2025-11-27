@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
@@ -37,4 +38,8 @@ public interface StudentService {
      * @param newValue новое значение поля
      */
     void updateStudent(Long id, String field, Object newValue);
+
+    List<Student> getStudentByGroupId(Long groupId);
+
+    List<Student> getAllStudents();
 }

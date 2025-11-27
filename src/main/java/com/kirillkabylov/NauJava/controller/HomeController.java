@@ -37,7 +37,6 @@ public class HomeController {
         model.addAttribute("isTeacher", isTeacher);
         model.addAttribute("isStudent", isStudent);
         model.addAttribute("isAdmin", isAdmin);
-        ;
 
         return "home";
     }

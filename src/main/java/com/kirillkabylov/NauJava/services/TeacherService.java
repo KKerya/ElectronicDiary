@@ -22,13 +22,13 @@ public interface TeacherService {
      * Находит учителя по id
      * @param id id
      */
-    Teacher findById(Long id);
+    Teacher getById(Long id);
 
     /**
      * Находит учителя по логину
      * @param login
      */
-    Teacher findByLogin(String login);
+    Teacher getByLogin(String login);
 
     /**
      * Удаляет учителя по id
@@ -53,12 +53,12 @@ public interface TeacherService {
     /**
      * Добавляет оценку
      * @param value значение оценки
-     * @param student студент
-     * @param subject предмет
-     * @param teacher учитель
+     * @param studentId id студента
+     * @param subjectId id предмета
+     * @param teacherId id учителя
      * @param dateTime время
      */
-    void addGrade(int value, Student student, Subject subject, Teacher teacher, LocalDateTime dateTime);
+    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime);
 
     /**
      * Удалить оценку

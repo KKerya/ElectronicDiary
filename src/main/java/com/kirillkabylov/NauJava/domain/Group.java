@@ -13,7 +13,7 @@ public class Group {
     Long id;
 
     @Column
-    String groupName;
+    String name;
 
     @OneToOne
     @JoinColumn(name = "teacher_id")
@@ -25,12 +25,12 @@ public class Group {
     public Group(){
     }
 
-    public Group(String groupName) {
-        this.groupName = groupName;
+    public Group(String name) {
+        this.name = name;
     }
 
-    public Group(String groupName, Teacher teacher) {
-        this.groupName = groupName;
+    public Group(String name, Teacher teacher) {
+        this.name = name;
         this.teacher = teacher;
     }
 
@@ -38,8 +38,8 @@ public class Group {
         return id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getName() {
+        return name;
     }
 
     public Teacher teacher(){
@@ -54,8 +54,8 @@ public class Group {
         this.students = students;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setTeacher(Teacher teacher){
@@ -66,7 +66,7 @@ public class Group {
     public String toString() {
         return "Group{" +
                 "id=" + id +
-                ", groupName='" + groupName + '\'' +
+                ", groupName='" + name + '\'' +
                 ", teacher=" + teacher +
                 ", students=" + students +
                 '}';

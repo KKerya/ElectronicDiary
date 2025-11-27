@@ -46,14 +46,15 @@
 <!-- Блок для преподавателя -->
 <div class="block" th:if="${isTeacher}">
     <h2>Преподавательский блок</h2>
-    <a href="/grades">Оценки студентов</a><br>
+    <a href="/grade/view">Оценки студентов</a><br>
     <a href="/subjects">Мои предметы</a>
+    <a href="/grade/create">Поставить оценку</a>
 </div>
 
 <!-- Блок для студента -->
 <div class="block" th:if="${isStudent}">
     <h2>Студенческий блок</h2>
-    <a href="/grades">Мои оценки</a><br>
+    <a href="/grade/view">Мои оценки</a><br>
     <a href="/schedule">Расписание</a>
 </div>
 
