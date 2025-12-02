@@ -1,9 +1,6 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.domain.Grade;
-import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -68,11 +65,11 @@ public interface TeacherService {
 
     /**
      * Создает занятие
-     * @param groupName класс
+     * @param group класс
      * @param subject предмет
      * @param teacher учитель
      * @param startTime время начала
      * @param room кабинет
      */
-    void addLesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room);
+    void addLesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime, String room);
 }

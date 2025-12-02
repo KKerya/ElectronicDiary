@@ -23,13 +23,13 @@ public interface StudentService {
      * @param password  пароль
      * @param group номер класса
      */
-    void createStudent(String login, String fullName, String password, Group group);
+    Student createStudent(String login, String fullName, String password, Group group);
 
     /**
      * Находит студента по id
      * @param id id
      */
-    Student findById(Long id);
+    Student getById(Long id);
 
     /**
      * Обновляет поле студента
@@ -39,7 +39,9 @@ public interface StudentService {
      */
     void updateStudent(Long id, String field, Object newValue);
 
-    List<Student> getStudentByGroupId(Long groupId);
+    List<Student> getStudentsByGroupId(Long groupId);
 
     List<Student> getAllStudents();
+
+    Student getByLogin(String login);
 }

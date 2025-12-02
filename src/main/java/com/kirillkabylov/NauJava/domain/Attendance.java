@@ -24,7 +24,7 @@ public class Attendance {
 
     public Attendance(){}
 
-    public Attendance(AttendanceStatus status, Lesson lesson, Student student) {
+    public Attendance(Lesson lesson, Student student, AttendanceStatus status) {
         this.status = status;
         this.lesson = lesson;
         this.student = student;

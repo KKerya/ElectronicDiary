@@ -2,6 +2,7 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.domain.Group;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Optional<Group> getById(Long id){
-        return groupRepository.findById(id);
+    public Group getById(Long id){
+        return groupRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("Group with id - " + id + "not found"));
     }
 }

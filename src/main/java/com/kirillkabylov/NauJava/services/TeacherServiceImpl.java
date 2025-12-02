@@ -89,7 +89,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addLesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime, String room) {
-        lessonRepository.save(new Lesson(groupName, subject, teacher, startTime));
+    public void addLesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime, String room) {
+        lessonRepository.save(new Lesson(group, subject, teacher, startTime));
     }
 }

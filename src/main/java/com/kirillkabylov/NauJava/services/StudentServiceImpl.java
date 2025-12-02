@@ -62,16 +62,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void createStudent(String login, String fullName, String password, Group group) {
+    public Student createStudent(String login, String fullName, String password, Group group) {
         if (studentRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Студент с таким логином уже существует");
         }
         Student newStudent = new Student(login, fullName, passwordEncoder.encode(password), group);
-        studentRepository.save(newStudent);
+        return studentRepository.save(newStudent);
     }
 
     @Override
-    public Student findById(Long id) {
+    public Student getById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
@@ -87,12 +87,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getStudentByGroupId(Long groupId) {
+    public List<Student> getStudentsByGroupId(Long groupId) {
         return groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found")).getStudents();
     }
 
     @Override
     public List<Student> getAllStudents(){
         return studentRepository.findAll();
+    }
+
+    @Override
+    public Student getByLogin(String login){
+        return studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login - " + login + " not found"));
     }
 }

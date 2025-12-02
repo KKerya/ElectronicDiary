@@ -1,17 +1,14 @@
 package com.kirillkabylov.NauJava;
 
 import com.kirillkabylov.NauJava.database.*;
-import com.kirillkabylov.NauJava.domain.Group;
-import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
-import com.kirillkabylov.NauJava.services.AdminService;
-import com.kirillkabylov.NauJava.services.StudentService;
-import com.kirillkabylov.NauJava.services.TeacherService;
-import com.kirillkabylov.NauJava.services.UserService;
+import com.kirillkabylov.NauJava.domain.*;
+import com.kirillkabylov.NauJava.enums.AttendanceStatus;
+import com.kirillkabylov.NauJava.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,11 +24,14 @@ public class DataInitializer implements CommandLineRunner {
     private final GroupRepository groupRepository;
     private final TeacherService teacherService;
     private final SubjectRepository subjectRepository;
+    private final AttendanceService attendanceService;
+    private final LessonRepository lessonRepository;
 
     @Autowired
     public DataInitializer(UserRepository userRepository, AdminService adminService, AdminRepository adminRepository,
                            UserService userService, StudentService studentService, GroupRepository groupRepository,
-                           TeacherService teacherService, SubjectRepository subjectRepository) {
+                           TeacherService teacherService, SubjectRepository subjectRepository, AttendanceService attendanceService,
+                           LessonRepository lessonRepository) {
         this.userRepository = userRepository;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
@@ -40,6 +40,8 @@ public class DataInitializer implements CommandLineRunner {
         this.groupRepository = groupRepository;
         this.teacherService = teacherService;
         this.subjectRepository = subjectRepository;
+        this.attendanceService = attendanceService;
+        this.lessonRepository = lessonRepository;
     }
 
     @Override
@@ -48,13 +50,16 @@ public class DataInitializer implements CommandLineRunner {
             userService.createUser("TestUser1", "Alica Alisovna", "123123");
             userService.createUser("TestUser2", "Ivan Ivanov", "123123");
 
-            Subject subject = new Subject("Math");
-            subjectRepository.save(subject);
+            Subject subject = subjectRepository.save(new Subject("Math"));
             Teacher teacher = teacherService.createTeacher("TeacherLogin", "Teacher Teacher", "123123", List.of(subject));
 
-            Group group = new Group("11A", teacher);
-            groupRepository.save(group);
-            studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123123", group);
+            Group group = groupRepository.save( new Group("11A", teacher));
+            Student student1 = studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123123", group);
+            studentService.createStudent("TestStudent2", "Masha Aleksandrova", "123123123", group);
+
+            Lesson lesson = lessonRepository.save(new Lesson(group, subject, teacher, LocalDateTime.now()));
+
+            attendanceService.createAttendance(lesson, student1, AttendanceStatus.PRESENT);
         }
         if (adminRepository.count() == 0){
             adminService.createAdmin("TestAdmin", "Admin", "123123");

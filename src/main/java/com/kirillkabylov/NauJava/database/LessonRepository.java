@@ -1,6 +1,7 @@
 package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Lesson;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
      */
     @Query("SELECT lesson FROM Lesson lesson WHERE lesson.teacher.fullName = :fullName")
     List<Lesson> findLessonByTeacherName(@Param("fullName") String fullName);
+
+    @EntityGraph(attributePaths = {"attendances"})
+    List<Lesson> findByGroupIdAndSubjectId(Long groupId, Long subjectId);
 }

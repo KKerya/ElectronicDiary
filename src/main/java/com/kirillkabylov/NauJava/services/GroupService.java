@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface GroupService {
     List<Group> getAllGroups();
 
-    Optional<Group> getById(Long id);
+    Group getById(Long id);
 }

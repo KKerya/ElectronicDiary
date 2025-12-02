@@ -14,11 +14,13 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String groupName;
+    @ManyToOne
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private Group group;
 
-    @Column
-    private String subject;
+    @ManyToOne
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    private Subject subject;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
@@ -30,29 +32,32 @@ public class Lesson {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Homework> homeworkList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attendance> attendances = new ArrayList<>();
+
     @Value("${lesson.max-duration:45}")
     private int durationMinutes;
 
     public Lesson() {
     }
 
+    public Lesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime) {
+        this.group = group;
+        this.subject = subject;
+        this.teacher = teacher;
+        this.startTime = startTime;
+    }
+
     @Override
     public String toString() {
         return "Lesson{" +
                 "id=" + id +
-                ", groupName='" + groupName + '\'' +
+                ", groupName='" + group.getName() + '\'' +
                 ", subject='" + subject + '\'' +
                 ", teacher=" + teacher +
                 ", startTime=" + startTime +
                 ", durationMinutes=" + durationMinutes +
                 '}';
-    }
-
-    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime) {
-        this.groupName = groupName;
-        this.subject = subject;
-        this.teacher = teacher;
-        this.startTime = startTime;
     }
 
     public void addHomework(Homework homework) {
@@ -70,11 +75,11 @@ public class Lesson {
         return id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public Group getGroup() {
+        return group;
     }
 
-    public String getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
@@ -90,11 +95,11 @@ public class Lesson {
         return durationMinutes;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
@@ -107,4 +112,16 @@ public class Lesson {
     }
 
     public List<Homework> getHomeworkList() { return homeworkList; }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public void setHomeworkList(List<Homework> homeworkList) {
+        this.homeworkList = homeworkList;
+    }
 }
