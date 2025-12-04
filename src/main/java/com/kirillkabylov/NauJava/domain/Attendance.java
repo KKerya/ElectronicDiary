@@ -30,6 +30,14 @@ public class Attendance {
         this.student = student;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public AttendanceStatus getStatus() {
         return status;
     }

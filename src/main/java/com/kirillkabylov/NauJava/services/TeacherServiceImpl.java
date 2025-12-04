@@ -1,14 +1,16 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.LessonRepository;
+import com.kirillkabylov.NauJava.database.SubjectRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
 import com.kirillkabylov.NauJava.domain.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,17 +26,20 @@ public class TeacherServiceImpl implements TeacherService {
     private final GradeService gradeService;
     private final Map<String, UserUpdateCommand<Teacher>> commands;
     private final PasswordEncoder passwordEncoder;
+    private final SubjectRepository subjectRepository;
 
     public TeacherServiceImpl(TeacherRepository teacherRepository,
                               LessonRepository lessonRepository,
                               GradeService gradeService,
                               Map<String, UserUpdateCommand<Teacher>> commands,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder,
+                              SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
         this.lessonRepository = lessonRepository;
         this.gradeService = gradeService;
         this.commands = commands;
         this.passwordEncoder = passwordEncoder;
+        this.subjectRepository = subjectRepository;
     }
 
     @Override
@@ -42,19 +47,22 @@ public class TeacherServiceImpl implements TeacherService {
         if (teacherRepository.findByLogin(login).isPresent()){
             throw new RuntimeException("Учитель с таким логином уже существует");
         }
-        Teacher newTeacher = new Teacher(login, fullName, passwordEncoder.encode(password), subject);
-        teacherRepository.save(newTeacher);
-        return newTeacher;
+        Teacher teacher = teacherRepository.save(new Teacher(login, fullName, passwordEncoder.encode(password), subject));
+        subject.forEach(s -> {
+            s.setTeacher(teacher);
+            subjectRepository.save(s);
+        });
+        return teacher;
     }
 
     @Override
     public Teacher getById(Long id) {
-        return teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return teacherRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Teacher with id - " + id + " not found"));
     }
 
     @Override
     public Teacher getByLogin(String login){
-        return teacherRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException(login));
+        return teacherRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Group with login - " + login + " not found"));
     }
 
     @Override
@@ -69,7 +77,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void updateTeacher (Long id, String field, Object newValue) {
-        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Group with id - " + id + " not found"));
         UserUpdateCommand<Teacher> command = commands.get(field);
         if (command == null) {
             throw new IllegalArgumentException("Неизвестное поле: " + field);

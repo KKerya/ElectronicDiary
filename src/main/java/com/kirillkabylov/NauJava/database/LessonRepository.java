@@ -21,4 +21,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @EntityGraph(attributePaths = {"attendances"})
     List<Lesson> findByGroupIdAndSubjectId(Long groupId, Long subjectId);
+
+    List<Lesson> findByTeacherLogin(String Login);
 }

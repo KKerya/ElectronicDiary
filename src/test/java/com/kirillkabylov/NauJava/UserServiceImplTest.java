@@ -1,11 +1,11 @@
 package com.kirillkabylov.NauJava;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.UserRepository;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import com.kirillkabylov.NauJava.services.UserServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -82,7 +82,7 @@ public class UserServiceImplTest {
     @Test
     void findByLoginNotFound(){
         when(userRepository.findByLogin("unknown")).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.findByLogin("unknown"));
+        assertThrows(EntityNotFoundException.class, () -> userService.findByLogin("unknown"));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class UserServiceImplTest {
     @Test
     void loadUserByUsernameNotFound() {
         when(userRepository.findByLogin("test")).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> userService.loadUserByUsername("test"));
     }
 

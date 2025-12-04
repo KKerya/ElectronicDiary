@@ -1,8 +1,8 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.AdminRepository;
 import com.kirillkabylov.NauJava.domain.Admin;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
         if (admin.isPresent()) {
             adminRepository.delete(admin.get());
         } else {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException("Admin with id - " + id + " not found");
         }
     }
 }

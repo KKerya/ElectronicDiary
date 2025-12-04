@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-<h1>Добро пожаловать!</h1>
+<h1 th:text="'Добро пожаловать, ' + ${username} + '!'"></h1>
 
 <!-- Блок для админа -->
 <div class="block" th:if="${isAdmin}">
@@ -48,15 +48,17 @@
     <h2>Преподавательский блок</h2>
     <a href="/grade/view">Оценки студентов</a><br>
     <a href="/subjects">Мои предметы</a> <br>
-    <a href="/grade/create">Поставить оценку</a>
+    <a href="/grade/create">Поставить оценку</a> <br>
+    <a href="/attendance/create">Посещаемость</a>
+
 </div>
 
 <!-- Блок для студента -->
 <div class="block" th:if="${isStudent}">
     <h2>Студенческий блок</h2>
     <a href="/grade/view">Мои оценки</a><br>
-    <a href="/schedule">Расписание</a>
-    <a href="/attendance">Посещаемость</a>
+    <a href="/schedule">Расписание</a><br>
+    <a href="/attendance/view">Посещаемость</a>
 </div>
 
 </body>

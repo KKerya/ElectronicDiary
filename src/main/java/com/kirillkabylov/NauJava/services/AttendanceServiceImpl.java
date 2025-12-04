@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService{
@@ -32,8 +33,34 @@ public class AttendanceServiceImpl implements AttendanceService{
     public Attendance createAttendance(Lesson lesson, Student student, AttendanceStatus status){
         Attendance attendance = attendanceRepository.save(new Attendance(lesson, student, status));
         lesson.getAttendances().add(attendance);
-        lessonRepository.save(lesson);
         return attendance;
+    }
+
+    @Override
+    public Attendance createAttendance(Long lessonId, Long studentId, AttendanceStatus status){
+        Attendance attendance = attendanceRepository
+                .findByLessonIdAndStudentId(lessonId, studentId)
+                .orElseGet(Attendance::new);
+
+        if (attendance.getId() == null) {
+            Lesson lesson = lessonRepository.getReferenceById(lessonId);
+            Student student = studentRepository.getReferenceById(studentId);
+            attendance = new Attendance(lesson, student, status);
+            lesson.getAttendances().add(attendance);
+        } else {
+            updateAttendanceStatus(attendance, status);
+        }
+
+        return attendanceRepository.save(attendance);
+    }
+
+    public void updateAttendanceStatus(Attendance attendance, AttendanceStatus status){
+        attendance.setStatus(status);
+    }
+
+    @Override
+    public void deleteAttendance(Long id){
+        attendanceRepository.deleteById(id);
     }
 
     @Override

@@ -1,18 +1,20 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.domain.Attendance;
+import com.kirillkabylov.NauJava.domain.Lesson;
+import com.kirillkabylov.NauJava.dto.AttendanceCreateRequest;
 import com.kirillkabylov.NauJava.dto.AttendanceDto;
+import com.kirillkabylov.NauJava.dto.StudentAttendanceDto;
 import com.kirillkabylov.NauJava.dto.StudentDto;
+import com.kirillkabylov.NauJava.enums.AttendanceStatus;
 import com.kirillkabylov.NauJava.services.AttendanceService;
+import com.kirillkabylov.NauJava.services.LessonService;
 import com.kirillkabylov.NauJava.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,11 +23,13 @@ import java.util.List;
 public class AttendanceController {
     private final AttendanceService attendanceService;
     private final StudentService studentService;
+    private final LessonService lessonService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService, StudentService studentService) {
+    public AttendanceController(AttendanceService attendanceService, StudentService studentService, LessonService lessonService) {
         this.attendanceService = attendanceService;
         this.studentService = studentService;
+        this.lessonService = lessonService;
     }
 
     @GetMapping("/my-attendance/")
@@ -71,5 +75,48 @@ public class AttendanceController {
                         a.getStatus().getDisplayName()
                 ))
                 .toList();
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public AttendanceDto createAttendance(@RequestBody AttendanceCreateRequest request) {
+        Attendance attendance = attendanceService.createAttendance(
+                request.lessonId(),
+                request.studentId(),
+                AttendanceStatus.valueOf(request.status())
+        );
+
+        return new AttendanceDto(
+                attendance.getLesson().getStartTime().toLocalDate(),
+                new StudentDto(
+                        attendance.getStudent().getId(),
+                        attendance.getStudent().getFullName(),
+                        attendance.getStudent().getGroup().getName()
+                ),
+                attendance.getStatus().getDisplayName()
+        );
+    }
+
+    @DeleteMapping("delete/{attendanceId}")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public void deleteAttendance(@PathVariable Long attendanceId){
+        attendanceService.deleteAttendance(attendanceId);
+    }
+
+    @GetMapping("/students/{lessonId}")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public List<StudentAttendanceDto> getStudentsByLesson(@PathVariable Long lessonId){
+        Lesson lesson = lessonService.getLessonById(lessonId);
+        return lesson.getGroup().getStudents().stream()
+                .map(student -> {
+                    Attendance attendance = lesson.getAttendances().stream()
+                            .filter(a -> a.getStudent().getId().equals(student.getId()))
+                            .findFirst()
+                            .orElse(null);
+
+                    String status = attendance != null ? attendance.getStatus().getDisplayName() : null;
+
+                    return new StudentAttendanceDto(student.getId(), student.getFullName(), status);
+                }).toList();
     }
 }

@@ -1,6 +1,5 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.LessonRepository;
@@ -72,12 +71,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getById(Long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student with id - " + id + " not found"));
     }
 
     @Override
     public void updateStudent(Long id, String field, Object newValue) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student with id - " + id + " not found"));
         UserUpdateCommand<Student> command = commands.get(field);
         if (command == null) {
             throw new IllegalArgumentException("Неизвестное поле: " + field);

@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface SubjectService {
     List<Subject> getAllSubjects();
 
+    List<Subject> getSubjectsByTeacherLogin(String login);
+
     Optional<Subject> getById(Long subjectId);
 }

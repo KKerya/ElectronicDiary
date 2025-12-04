@@ -3,10 +3,10 @@ package com.kirillkabylov.NauJava.services;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface GradeService {
     /**
@@ -26,13 +26,14 @@ public interface GradeService {
      * @param dateTime время
      * @return grade
      */
-    Grade findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime);
+    Grade getGrade(long studentId, Subject subject, int value, LocalDateTime dateTime);
 
     /**
      * Находит оценку студента по id
+     *
      * @param id id
      */
-    Grade findById(long id);
+    Optional<Grade> findById(long id);
 
     /**
      * Удаляет оценку студента

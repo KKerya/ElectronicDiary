@@ -1,11 +1,11 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.UserRepository;
 import com.kirillkabylov.NauJava.domain.Admin;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,14 +52,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<UserEntity> findByFullName(String fullName) {
         List<UserEntity> users = userRepository.findByFullName(fullName);
         if (users.isEmpty()){
-            throw new UserNotFoundException(fullName);
+            throw new EntityNotFoundException("Users with fullName - " + fullName + "not found");
         }
         return users;
     }
 
     @Override
     public UserEntity findByLogin(String login){
-        return userRepository.findByLogin(login).orElseThrow( () -> new UserNotFoundException(login));
+        return userRepository.findByLogin(login).orElseThrow( () -> new EntityNotFoundException("User with login - " + login + " not found"));
     }
 
 

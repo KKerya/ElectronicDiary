@@ -46,10 +46,10 @@ public class GradeViewController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('TEACHER')")
-    public String createGradePage(Model model) {
+    public String createGradePage(@AuthenticationPrincipal UserDetails user, Model model) {
         model.addAttribute("minScore", gradeProperties.getMinScore());
         model.addAttribute("maxScore", gradeProperties.getMaxScore());
-        model.addAttribute("subjects", subjectService.getAllSubjects());
+        model.addAttribute("subjects", subjectService.getSubjectsByTeacherLogin(user.getUsername()));
         model.addAttribute("groups", groupService.getAllGroups());
         model.addAttribute("students", studentService.getAllStudents());
 

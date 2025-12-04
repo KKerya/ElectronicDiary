@@ -1,7 +1,5 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -56,18 +55,25 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime).orElseThrow(GradeNotFoundException::new);
+    public Grade getGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
+        return gradeRepository
+                .findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime)
+                .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
+    }
+
+    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime){
+        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime);
     }
 
     @Override
-    public Grade findById(long id) {
-        return gradeRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public Optional<Grade> findById(long id) {
+        return gradeRepository.findById(id);
     }
 
     @Override
     public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        gradeRepository.delete(findGrade(studentId, subject, value, dateTime));
+        Optional<Grade> grade = findGrade(studentId, subject, value, dateTime);
+        grade.ifPresent(gradeRepository::delete);
     }
 
     @Override
@@ -82,7 +88,9 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void changeGradeValue(Grade grade, int newValue) {
-        Grade existingGrade = gradeRepository.findById(grade.getId()).orElseThrow(GradeNotFoundException::new);
+        Grade existingGrade = gradeRepository
+                .findById(grade.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
 
         existingGrade.setValue(newValue);
         for (GradeRule rule : gradeRules) {

@@ -2,6 +2,7 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.database.SubjectRepository;
 import com.kirillkabylov.NauJava.domain.Subject;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> getAllSubjects() {
         return (List<Subject>) subjectRepository.findAll();
+    }
+
+    @Override
+    public List<Subject> getSubjectsByTeacherLogin(String login) {
+        return subjectRepository.findByTeacherLogin(login);
     }
 
     @Override
