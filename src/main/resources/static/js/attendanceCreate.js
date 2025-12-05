@@ -38,7 +38,6 @@ showBtn.addEventListener("click", () => {
 
             studentsTable.style.display = "table";
 
-            // Навешиваем обработчик на кнопки
             document.querySelectorAll(".mark-btn").forEach(btn => {
                 btn.addEventListener("click", function() {
                     const studentId = this.dataset.id;

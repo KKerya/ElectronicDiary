@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -23,4 +25,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByGroupIdAndSubjectId(Long groupId, Long subjectId);
 
     List<Lesson> findByTeacherLogin(String Login);
+
+    @Query("SELECT l FROM Lesson l WHERE l.group.id = :groupId AND FUNCTION('DATE', l.startTime) BETWEEN :startDate AND :endDate")
+    List<Lesson> findByGroupIdAndStartTimeBetween(Long groupId, LocalDateTime startDate, LocalDateTime endDate);
 }

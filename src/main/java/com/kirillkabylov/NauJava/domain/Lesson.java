@@ -35,7 +35,6 @@ public class Lesson {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attendance> attendances = new ArrayList<>();
 
-    @Value("${lesson.max-duration:45}")
     private int durationMinutes;
 
     public Lesson() {
@@ -93,6 +92,10 @@ public class Lesson {
 
     public int getDurationMinutes() {
         return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
     }
 
     public void setGroup(Group group) {

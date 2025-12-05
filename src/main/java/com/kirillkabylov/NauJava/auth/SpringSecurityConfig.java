@@ -26,7 +26,7 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests)-> requests
                     .requestMatchers("/login", "/registration").permitAll()
-                    .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
+//                    .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())

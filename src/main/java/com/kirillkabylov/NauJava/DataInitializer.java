@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,13 +27,13 @@ public class DataInitializer implements CommandLineRunner {
     private final TeacherService teacherService;
     private final SubjectRepository subjectRepository;
     private final AttendanceService attendanceService;
-    private final LessonRepository lessonRepository;
+    private final LessonService lessonService;
 
     @Autowired
     public DataInitializer(UserRepository userRepository, AdminService adminService, AdminRepository adminRepository,
                            UserService userService, StudentService studentService, GroupRepository groupRepository,
                            TeacherService teacherService, SubjectRepository subjectRepository, AttendanceService attendanceService,
-                           LessonRepository lessonRepository) {
+                           LessonService lessonService) {
         this.userRepository = userRepository;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
@@ -41,7 +43,7 @@ public class DataInitializer implements CommandLineRunner {
         this.teacherService = teacherService;
         this.subjectRepository = subjectRepository;
         this.attendanceService = attendanceService;
-        this.lessonRepository = lessonRepository;
+        this.lessonService = lessonService;
     }
 
     @Override
@@ -56,13 +58,16 @@ public class DataInitializer implements CommandLineRunner {
             Teacher teacher = teacherService.createTeacher("TestTeacher1", "Teacher Teacher", "123123", List.of(subject));
             Teacher teacher2 = teacherService.createTeacher("TestTeacher2", "Teacher Teacher", "123123", List.of(subject1));
 
-
             Group group = groupRepository.save( new Group("11A", teacher));
             Student student1 = studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123", group);
             studentService.createStudent("TestStudent2", "Masha Aleksandrova", "123123", group);
 
-            Lesson lesson = lessonRepository.save(new Lesson(group, subject, teacher, LocalDateTime.now()));
-            Lesson lesson1 = lessonRepository.save(new Lesson(group, subject, teacher, LocalDateTime.now().plusHours(100)));
+            LocalDateTime firstMonday = LocalDate.of(LocalDate.now().getYear(), 9, 1)
+                    .with(DayOfWeek.MONDAY)
+                    .atTime(9, 0);
+
+            Lesson lesson = lessonService.createLesson(group, subject, teacher, firstMonday);
+            Lesson lesson1 = lessonService.createLesson(group, subject, teacher, firstMonday.plusDays(1).plusHours(2));
 
             attendanceService.createAttendance(lesson, student1, AttendanceStatus.PRESENT);
             attendanceService.createAttendance(lesson1, student1, AttendanceStatus.PRESENT);
