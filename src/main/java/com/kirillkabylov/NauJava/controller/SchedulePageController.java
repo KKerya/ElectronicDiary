@@ -25,7 +25,7 @@ public class SchedulePageController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/view")
+    @GetMapping("/page")
     public String getSchedulePage(Model model,  @AuthenticationPrincipal UserDetails user) {
         long groupId = studentService.getByLogin(user.getUsername()).getGroup().getId();
 

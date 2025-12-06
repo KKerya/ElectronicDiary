@@ -1,6 +1,5 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.dto.LessonDto;
 import com.kirillkabylov.NauJava.dto.SubjectDto;
 import com.kirillkabylov.NauJava.services.LessonService;
@@ -18,17 +17,17 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/attendance")
-public class AttendanceViewController {
+public class AttendancePageController {
     private final SubjectService subjectService;
     private final LessonService lessonService;
 
     @Autowired
-    public AttendanceViewController(SubjectService subjectService, LessonService lessonService) {
+    public AttendancePageController(SubjectService subjectService, LessonService lessonService) {
         this.subjectService = subjectService;
         this.lessonService = lessonService;
     }
 
-    @GetMapping("/view")
+    @GetMapping("/page")
     @PreAuthorize("hasRole('STUDENT')")
     public String attendancePage(Model model) {
         model.addAttribute("subjects", subjectService.getAllSubjects());

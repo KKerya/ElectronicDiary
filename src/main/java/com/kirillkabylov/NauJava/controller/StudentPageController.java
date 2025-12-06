@@ -14,8 +14,8 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("custom/students/view")
-public class StudentControllerView {
+@RequestMapping("custom/students/page")
+public class StudentPageController {
     @Autowired
     private StudentRepository studentRepository;
 

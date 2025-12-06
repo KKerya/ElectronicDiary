@@ -1,27 +1,29 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.database.LessonRepository;
-import com.kirillkabylov.NauJava.domain.Lesson;
+import com.kirillkabylov.NauJava.dto.CreateLessonRequest;
+import com.kirillkabylov.NauJava.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("custom/lessons")
+@RequestMapping("api/lesson")
 public class LessonController {
-    private final LessonRepository lessonRepository;
+    private final LessonService lessonService;
 
     @Autowired
-    public LessonController(LessonRepository lessonRepository) {
-        this.lessonRepository = lessonRepository;
+    public LessonController(LessonService lessonService) {
+        this.lessonService = lessonService;
     }
 
-    @GetMapping
-    public List<Lesson> getLessonsByTeacherName(@RequestParam String name) {
-        return lessonRepository.findLessonByTeacherName(name);
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createLesson(@RequestBody CreateLessonRequest request) {
+        lessonService.createLesson(request.groupId(), request.subjectId(), request.teacherId(), request.startTime(), request.wholeYear());
+        return ResponseEntity.ok("OK");
     }
 }

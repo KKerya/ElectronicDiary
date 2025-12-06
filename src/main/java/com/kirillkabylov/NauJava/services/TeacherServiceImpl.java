@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,5 +98,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public void addLesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime, String room) {
         lessonRepository.save(new Lesson(group, subject, teacher, startTime));
+    }
+
+    @Override
+    public List<Teacher> getAllTeacher(){
+        return teacherRepository.findAll();
     }
 }

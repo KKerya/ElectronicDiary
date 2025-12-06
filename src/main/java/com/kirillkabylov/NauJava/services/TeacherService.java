@@ -72,4 +72,6 @@ public interface TeacherService {
      * @param room кабинет
      */
     void addLesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime, String room);
+
+    List<Teacher> getAllTeacher();
 }

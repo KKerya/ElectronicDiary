@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class RegistrationController {
+public class RegistrationPageController {
     private final UserService userService;
 
     @Autowired
-    public RegistrationController(UserService userService){
+    public RegistrationPageController(UserService userService){
         this.userService = userService;
     }
 

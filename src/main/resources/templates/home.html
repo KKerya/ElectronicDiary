@@ -3,51 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #333;
-        }
-        .block {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        a {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
+
+<div class="logout-container">
+    <a href="/logout" class="logout-btn">Выйти</a>
+</div>
+
 <h1 th:text="'Добро пожаловать, ' + ${username} + '!'"></h1>
 
 <!-- Блок для админа -->
 <div class="block" th:if="${isAdmin}">
     <h2>Админский блок</h2>
-    <a href="/admin/users">Управление пользователями</a><br>
-    <a href="/admin/settings">Настройки системы</a>
+    <a href="/lesson/create">Создать занятие</a><br>
 </div>
 
 <!-- Блок для преподавателя -->
 <div class="block" th:if="${isTeacher}">
     <h2>Преподавательский блок</h2>
-    <a href="/grade/view">Оценки студентов</a><br>
-    <a href="/subjects">Мои предметы</a> <br>
+    <a href="/grade/page">Оценки студентов</a><br>
     <a href="/grade/create">Поставить оценку</a> <br>
     <a href="/attendance/create">Посещаемость</a>
 
@@ -56,9 +31,9 @@
 <!-- Блок для студента -->
 <div class="block" th:if="${isStudent}">
     <h2>Студенческий блок</h2>
-    <a href="/grade/view">Мои оценки</a><br>
-    <a href="/schedule/view">Расписание</a><br>
-    <a href="/attendance/view">Посещаемость</a>
+    <a href="/grade/page">Мои оценки</a><br>
+    <a href="/schedule/page">Расписание</a><br>
+    <a href="/attendance/page">Посещаемость</a>
 </div>
 
 </body>

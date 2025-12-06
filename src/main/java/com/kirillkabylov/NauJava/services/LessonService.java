@@ -12,6 +12,8 @@ import java.util.List;
 public interface LessonService {
     Lesson createLesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime);
 
+    Lesson createLesson(Long groupId, Long subjectId, Long teacherId, LocalDateTime startTime, boolean wholeYear);
+
     List<Lesson> getLessonsByTeacherLogin(String login);
 
     Lesson getLessonById(Long lessonId);
