@@ -8,7 +8,12 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("TEACHER")
 public class Teacher extends UserEntity {
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.MERGE)
+    @ManyToMany
+    @JoinTable(
+            name = "subject_teacher",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
     private List<Subject> subjects = new ArrayList<>();
 
     public Teacher() {

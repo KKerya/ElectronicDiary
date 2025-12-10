@@ -1,9 +1,11 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface TeacherService {
     /**
@@ -11,9 +13,14 @@ public interface TeacherService {
      * @param login логин
      * @param fullName полное имя (ФИО)
      * @param password пароль
-     * @param subject предмет
+     * @param subjectIds id предметов
      */
-    Teacher createTeacher(String login, String fullName, String password, List<Subject> subject);
+    Teacher createTeacher(String login, String fullName, String password, List<Long> subjectIds);
+
+    @Transactional
+    void promoteToTeacher(UserEntity user, List<Long> subjects);
+
+    Teacher createTeacherWithoutEncodingPassword(String login, String fullName, String password, List<Long> subjectIds);
 
     /**
      * Находит учителя по id

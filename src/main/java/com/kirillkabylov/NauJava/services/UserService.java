@@ -26,5 +26,7 @@ public interface UserService {
      * Находит пользователя по логину
      * @param login логин
      */
-    UserEntity findByLogin(String login);
+    UserEntity getByLogin(String login);
+
+    void deleteUser(UserEntity user);
 }

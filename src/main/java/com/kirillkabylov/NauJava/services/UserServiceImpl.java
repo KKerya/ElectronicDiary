@@ -7,7 +7,6 @@ import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -59,14 +58,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserEntity findByLogin(String login){
+    public UserEntity getByLogin(String login){
         return userRepository.findByLogin(login).orElseThrow( () -> new EntityNotFoundException("User with login - " + login + " not found"));
     }
 
+    @Override
+    public void deleteUser(UserEntity user){
+        userRepository.delete(user);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userLogin){
-        UserEntity appUser = findByLogin(userLogin);
+        UserEntity appUser = getByLogin(userLogin);
         return new User(appUser.getLogin(), appUser.getPassword(), mapRoles(appUser));
     }
 

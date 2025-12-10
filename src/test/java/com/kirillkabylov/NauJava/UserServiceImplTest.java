@@ -74,7 +74,7 @@ public class UserServiceImplTest {
         UserEntity user = new UserEntity("test", "User", "123");
         when(userRepository.findByLogin("test")).thenReturn(Optional.of(user));
 
-        UserEntity result = userService.findByLogin("test");
+        UserEntity result = userService.getByLogin("test");
 
         assertEquals("test", result.getLogin());
     }
@@ -82,7 +82,7 @@ public class UserServiceImplTest {
     @Test
     void findByLoginNotFound(){
         when(userRepository.findByLogin("unknown")).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> userService.findByLogin("unknown"));
+        assertThrows(EntityNotFoundException.class, () -> userService.getByLogin("unknown"));
     }
 
     @Test

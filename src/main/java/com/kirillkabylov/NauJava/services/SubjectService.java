@@ -10,5 +10,7 @@ public interface SubjectService {
 
     List<Subject> getSubjectsByTeacherLogin(String login);
 
-    Optional<Subject> getById(Long subjectId);
+    Subject getById(Long subjectId);
+
+    List<Subject> findSubjectByIds(List<Long> subjectsIds);
 }

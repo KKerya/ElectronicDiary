@@ -12,6 +12,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Класс для инициализации демо-данных при старте приложения
@@ -55,8 +56,8 @@ public class DataInitializer implements CommandLineRunner {
             Subject subject = subjectRepository.save(new Subject("Math"));
             Subject subject1 = subjectRepository.save(new Subject("Rus"));
 
-            Teacher teacher = teacherService.createTeacher("TestTeacher1", "Teacher Teacher", "123123", List.of(subject));
-            Teacher teacher2 = teacherService.createTeacher("TestTeacher2", "Teacher Teacher", "123123", List.of(subject1));
+            Teacher teacher = teacherService.createTeacher("TestTeacher1", "Teacher Teacher", "123123", List.of(subject.getId()));
+            Teacher teacher2 = teacherService.createTeacher("TestTeacher2", "Teacher Teacher", "123123", List.of(subject1.getId()));
 
             Group group = groupRepository.save( new Group("11A", teacher));
             Student student1 = studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123", group);

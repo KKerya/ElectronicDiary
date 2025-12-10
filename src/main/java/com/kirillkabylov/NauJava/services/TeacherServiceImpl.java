@@ -8,10 +8,14 @@ import com.kirillkabylov.NauJava.domain.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Реализация сервиса для управления учителями.
@@ -26,32 +30,69 @@ public class TeacherServiceImpl implements TeacherService {
     private final Map<String, UserUpdateCommand<Teacher>> commands;
     private final PasswordEncoder passwordEncoder;
     private final SubjectRepository subjectRepository;
+    private final UserService userService;
 
     public TeacherServiceImpl(TeacherRepository teacherRepository,
                               LessonRepository lessonRepository,
                               GradeService gradeService,
                               Map<String, UserUpdateCommand<Teacher>> commands,
                               PasswordEncoder passwordEncoder,
-                              SubjectRepository subjectRepository) {
+                              SubjectRepository subjectRepository,
+                              UserService userService) {
         this.teacherRepository = teacherRepository;
         this.lessonRepository = lessonRepository;
         this.gradeService = gradeService;
         this.commands = commands;
         this.passwordEncoder = passwordEncoder;
         this.subjectRepository = subjectRepository;
+        this.userService = userService;
     }
 
     @Override
-    public Teacher createTeacher(String login, String fullName, String password, List<Subject> subject) {
-        if (teacherRepository.findByLogin(login).isPresent()){
+    @Transactional
+    public Teacher createTeacher(String login, String fullName, String password, List<Long> subjectIds) {
+        if (teacherRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Учитель с таким логином уже существует");
         }
-        Teacher teacher = teacherRepository.save(new Teacher(login, fullName, passwordEncoder.encode(password), subject));
-        subject.forEach(s -> {
-            s.setTeacher(teacher);
-            subjectRepository.save(s);
-        });
-        return teacher;
+        Teacher teacher = new Teacher(login, fullName, passwordEncoder.encode(password));
+        teacherRepository.save(teacher);
+
+        List<Subject> subjects = subjectRepository.findAllById(subjectIds);
+
+        for (Subject subject : subjects) {
+            subject.getTeachers().add(teacher);
+        }
+
+        teacher.setSubjects(subjects);
+
+        return teacherRepository.save(teacher);
+    }
+
+    @Override
+    @Transactional
+    public void promoteToTeacher(UserEntity user, List<Long> subjectIds) {
+        userService.deleteUser(user);
+        createTeacherWithoutEncodingPassword(user.getLogin(), user.getFullName(), user.getPassword(), subjectIds);
+    }
+
+    @Override
+    @Transactional
+    public Teacher createTeacherWithoutEncodingPassword(String login, String fullName, String password, List<Long> subjectIds){
+        if (teacherRepository.findByLogin(login).isPresent()) {
+            throw new RuntimeException("Учитель с таким логином уже существует");
+        }
+        Teacher teacher = new Teacher(login, fullName, password);
+        teacherRepository.save(teacher);
+
+        List<Subject> subjects = subjectRepository.findAllById(subjectIds);
+
+        for (Subject subject : subjects) {
+            subject.getTeachers().add(teacher);
+        }
+
+        teacher.setSubjects(subjects);
+
+        return teacherRepository.save(teacher);
     }
 
     @Override

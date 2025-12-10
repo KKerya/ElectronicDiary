@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
@@ -29,7 +28,12 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Optional<Subject> getById(Long subjectId){
-        return subjectRepository.findById(subjectId);
+    public Subject getById(Long subjectId){
+        return subjectRepository.findById(subjectId).orElseThrow( () -> new EntityNotFoundException("Subject with id " + subjectId + " not found"));
+    }
+
+    @Override
+    public List<Subject> findSubjectByIds(List<Long> subjectsIds){
+        return subjectRepository.findAllById(subjectsIds);
     }
 }
