@@ -34,7 +34,7 @@ a:hover {
 .logout-btn {
     display: inline-block;
     padding: 8px 16px;
-    background-color: #e74c3c; /* красный */
+    background-color: #e74c3c;
     color: white;
     text-decoration: none;
     border-radius: 5px;

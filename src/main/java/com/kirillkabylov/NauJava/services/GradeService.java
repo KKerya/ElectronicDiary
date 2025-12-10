@@ -72,4 +72,8 @@ public interface GradeService {
     List<Grade> getGradesByStudent(String login);
 
     List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end);
+
+    double getAverage(Long studentId, Long subjectId);
+
+    double getAverage(String login, Long subjectId);
 }

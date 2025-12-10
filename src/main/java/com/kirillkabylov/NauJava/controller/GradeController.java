@@ -31,13 +31,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/grade")
 public class GradeController {
     private final GradeService gradeService;
-    private final StudentService studentService;
     private final TeacherService teacherService;
 
     @Autowired
-    public GradeController(GradeService gradeService, StudentService studentService, TeacherService teacherService) {
+    public GradeController(GradeService gradeService, TeacherService teacherService) {
         this.gradeService = gradeService;
-        this.studentService = studentService;
         this.teacherService = teacherService;
     }
 
@@ -121,4 +119,8 @@ public class GradeController {
         );
     }
 
+    @GetMapping("/average")
+    public double getAverage(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId){
+        return gradeService.getAverage(user.getUsername(), subjectId);
+    }
 }

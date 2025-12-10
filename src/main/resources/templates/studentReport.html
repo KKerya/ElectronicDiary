@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчёт успеваемости</title>
+    <link rel="stylesheet" th:href="@{/css/studentReport.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Отчёт успеваемости</h1>
+
+    <button id="backBtn" onclick="window.location.href='/'">Главное меню</button>
+
+    <form>
+        <label for="subjectSelect">Выберите предмет:</label>
+        <select id="subjectSelect">
+            <option value="" disabled selected>Выберите предмет</option>
+            <th:block th:each="subject : ${subjects}">
+                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+            </th:block>
+        </select>
+        <button type="button" id="getAverageBtn">Cформировать</button>
+    </form>
+
+    <div id="average"></div>
+
+    <div id="attendance" class="attendance-box" style="display: none;">
+        <h3>Посещаемость</h3>
+        <p>Всего занятий: <span id="totalClasses">0</span></p>
+        <p>Присутствовал: <span id="presentCount">0</span></p>
+        <p>Опозданий: <span id="lateCount">0</span></p>
+        <p>Отсутствий (уважительная причина): <span id="excusedAbsenceCount">0</span></p>
+        <p>Отсутствий (неуважительная причина): <span id="unexcusedAbsenceCount">0</span></p>
+    </div>
+
+</div>
+<script th:src="@{/js/studentReport.js}"></script>
+</body>
+</html>

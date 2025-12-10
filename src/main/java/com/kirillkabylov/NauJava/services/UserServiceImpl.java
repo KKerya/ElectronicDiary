@@ -7,6 +7,7 @@ import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

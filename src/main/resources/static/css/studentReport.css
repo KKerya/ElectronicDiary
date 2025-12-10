@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+#backBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#backBtn:hover {
+    background-color: #45a049;
+}
+
+form {
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+label {
+    margin-right: 10px;
+}
+
+select, button#getAverageBtn {
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+#average {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.attendance-box {
+    background-color: #e8f5e9;
+    border: 1px solid #4CAF50;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+.attendance-box h3 {
+    margin-top: 0;
+    color: #2e7d32;
+}

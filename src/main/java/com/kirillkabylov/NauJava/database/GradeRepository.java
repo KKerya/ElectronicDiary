@@ -74,4 +74,6 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
             Long groupId,
             LocalDateTime start,
             LocalDateTime end);
+
+    List<Grade> findAllByStudentIdAndSubjectId(Long studentId, Long subjectId);
 }

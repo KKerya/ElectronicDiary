@@ -130,4 +130,23 @@ public class GradeServiceImpl implements GradeService {
     public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end) {
         return gradeRepository.findGradesByGroupAndDate(groupId, start, end);
     }
+
+    @Override
+    public double getAverage(Long studentId, Long subjectId){
+        return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    public double getAverage(String login, Long subjectId){
+        Long studentId = studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login - " + login + " not found")).getId();
+        return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
 }

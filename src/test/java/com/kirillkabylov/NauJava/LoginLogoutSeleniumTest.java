@@ -59,9 +59,9 @@ public class LoginLogoutSeleniumTest {
         loginButton.click();
 
         WebElement nameLabel = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("userFullNameLabel"))
+                ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
         );
-        Assertions.assertEquals("Alica Alisovna", nameLabel.getText());
+        Assertions.assertEquals("Добро пожаловать, Alica Alisovna!", nameLabel.getText());
 
         driver.get("http://localhost:" + port + "/logout");
         WebElement logoutButton = wait.until(
