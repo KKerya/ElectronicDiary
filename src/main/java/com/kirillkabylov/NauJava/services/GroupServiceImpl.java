@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -19,12 +18,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Group> getAllGroups(){
-        return (List<Group>) groupRepository.findAll();
+    public List<Group> getAllGroups() {
+        return groupRepository.findAll();
     }
 
     @Override
-    public Group getById(Long id){
-        return groupRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("Group with id - " + id + "not found"));
+    public Group getById(Long id) {
+        return groupRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Group with id - " + id + "not found"));
     }
 }

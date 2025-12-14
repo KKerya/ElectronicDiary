@@ -23,7 +23,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public List<Subject> getAllSubjects() {
-        return (List<Subject>) subjectRepository.findAll();
+        return subjectRepository.findAll();
     }
 
     @Override
@@ -53,11 +53,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void setSubjectTeacher(Long subjectId, Long teacherId){
+    public void setSubjectTeacher(Long subjectId, Long teacherId) {
         Subject subject = subjectRepository.getReferenceById(subjectId);
         Teacher teacher = teacherRepository.getReferenceById(teacherId);
-        if(teacher.getSubjects().stream()
-                .anyMatch(s -> s.getId().equals(subjectId))){
+        if (teacher.getSubjects().stream()
+                .anyMatch(s -> s.getId().equals(subjectId))) {
             throw new RuntimeException("Данный учитель уже назначен на этот предмет");
         }
         subject.getTeachers().add(teacher);
@@ -66,11 +66,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void removeSubjectFromTeacher(Long subjectId, Long teacherId){
+    public void removeSubjectFromTeacher(Long subjectId, Long teacherId) {
         Subject subject = subjectRepository.getReferenceById(subjectId);
         Teacher teacher = teacherRepository.getReferenceById(teacherId);
-        if(teacher.getSubjects().stream()
-                .noneMatch(s -> s.getId().equals(subjectId))){
+        if (teacher.getSubjects().stream()
+                .noneMatch(s -> s.getId().equals(subjectId))) {
             throw new RuntimeException("Данный учитель не назначен на этот предмет");
         }
         teacher.getSubjects().remove(subject);

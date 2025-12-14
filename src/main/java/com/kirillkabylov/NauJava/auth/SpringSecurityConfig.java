@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurityConfig {
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -24,10 +24,10 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests)-> requests
-                    .requestMatchers("/login", "/registration").permitAll()
+                .authorizeHttpRequests((requests) -> requests
+                                .requestMatchers("/login", "/registration").permitAll()
 //                    .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);

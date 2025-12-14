@@ -11,16 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceImplTest {
     @Mock
@@ -33,12 +32,12 @@ public class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void createUserSuccess(){
+    void createUserSuccess() {
         when(userRepository.findByLogin("test")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("123")).thenReturn("encode123");
         userService.createUser("test", "Test Test", "123");
@@ -80,13 +79,13 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findByLoginNotFound(){
+    void findByLoginNotFound() {
         when(userRepository.findByLogin("unknown")).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> userService.getByLogin("unknown"));
     }
 
     @Test
-    void loadUserByUsernameSuccess(){
+    void loadUserByUsernameSuccess() {
         UserEntity userEntity = new UserEntity("test", "Test Test", "123");
         when(userRepository.findByLogin("test")).thenReturn(Optional.of(userEntity));
 
@@ -103,7 +102,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void mapRolesWhenTeacherHaveTeacherRole(){
+    void mapRolesWhenTeacherHaveTeacherRole() {
         Teacher teacher = new Teacher();
         var roles = userService.mapRoles(teacher);
 

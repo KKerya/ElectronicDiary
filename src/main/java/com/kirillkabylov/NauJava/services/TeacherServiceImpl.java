@@ -9,13 +9,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Реализация сервиса для управления учителями.
@@ -77,7 +74,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public Teacher createTeacherWithoutEncodingPassword(String login, String fullName, String password, List<Long> subjectIds){
+    public Teacher createTeacherWithoutEncodingPassword(String login, String fullName, String password, List<Long> subjectIds) {
         if (teacherRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Учитель с таким логином уже существует");
         }
@@ -101,7 +98,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher getByLogin(String login){
+    public Teacher getByLogin(String login) {
         return teacherRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Group with login - " + login + " not found"));
     }
 
@@ -116,7 +113,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateTeacher (Long id, String field, Object newValue) {
+    public void updateTeacher(Long id, String field, Object newValue) {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Group with id - " + id + " not found"));
         UserUpdateCommand<Teacher> command = commands.get(field);
         if (command == null) {
@@ -142,7 +139,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> getAllTeacher(){
+    public List<Teacher> getAllTeacher() {
         return teacherRepository.findAll();
     }
 }

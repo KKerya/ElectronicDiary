@@ -7,7 +7,6 @@ import com.kirillkabylov.NauJava.dto.GradeCreateRequest;
 import com.kirillkabylov.NauJava.dto.GradeDto;
 import com.kirillkabylov.NauJava.dto.StudentGradesDto;
 import com.kirillkabylov.NauJava.services.GradeService;
-import com.kirillkabylov.NauJava.services.StudentService;
 import com.kirillkabylov.NauJava.services.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -120,7 +119,7 @@ public class GradeController {
     }
 
     @GetMapping("/average")
-    public double getAverage(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId){
+    public double getAverage(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId) {
         return gradeService.getAverage(user.getUsername(), subjectId);
     }
 }

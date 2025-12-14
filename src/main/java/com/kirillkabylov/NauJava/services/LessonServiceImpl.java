@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class LessonServiceImpl implements LessonService{
+public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
     private final GroupRepository groupRepository;
     private final SubjectRepository subjectRepository;
@@ -46,7 +46,7 @@ public class LessonServiceImpl implements LessonService{
 
     @Override
     @Transactional
-    public Lesson createLesson(Long groupId, Long subjectId, Long teacherId, LocalDateTime startTime, boolean wholeYear){
+    public Lesson createLesson(Long groupId, Long subjectId, Long teacherId, LocalDateTime startTime, boolean wholeYear) {
         Group group = groupRepository.getReferenceById(groupId);
         Subject subject = subjectRepository.getReferenceById(subjectId);
         Teacher teacher = teacherRepository.getReferenceById(teacherId);
@@ -56,7 +56,7 @@ public class LessonServiceImpl implements LessonService{
         lesson = lessonRepository.save(lesson);
 
         // создание на весь учебный год — 34 недели
-         if (wholeYear) {
+        if (wholeYear) {
             for (int i = 1; i < 34; i++) {
                 Lesson dublicateLesson = new Lesson(group, subject, teacher, startTime.plusWeeks(i));
                 dublicateLesson.setDurationMinutes(defaultDuration);
@@ -64,21 +64,21 @@ public class LessonServiceImpl implements LessonService{
             }
         }
 
-         return lesson;
+        return lesson;
     }
 
     @Override
-    public List<Lesson> getLessonsByTeacherLogin(String login){
+    public List<Lesson> getLessonsByTeacherLogin(String login) {
         return lessonRepository.findByTeacherLogin(login);
     }
 
     @Override
-    public Lesson getLessonById(Long lessonId){
+    public Lesson getLessonById(Long lessonId) {
         return lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson with id - " + lessonId + " not found"));
     }
 
     @Override
-    public List<Lesson> getLessonsByGroupIdBetweenDates(Long groupId, LocalDate startDate, LocalDate endDate){
+    public List<Lesson> getLessonsByGroupIdBetweenDates(Long groupId, LocalDate startDate, LocalDate endDate) {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
         return lessonRepository.findByGroupIdAndStartTimeBetween(groupId, startDateTime, endDateTime);

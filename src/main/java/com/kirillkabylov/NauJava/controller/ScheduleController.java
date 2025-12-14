@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.domain.Lesson;
-import com.kirillkabylov.NauJava.dto.LessonDto;
 import com.kirillkabylov.NauJava.dto.LessonForScheduleDto;
 import com.kirillkabylov.NauJava.dto.WeekScheduleDto;
 import com.kirillkabylov.NauJava.services.LessonService;
@@ -19,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

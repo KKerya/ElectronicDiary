@@ -4,4 +4,5 @@ public record StudentDto(
         Long id,
         String name,
         String group
-){}
+) {
+}

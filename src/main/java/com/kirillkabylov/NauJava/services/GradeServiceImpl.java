@@ -43,9 +43,9 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
-        Student student = studentRepository.findById(studentId).orElseThrow( () -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow( () -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow( () -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
         Grade grade = new Grade(value, student, subject, teacher, dateTime);
         for (GradeRule rule : gradeRules) {
             rule.validate(grade);
@@ -61,7 +61,7 @@ public class GradeServiceImpl implements GradeService {
                 .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
     }
 
-    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime){
+    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
         return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime);
     }
 
@@ -132,7 +132,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public double getAverage(Long studentId, Long subjectId){
+    public double getAverage(Long studentId, Long subjectId) {
         return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
                 .stream()
                 .mapToInt(Grade::getValue)
@@ -141,7 +141,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public double getAverage(String login, Long subjectId){
+    public double getAverage(String login, Long subjectId) {
         Long studentId = studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login - " + login + " not found")).getId();
         return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
                 .stream()

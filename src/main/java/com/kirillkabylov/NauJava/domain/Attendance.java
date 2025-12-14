@@ -22,7 +22,8 @@ public class Attendance {
     @Column(nullable = false)
     private AttendanceStatus status;
 
-    public Attendance(){}
+    public Attendance() {
+    }
 
     public Attendance(Lesson lesson, Student student, AttendanceStatus status) {
         this.status = status;

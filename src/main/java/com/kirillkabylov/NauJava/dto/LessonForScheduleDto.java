@@ -4,4 +4,5 @@ public record LessonForScheduleDto(
         String subjectName,
         String startTime,
         Integer durationMinutes
-) {}
+) {
+}

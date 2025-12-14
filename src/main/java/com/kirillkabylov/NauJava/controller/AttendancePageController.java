@@ -38,11 +38,11 @@ public class AttendancePageController {
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public String attendanceCreatePage(@AuthenticationPrincipal UserDetails user, Model model) {
         List<SubjectDto> subjects = subjectService.getSubjectsByTeacherLogin(user.getUsername())
-                                    .stream()
-                                    .map(s -> new SubjectDto(s.getId(), s.getName())).toList();
+                .stream()
+                .map(s -> new SubjectDto(s.getId(), s.getName())).toList();
         List<LessonDto> lessons = lessonService.getLessonsByTeacherLogin(user.getUsername())
-                                    .stream()
-                                    .map(l -> new LessonDto(l.getId(), l.getStartTime(), l.getSubject().getId(), l.getDurationMinutes())).toList();
+                .stream()
+                .map(l -> new LessonDto(l.getId(), l.getStartTime(), l.getSubject().getId(), l.getDurationMinutes())).toList();
 
         model.addAttribute("subjects", subjects);
         model.addAttribute("lessons", lessons);

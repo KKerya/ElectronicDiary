@@ -72,10 +72,13 @@ public class Grade {
         this.student = student;
     }
 
-    public Subject getSubject() { return subject;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubject(Subject subject) { this.subject = subject;}
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 
     public Teacher getTeacher() {
         return teacher;

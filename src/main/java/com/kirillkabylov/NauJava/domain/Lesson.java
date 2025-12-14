@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -78,16 +77,32 @@ public class Lesson {
         return group;
     }
 
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     public Subject getSubject() {
         return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public Teacher getTeacher() {
         return teacher;
     }
 
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public int getDurationMinutes() {
@@ -98,23 +113,13 @@ public class Lesson {
         this.durationMinutes = durationMinutes;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public List<Homework> getHomeworkList() {
+        return homeworkList;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setHomeworkList(List<Homework> homeworkList) {
+        this.homeworkList = homeworkList;
     }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public List<Homework> getHomeworkList() { return homeworkList; }
 
     public List<Attendance> getAttendances() {
         return attendances;
@@ -122,9 +127,5 @@ public class Lesson {
 
     public void setAttendances(List<Attendance> attendances) {
         this.attendances = attendances;
-    }
-
-    public void setHomeworkList(List<Homework> homeworkList) {
-        this.homeworkList = homeworkList;
     }
 }

@@ -4,4 +4,5 @@ public record AttendanceCreateRequest(
         Long studentId,
         Long lessonId,
         String status
-) {}
+) {
+}

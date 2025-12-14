@@ -7,4 +7,5 @@ public record GradeDto(
         String teacherFullName,
         Integer value,
         LocalDateTime date
-) {}
+) {
+}

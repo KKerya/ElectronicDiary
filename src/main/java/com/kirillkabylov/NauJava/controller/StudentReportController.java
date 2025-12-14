@@ -18,7 +18,7 @@ public class StudentReportController {
 
     @GetMapping("/student/report")
     @PreAuthorize("hasRole('STUDENT')")
-    public String studentReportPage(Model model){
+    public String studentReportPage(Model model) {
         model.addAttribute("subjects", subjectService.getAllSubjects());
         return "student/studentReport";
     }

@@ -20,7 +20,7 @@ public class TeacherController {
 
     @Autowired
     public TeacherController(UserService userService,
-                           TeacherService teacherService) {
+                             TeacherService teacherService) {
         this.userService = userService;
         this.teacherService = teacherService;
     }

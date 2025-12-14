@@ -11,8 +11,9 @@ import java.util.Optional;
 public interface GradeService {
     /**
      * Создает оценку
+     *
      * @param studentId id студента
-     * @param value оценка
+     * @param value     оценка
      * @param subjectId id предмета
      * @param teacherId id учителя
      */
@@ -20,10 +21,11 @@ public interface GradeService {
 
     /**
      * Находит оценку студента
+     *
      * @param studentId id студента
-     * @param subject предмет
-     * @param value значение оценки
-     * @param dateTime время
+     * @param subject   предмет
+     * @param value     значение оценки
+     * @param dateTime  время
      * @return grade
      */
     Grade getGrade(long studentId, Subject subject, int value, LocalDateTime dateTime);
@@ -37,27 +39,31 @@ public interface GradeService {
 
     /**
      * Удаляет оценку студента
+     *
      * @param studentId id студента
-     * @param subject предмет
-     * @param value значение оценки
-     * @param dateTime время
+     * @param subject   предмет
+     * @param value     значение оценки
+     * @param dateTime  время
      */
     void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime);
 
     /**
      * Удаляет все оценки студента
+     *
      * @param student студент
      */
     void deleteAllGradesFromStudent(Student student);
 
     /**
      * Удаляет оценку студента
+     *
      * @param grade ссылка на оценку
      */
     void deleteGradeFromStudent(Grade grade);
 
     /**
      * Меняет оценку
+     *
      * @param grade    оценка
      * @param newValue новое значение оценки
      */

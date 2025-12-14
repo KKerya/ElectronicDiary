@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class SchedulePageController {
     }
 
     @GetMapping("/page")
-    public String getSchedulePage(Model model,  @AuthenticationPrincipal UserDetails user) {
+    public String getSchedulePage(Model model, @AuthenticationPrincipal UserDetails user) {
         long groupId = studentService.getByLogin(user.getUsername()).getGroup().getId();
 
         LocalDate start = LocalDate.of(LocalDate.now().getYear(), 9, 1);

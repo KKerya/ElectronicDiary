@@ -99,13 +99,13 @@ public class AttendanceController {
 
     @DeleteMapping("delete/{attendanceId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
-    public void deleteAttendance(@PathVariable Long attendanceId){
+    public void deleteAttendance(@PathVariable Long attendanceId) {
         attendanceService.deleteAttendance(attendanceId);
     }
 
     @GetMapping("/students/{lessonId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
-    public List<StudentAttendanceDto> getStudentsByLesson(@PathVariable Long lessonId){
+    public List<StudentAttendanceDto> getStudentsByLesson(@PathVariable Long lessonId) {
         Lesson lesson = lessonService.getLessonById(lessonId);
         return lesson.getGroup().getStudents().stream()
                 .map(student -> {

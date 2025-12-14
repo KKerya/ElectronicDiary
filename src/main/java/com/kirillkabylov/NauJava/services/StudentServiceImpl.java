@@ -32,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
     private final Map<String, UserUpdateCommand<Student>> commands;
     private final PasswordEncoder passwordEncoder;
     private final GroupRepository groupRepository;
+
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               GradeService gradeService,
@@ -62,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(String login, String fullName, String password, Group group) {
-        if (studentRepository.findByLogin(login).isPresent()){
+        if (studentRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Студент с таким логином уже существует");
         }
         Student newStudent = new Student(login, fullName, passwordEncoder.encode(password), group);
@@ -91,12 +92,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
     @Override
-    public Student getByLogin(String login){
+    public Student getByLogin(String login) {
         return studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login - " + login + " not found"));
     }
 }

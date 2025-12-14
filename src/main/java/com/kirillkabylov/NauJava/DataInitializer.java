@@ -1,6 +1,9 @@
 package com.kirillkabylov.NauJava;
 
-import com.kirillkabylov.NauJava.database.*;
+import com.kirillkabylov.NauJava.database.AdminRepository;
+import com.kirillkabylov.NauJava.database.GroupRepository;
+import com.kirillkabylov.NauJava.database.SubjectRepository;
+import com.kirillkabylov.NauJava.database.UserRepository;
 import com.kirillkabylov.NauJava.domain.*;
 import com.kirillkabylov.NauJava.enums.AttendanceStatus;
 import com.kirillkabylov.NauJava.services.*;
@@ -12,7 +15,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Класс для инициализации демо-данных при старте приложения
@@ -59,7 +61,7 @@ public class DataInitializer implements CommandLineRunner {
             Teacher teacher = teacherService.createTeacher("TestTeacher1", "Teacher Teacher", "123123", List.of(subject.getId()));
             Teacher teacher2 = teacherService.createTeacher("TestTeacher2", "Teacher Teacher", "123123", List.of(subject1.getId()));
 
-            Group group = groupRepository.save( new Group("11A", teacher));
+            Group group = groupRepository.save(new Group("11A", teacher));
             Student student1 = studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123", group);
             studentService.createStudent("TestStudent2", "Masha Aleksandrova", "123123", group);
 
@@ -73,7 +75,7 @@ public class DataInitializer implements CommandLineRunner {
             attendanceService.createAttendance(lesson, student1, AttendanceStatus.PRESENT);
             attendanceService.createAttendance(lesson1, student1, AttendanceStatus.PRESENT);
         }
-        if (adminRepository.count() == 0){
+        if (adminRepository.count() == 0) {
             adminService.createAdmin("TestAdmin", "Admin", "123123");
         }
     }

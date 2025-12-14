@@ -23,19 +23,19 @@ public class SubjectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public void createSubject(@RequestBody Map<String, String> request){
+    public void createSubject(@RequestBody Map<String, String> request) {
         subjectService.createSubject(request.get("name").trim());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/set")
-    public void setSubjectTeacher(@RequestBody TeacherSubjectDTO request){
+    public void setSubjectTeacher(@RequestBody TeacherSubjectDTO request) {
         subjectService.setSubjectTeacher(request.subjectId(), request.teacherId());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove")
-    public void removeSubjectFromTeacher(@RequestBody TeacherSubjectDTO request){
+    public void removeSubjectFromTeacher(@RequestBody TeacherSubjectDTO request) {
         subjectService.removeSubjectFromTeacher(request.subjectId(), request.teacherId());
     }
 }

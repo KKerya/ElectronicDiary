@@ -5,12 +5,12 @@ import com.kirillkabylov.NauJava.domain.Student;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface StudentService {
     /**
      * Удаляет студента и все его оценки
      * Transaction операция
+     *
      * @param student студент
      */
     @Transactional
@@ -18,21 +18,24 @@ public interface StudentService {
 
     /**
      * Создать нового студента
-     * @param login     логин
-     * @param fullName  полное имя (ФИО)
-     * @param password  пароль
-     * @param group номер класса
+     *
+     * @param login    логин
+     * @param fullName полное имя (ФИО)
+     * @param password пароль
+     * @param group    номер класса
      */
     Student createStudent(String login, String fullName, String password, Group group);
 
     /**
      * Находит студента по id
+     *
      * @param id id
      */
     Student getById(Long id);
 
     /**
      * Обновляет поле студента
+     *
      * @param id       id Студента
      * @param field    поле для обновление
      * @param newValue новое значение поля
