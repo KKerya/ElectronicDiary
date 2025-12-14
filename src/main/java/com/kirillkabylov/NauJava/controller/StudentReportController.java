@@ -1,6 +1,5 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.domain.Subject;
 import com.kirillkabylov.NauJava.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +20,6 @@ public class StudentReportController {
     @PreAuthorize("hasRole('STUDENT')")
     public String studentReportPage(Model model){
         model.addAttribute("subjects", subjectService.getAllSubjects());
-        return "studentReport";
+        return "student/studentReport";
     }
 }

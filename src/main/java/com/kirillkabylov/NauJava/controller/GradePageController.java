@@ -53,6 +53,6 @@ public class GradePageController {
         model.addAttribute("groups", groupService.getAllGroups());
         model.addAttribute("students", studentService.getAllStudents());
 
-        return "createGrade";
+        return "teacher/createGrade";
     }
 }

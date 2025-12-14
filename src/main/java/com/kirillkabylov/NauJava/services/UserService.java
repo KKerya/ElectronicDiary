@@ -29,4 +29,6 @@ public interface UserService {
     UserEntity getByLogin(String login);
 
     void deleteUser(UserEntity user);
+
+    void changePassword(String login, String newPassword);
 }

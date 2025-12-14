@@ -15,4 +15,6 @@ import java.util.Optional;
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
     @Query("SELECT s FROM Subject s JOIN s.teachers t WHERE t.login = :login")
     List<Subject> findByTeacherLogin(String login);
+
+    Optional<Subject> findByName(String name);
 }

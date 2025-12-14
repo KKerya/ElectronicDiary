@@ -31,7 +31,7 @@ public class AttendancePageController {
     @PreAuthorize("hasRole('STUDENT')")
     public String attendancePage(Model model) {
         model.addAttribute("subjects", subjectService.getAllSubjects());
-        return "attendance";
+        return "student/attendance";
     }
 
     @GetMapping("/create")
@@ -47,6 +47,6 @@ public class AttendancePageController {
         model.addAttribute("subjects", subjects);
         model.addAttribute("lessons", lessons);
 
-        return "attendanceCreate";
+        return "teacher/attendanceCreate";
     }
 }

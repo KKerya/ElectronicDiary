@@ -3,6 +3,7 @@ const scheduleContainer = document.getElementById("scheduleContainer");
 
 const daysOrderLeft = ["MONDAY", "TUESDAY", "WEDNESDAY"];
 const daysOrderRight = ["THURSDAY", "FRIDAY", "SATURDAY"];
+
 const dayNamesRu = {
     MONDAY: "Понедельник",
     TUESDAY: "Вторник",
@@ -12,17 +13,24 @@ const dayNamesRu = {
     SATURDAY: "Суббота"
 };
 
+function getMondayOfWeek(weekNumber) {
+    const year = new Date().getFullYear();
+    const startDate = new Date(year, 8, 1);
+    const dayOfWeek = startDate.getDay() === 0 ? 7 : startDate.getDay();
+    const monday = new Date(startDate);
+    monday.setDate(startDate.getDate() - dayOfWeek + 1 + (weekNumber - 1) * 7);
+    return monday;
+}
+
 function formatTime(isoString) {
     if (!isoString) return "";
     return isoString.substring(11, 16);
 }
 
-function createLessonNode(lesson) {
-    const el = document.createElement("div");
-    el.className = "lesson";
-    const endTime = lesson.durationMinutes ? addMinutes(lesson.startTime, lesson.durationMinutes) : "";
-    el.textContent = `${lesson.subjectName} (${formatTime(lesson.startTime)}${endTime ? " — " + endTime : ""})`;
-    return el;
+function formatDate(date) {
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    return `${dd}.${mm}`;
 }
 
 function addMinutes(iso, minutes) {
@@ -33,12 +41,20 @@ function addMinutes(iso, minutes) {
     return `${hh}:${mm}`;
 }
 
-function createDayColumn(dayKey, lessons) {
+function createLessonNode(lesson) {
+    const el = document.createElement("div");
+    el.className = "lesson";
+    const endTime = lesson.durationMinutes ? addMinutes(lesson.startTime, lesson.durationMinutes) : "";
+    el.textContent = `${lesson.subjectName} (${formatTime(lesson.startTime)}${endTime ? " — " + endTime : ""})`;
+    return el;
+}
+
+function createDayColumn(dayKey, lessons, date) {
     const container = document.createElement("div");
     container.className = "day-column";
 
     const h = document.createElement("h3");
-    h.textContent = dayNamesRu[dayKey];
+    h.textContent = `${dayNamesRu[dayKey]} (${formatDate(date)})`;
     container.appendChild(h);
 
     if (!lessons || lessons.length === 0) {
@@ -49,12 +65,12 @@ function createDayColumn(dayKey, lessons) {
         return container;
     }
 
-    lessons.sort((a,b) => a.startTime.localeCompare(b.startTime));
+    lessons.sort((a, b) => a.startTime.localeCompare(b.startTime));
     lessons.forEach(lesson => container.appendChild(createLessonNode(lesson)));
     return container;
 }
 
-function renderWeek(data) {
+function renderWeek(data, weekNumber) {
     scheduleContainer.innerHTML = "";
 
     const leftCol = document.createElement("div");
@@ -62,13 +78,24 @@ function renderWeek(data) {
     leftCol.className = "days-column";
     rightCol.className = "days-column";
 
+    const monday = getMondayOfWeek(weekNumber);
+
+    const dayDates = {};
+    const allDays = [...daysOrderLeft, ...daysOrderRight];
+    allDays.forEach((day, idx) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + idx);
+        dayDates[day] = d;
+    });
+
     daysOrderLeft.forEach(day => {
         const lessons = data.lessonsByDay[day] || [];
-        leftCol.appendChild(createDayColumn(day, lessons));
+        leftCol.appendChild(createDayColumn(day, lessons, dayDates[day]));
     });
+
     daysOrderRight.forEach(day => {
         const lessons = data.lessonsByDay[day] || [];
-        rightCol.appendChild(createDayColumn(day, lessons));
+        rightCol.appendChild(createDayColumn(day, lessons, dayDates[day]));
     });
 
     scheduleContainer.appendChild(leftCol);
@@ -85,7 +112,7 @@ function loadSchedule() {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return res.json();
         })
-        .then(data => renderWeek(data))
+        .then(data => renderWeek(data, Number(weekNumber)))
         .catch(err => {
             console.error(err);
             scheduleContainer.innerHTML = "Не удалось загрузить расписание";

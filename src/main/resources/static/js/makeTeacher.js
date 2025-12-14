@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch('/api/admin/makeTeacher', {
+        fetch('/api/teacher/make', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

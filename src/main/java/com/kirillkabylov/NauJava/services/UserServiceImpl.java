@@ -25,14 +25,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void createUser(String login, String fullName, String password) {
-        if(userRepository.findByLogin(login).isPresent()){
+        if (userRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Пользователь с таким логином уже существует");
         }
         UserEntity user = new UserEntity(login, fullName, passwordEncoder.encode(password));
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void createUser(UserEntity user) {
-        if(userRepository.findByLogin(user.getLogin()).isPresent()){
+        if (userRepository.findByLogin(user.getLogin()).isPresent()) {
             throw new RuntimeException("Пользователь с таким логином уже существует");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -51,29 +51,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<UserEntity> findByFullName(String fullName) {
         List<UserEntity> users = userRepository.findByFullName(fullName);
-        if (users.isEmpty()){
+        if (users.isEmpty()) {
             throw new EntityNotFoundException("Users with fullName - " + fullName + "not found");
         }
         return users;
     }
 
     @Override
-    public UserEntity getByLogin(String login){
-        return userRepository.findByLogin(login).orElseThrow( () -> new EntityNotFoundException("User with login - " + login + " not found"));
+    public UserEntity getByLogin(String login) {
+        return userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login - " + login + " not found"));
     }
 
     @Override
-    public void deleteUser(UserEntity user){
+    public void deleteUser(UserEntity user) {
         userRepository.delete(user);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userLogin){
+    public UserDetails loadUserByUsername(String userLogin) {
         UserEntity appUser = getByLogin(userLogin);
         return new User(appUser.getLogin(), appUser.getPassword(), mapRoles(appUser));
     }
 
-    public Collection<GrantedAuthority> mapRoles(UserEntity appUser){
+    public Collection<GrantedAuthority> mapRoles(UserEntity appUser) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if (appUser instanceof Admin) {
@@ -87,5 +87,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public void changePassword(String login, String newPassword) {
+        if (newPassword.isEmpty())
+            throw new RuntimeException("Incorrect password");
+        UserEntity user = userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login - " + login + " not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

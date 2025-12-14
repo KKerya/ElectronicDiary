@@ -33,7 +33,6 @@ public class SchedulePageController {
         LocalDate end = LocalDate.of(LocalDate.now().getYear() + 1, 5, 31);
 
         List<WeekDto> weeks = new ArrayList<>();
-        WeekFields wf = WeekFields.ISO;
 
         LocalDate date = start;
         int weekNumber = 1;
@@ -45,6 +44,6 @@ public class SchedulePageController {
 
         model.addAttribute("weeks", weeks);
         model.addAttribute("groupId", groupId);
-        return "schedule";
+        return "student/schedule";
     }
 }
