@@ -2,6 +2,7 @@ package com.kirillkabylov.NauJava.database;
 
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
             Long studentId,
             Long subjectId,
             int value,
-            LocalDateTime date
+            LocalDate date
     );
 
     /**
@@ -66,14 +68,18 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
 
     List<Grade> findAllByStudentGroupId(Long groupId);
 
+    Optional<Grade> findByStudentIdAndSubjectIdAndDate(Long studentId, Long subjectId, LocalDate date);
+
     @Query("SELECT grade FROM Grade grade WHERE grade.student.login = :login")
     List<Grade> findAllByStudentLogin(String login);
 
     @Query("SELECT grade FROM Grade grade Where grade.student.group.id = :groupId AND grade.date BETWEEN :start AND :end")
     List<Grade> findGradesByGroupAndDate(
             Long groupId,
-            LocalDateTime start,
-            LocalDateTime end);
+            LocalDate start,
+            LocalDate end);
 
     List<Grade> findAllByStudentIdAndSubjectId(Long studentId, Long subjectId);
+
+    boolean existsByStudentAndSubjectAndDateAndValue(Student student, Subject subject, LocalDate date, int value);
 }

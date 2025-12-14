@@ -2,7 +2,6 @@ package com.kirillkabylov.NauJava.dto;
 
 public record StudentDto(
         Long id,
-        String name,
+        String fullName,
         String group
-) {
-}
+) {}

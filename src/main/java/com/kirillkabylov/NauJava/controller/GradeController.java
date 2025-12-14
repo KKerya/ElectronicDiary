@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -43,8 +44,8 @@ public class GradeController {
     public List<StudentGradesDto> getGradesByGroupAndMonth(
             @RequestParam Long groupId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
-        LocalDateTime start = month.atDay(1).atStartOfDay();
-        LocalDateTime end = month.atEndOfMonth().atTime(23, 59, 59);
+        LocalDate start = month.atDay(1);
+        LocalDate end = month.atEndOfMonth();
 
         List<Grade> grades = gradeService.getGradesByGroupIdAndDateBetween(groupId, start, end);
 
@@ -95,7 +96,7 @@ public class GradeController {
                         g.getStudent().getFullName(),
                         g.getTeacher().getFullName(),
                         g.getValue(),
-                        g.getDate().toLocalDate().atTime(LocalTime.now())
+                        g.getDate()
                 ))
                 .toList();
     }
@@ -114,7 +115,7 @@ public class GradeController {
                 request.value(),
                 request.subjectId(),
                 teacher.getId(),
-                request.date().atTime(0, 0)
+                request.date()
         );
     }
 

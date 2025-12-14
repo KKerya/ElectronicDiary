@@ -23,6 +23,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @EntityGraph(attributePaths = {"attendances"})
     List<Lesson> findByGroupIdAndSubjectId(Long groupId, Long subjectId);
 
+    @EntityGraph(attributePaths = {"attendances"})
+    List<Lesson> findByTeacherIdAndGroupIdAndSubjectId(Long teacherId, Long subjectId, Long groupId);
+
     List<Lesson> findByTeacherLogin(String Login);
 
     @Query("SELECT l FROM Lesson l WHERE l.group.id = :groupId AND FUNCTION('DATE', l.startTime) BETWEEN :startDate AND :endDate")

@@ -4,10 +4,7 @@ import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.SubjectRepository;
 import com.kirillkabylov.NauJava.database.TeacherRepository;
-import com.kirillkabylov.NauJava.domain.Group;
-import com.kirillkabylov.NauJava.domain.Lesson;
-import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,4 +81,13 @@ public class LessonServiceImpl implements LessonService {
         return lessonRepository.findByGroupIdAndStartTimeBetween(groupId, startDateTime, endDateTime);
     }
 
+    @Override
+    public List<Lesson> getLessonForTeacher(Long teacherId, Long subjectId, Long groupId) {
+        return lessonRepository.findByTeacherIdAndGroupIdAndSubjectId(teacherId, groupId, subjectId);
+    }
+
+    @Override
+    public List<Student> getStudentsForLesson(Long lessonId){
+        return lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson with id - " + lessonId + " not found")).getGroup().getStudents();
+    }
 }

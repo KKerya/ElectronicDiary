@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -42,27 +43,38 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
+    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date) {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
         Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
-        Grade grade = new Grade(value, student, subject, teacher, dateTime);
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade);
+
+        if (gradeRepository.existsByStudentAndSubjectAndDateAndValue(student, subject, date, value)) {
+            throw new RuntimeException("Такая оценка уже поставлена");
         }
 
-        return gradeRepository.save(grade);
+        Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectIdAndDate(studentId, subjectId, date);
+        if (grade.isPresent()){
+            grade.get().setValue(value);
+            return gradeRepository.save(grade.get());
+        }
+
+        Grade createdGrade = new Grade(value, student, subject, teacher, date);
+        for (GradeRule rule : gradeRules) {
+            rule.validate(createdGrade);
+        }
+
+        return gradeRepository.save(createdGrade);
     }
 
     @Override
-    public Grade getGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
+    public Grade getGrade(long studentId, Subject subject, int value, LocalDate date) {
         return gradeRepository
-                .findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime)
+                .findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date)
                 .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
     }
 
-    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime);
+    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDate date) {
+        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date);
     }
 
     @Override
@@ -71,8 +83,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        Optional<Grade> grade = findGrade(studentId, subject, value, dateTime);
+    public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDate date) {
+        Optional<Grade> grade = findGrade(studentId, subject, value, date);
         grade.ifPresent(gradeRepository::delete);
     }
 
@@ -127,7 +139,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end) {
+    public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDate start, LocalDate end) {
         return gradeRepository.findGradesByGroupAndDate(groupId, start, end);
     }
 

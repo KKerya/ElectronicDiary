@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -124,8 +125,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
-        return gradeService.createGrade(studentId, value, subjectId, teacherId, dateTime);
+    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date) {
+        return gradeService.createGrade(studentId, value, subjectId, teacherId, date);
     }
 
     @Override

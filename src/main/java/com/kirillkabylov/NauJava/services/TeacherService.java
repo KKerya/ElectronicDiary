@@ -3,6 +3,7 @@ package com.kirillkabylov.NauJava.services;
 import com.kirillkabylov.NauJava.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,9 +67,9 @@ public interface TeacherService {
      * @param studentId id студента
      * @param subjectId id предмета
      * @param teacherId id учителя
-     * @param dateTime  время
+     * @param date дата
      */
-    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime);
+    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date);
 
     /**
      * Удалить оценку

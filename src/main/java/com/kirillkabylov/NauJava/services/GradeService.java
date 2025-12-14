@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Subject;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface GradeService {
      * @param subjectId id предмета
      * @param teacherId id учителя
      */
-    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime);
+    Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date);
 
     /**
      * Находит оценку студента
@@ -25,10 +26,10 @@ public interface GradeService {
      * @param studentId id студента
      * @param subject   предмет
      * @param value     значение оценки
-     * @param dateTime  время
+     * @param date  дата
      * @return grade
      */
-    Grade getGrade(long studentId, Subject subject, int value, LocalDateTime dateTime);
+    Grade getGrade(long studentId, Subject subject, int value, LocalDate date);
 
     /**
      * Находит оценку студента по id
@@ -43,9 +44,9 @@ public interface GradeService {
      * @param studentId id студента
      * @param subject   предмет
      * @param value     значение оценки
-     * @param dateTime  время
+     * @param date  время
      */
-    void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime);
+    void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDate date);
 
     /**
      * Удаляет все оценки студента
@@ -77,7 +78,7 @@ public interface GradeService {
 
     List<Grade> getGradesByStudent(String login);
 
-    List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end);
+    List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDate start, LocalDate end);
 
     double getAverage(Long studentId, Long subjectId);
 

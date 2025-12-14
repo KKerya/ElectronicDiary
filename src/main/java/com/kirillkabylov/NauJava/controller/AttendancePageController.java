@@ -42,7 +42,7 @@ public class AttendancePageController {
                 .map(s -> new SubjectDto(s.getId(), s.getName())).toList();
         List<LessonDto> lessons = lessonService.getLessonsByTeacherLogin(user.getUsername())
                 .stream()
-                .map(l -> new LessonDto(l.getId(), l.getStartTime(), l.getSubject().getId(), l.getDurationMinutes())).toList();
+                .map(l -> new LessonDto(l.getId(), l.getStartTime(), l.getSubject().getId(), l.getGroup().getId(), l.getDurationMinutes())).toList();
 
         model.addAttribute("subjects", subjects);
         model.addAttribute("lessons", lessons);

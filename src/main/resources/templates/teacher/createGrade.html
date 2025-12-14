@@ -2,46 +2,49 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Создание оценки</title>
+    <title>Создание оценок</title>
     <link rel="stylesheet" th:href="@{/css/createGrade.css}">
 </head>
 <body>
-
 <div class="container">
-    <h1>Создание оценки</h1>
+    <h1>Создание оценок</h1>
 
-    <form id="createGradeForm">
-        <label for="student">Студент:</label>
-        <select id="student" name="studentId" required>
-            <option value="">--Выберите студента--</option>
-            <option th:each="student : ${students}"
-                    th:value="${student.id}"
-                    th:text="${student.fullName}"></option>
+    <label>Предмет:
+        <select id="subjectSelect">
+            <option value="">-- Выберите предмет --</option>
+            <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.name}"></option>
         </select>
+    </label>
 
-        <label for="subject">Предмет:</label>
-        <select id="subject" name="subjectId" required>
-            <option value="">--Выберите предмет--</option>
-            <option th:each="subject : ${subjects}"
-                    th:value="${subject.id}"
-                    th:text="${subject.name}"></option>
+    <label>Группа:
+        <select id="groupSelect">
+            <option value="">-- Выберите группу --</option>
+            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"></option>
         </select>
+    </label>
 
-        <label for="value">Оценка:</label>
-        <input type="number" id="value" name="value"
-               th:min="${minScore}" th:max="${maxScore}" required>
+    <label>Занятие:
+        <select id="lessonSelect">
+            <option value="">-- Сначала выберите предмет и группу --</option>
+        </select>
+    </label>
 
-        <label for="date">Дата:</label>
-        <input type="date" id="date" name="date" required>
+    <button id="loadStudentsBtn">Загрузить студентов</button>
 
-        <button type="submit">Создать оценку</button>
-    </form>
-
-    <div id="message"></div>
+    <table id="studentsTable" style="display:none;">
+        <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Оценка</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <a href="/" class="main-menu-btn">На главное меню</a>
 </div>
 
-<script th:src="@{/js/createGrade.js}" defer></script>
+<script th:src="@{/js/createGrade.js}"></script>
 </body>
 </html>

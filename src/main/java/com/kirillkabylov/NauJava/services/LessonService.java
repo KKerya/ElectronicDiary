@@ -1,9 +1,6 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.domain.Group;
-import com.kirillkabylov.NauJava.domain.Lesson;
-import com.kirillkabylov.NauJava.domain.Subject;
-import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,4 +16,8 @@ public interface LessonService {
     Lesson getLessonById(Long lessonId);
 
     List<Lesson> getLessonsByGroupIdBetweenDates(Long groupId, LocalDate startDate, LocalDate endDate);
+
+    List<Lesson> getLessonForTeacher(Long teacherId, Long subjectId, Long groupId);
+
+    List<Student> getStudentsForLesson(Long lessonId);
 }

@@ -1,11 +1,11 @@
 package com.kirillkabylov.NauJava.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record GradeDto(
         String studentFullName,
         String teacherFullName,
         Integer value,
-        LocalDateTime date
+        LocalDate date
 ) {
 }

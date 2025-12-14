@@ -10,7 +10,6 @@ h1 {
     margin-bottom: 25px;
 }
 
-/* --- Стили формы --- */
 form {
     display: flex;
     flex-wrap: wrap;
@@ -53,7 +52,6 @@ button:hover {
     background-color: #45a049;
 }
 
-/* --- Стили таблицы --- */
 table {
     width: 100%;
     border-collapse: collapse;
