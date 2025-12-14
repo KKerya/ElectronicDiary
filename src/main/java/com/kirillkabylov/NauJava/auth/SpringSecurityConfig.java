@@ -1,5 +1,6 @@
 package com.kirillkabylov.NauJava.auth;
 
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,9 +26,10 @@ public class SpringSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/login", "/registration").permitAll()
-//                    .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/login", "/registration").permitAll()
+                        .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);
