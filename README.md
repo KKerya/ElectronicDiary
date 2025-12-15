@@ -42,6 +42,7 @@ Before launching, make sure that you have installed:
    git clone https://github.com/KKerya/ElectronicDiary.git
 2. Set up the database. Create a database and import the create.sql SQL script:
 3. Configure the database connection in application.properties:
+   
   spring.datasource.url=jdbc:mysql://localhost:3306/electronic_diary
 
   spring.datasource.username=your_username
