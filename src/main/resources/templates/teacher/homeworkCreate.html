@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать домашнее задание</title>
+    <link rel="stylesheet" href="/css/homeworkCreate.css">
+</head>
+<body>
+<div class="container">
+    <h1>Создать домашнее задание</h1>
+
+    <form id="homeworkForm">
+        <div class="form-group">
+            <label for="subject">Предмет:</label>
+            <select id="subject" name="subjectId" required>
+                <option value="">-- Выберите предмет --</option>
+                <option th:each="subject : ${subjects}"
+                        th:value="${subject.id}"
+                        th:text="${subject.name}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="group">Группа:</label>
+            <select id="group" name="groupId" required>
+                <option value="">-- Выберите группу --</option>
+                <option th:each="group : ${groups}"
+                        th:value="${group.id}"
+                        th:text="${group.name}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lesson">Занятие:</label>
+            <select id="lesson" name="lessonId" required>
+                <option value="">-- Сначала выберите предмет и группу --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="deadline">Дедлайн:</label>
+            <input type="datetime-local" id="deadline" name="deadline" required>
+        </div>
+
+        <button type="submit">Создать</button>
+    </form>
+
+    <div id="message" style="margin-top:20px; color:green;"></div>
+
+    <a href="/" class="main-menu-btn">Главное меню</a>
+</div>
+
+<script src="/js/homeworkCreate.js"></script>
+</body>
+</html>

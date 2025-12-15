@@ -26,6 +26,10 @@ public class LessonController {
         this.userService = userService;
     }
 
+    /**
+     * Создать занятие
+     * @param request
+     */
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createLesson(@RequestBody CreateLessonRequest request) {
@@ -33,6 +37,12 @@ public class LessonController {
         return ResponseEntity.ok("OK");
     }
 
+    /**
+     * Получить занятие
+     * @param subjectId id предмета
+     * @param groupId id группы
+     * @param user пользователь
+     */
     @GetMapping("/api/lessons")
     @PreAuthorize("hasRole('TEACHER')")
     public List<LessonDto> getLessons(

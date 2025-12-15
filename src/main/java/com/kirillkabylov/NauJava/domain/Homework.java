@@ -1,5 +1,6 @@
 package com.kirillkabylov.NauJava.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,12 +21,12 @@ public class Homework {
     @Column
     private LocalDateTime deadline;
 
-    @ManyToOne
-    @JoinColumn(name = "lesson_id")
+    @OneToOne
+    @JoinColumn(name = "lesson_id", unique = true)
+    @JsonIgnore
     private Lesson lesson;
 
-    public Homework() {
-    }
+    public Homework() { }
 
     public Homework(Lesson lesson, LocalDateTime deadline, LocalDateTime createdAt, String description) {
         this.lesson = lesson;

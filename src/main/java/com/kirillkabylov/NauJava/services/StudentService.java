@@ -2,6 +2,8 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.Teacher;
+import com.kirillkabylov.NauJava.domain.UserEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,6 +17,12 @@ public interface StudentService {
      */
     @Transactional
     void deleteStudent(Student student);
+
+    @Transactional
+    void promoteToStudent(UserEntity user, Long groupId);
+
+    @Transactional
+    Student createStudentWithoutEncodingPassword(String login, String fullName, String password, Long groupId);
 
     /**
      * Создать нового студента
@@ -47,4 +55,6 @@ public interface StudentService {
     List<Student> getAllStudents();
 
     Student getByLogin(String login);
+
+    List<Student> getStudentsByLesson(Long lessonId);
 }

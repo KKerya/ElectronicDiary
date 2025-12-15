@@ -18,6 +18,11 @@ public class HomeController {
         this.userService = userService;
     }
 
+    /**
+     * Главное меню
+     * @param model
+     * @param userDetails пользователь
+     */
     @GetMapping("/home")
     public String homePage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();

@@ -51,7 +51,6 @@ public class GradePageController {
         model.addAttribute("maxScore", gradeProperties.getMaxScore());
         model.addAttribute("subjects", subjectService.getSubjectsByTeacherLogin(user.getUsername()));
         model.addAttribute("groups", groupService.getAllGroups());
-        model.addAttribute("students", studentService.getAllStudents());
 
         return "teacher/createGrade";
     }

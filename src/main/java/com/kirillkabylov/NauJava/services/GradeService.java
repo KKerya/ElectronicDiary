@@ -7,6 +7,7 @@ import com.kirillkabylov.NauJava.domain.Subject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface GradeService {
@@ -83,4 +84,10 @@ public interface GradeService {
     double getAverage(Long studentId, Long subjectId);
 
     double getAverage(String login, Long subjectId);
+
+    double getAverage(Long teacherId, Long subjectId, Long groupId);
+
+    long getGradesCount(Long subjectId, Long groupId);
+
+    Map<Integer, Long> getGradeDistribution(Long subjectId, Long groupId);
 }

@@ -34,6 +34,12 @@ public class ScheduleController {
         this.studentService = studentService;
     }
 
+    /**
+     * Получить расписание на неделю
+     * @param groupId id группы
+     * @param weekNumber номер недели
+     * @param user пользователь
+     */
     @GetMapping("/group/{groupId}/week/{weekNumber}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER') or hasRole('ADMIN')")
     public WeekScheduleDto getGroupWeekSchedule(

@@ -1,10 +1,7 @@
 package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.database.UserRepository;
-import com.kirillkabylov.NauJava.domain.Admin;
-import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Teacher;
-import com.kirillkabylov.NauJava.domain.UserEntity;
+import com.kirillkabylov.NauJava.domain.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;

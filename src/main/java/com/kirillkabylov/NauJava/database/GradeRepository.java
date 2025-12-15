@@ -81,5 +81,9 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
 
     List<Grade> findAllByStudentIdAndSubjectId(Long studentId, Long subjectId);
 
+    List<Grade> findAllByTeacherIdAndSubjectIdAndStudentGroupId(Long teacherId, Long subjectId, Long groupId);
+
     boolean existsByStudentAndSubjectAndDateAndValue(Student student, Subject subject, LocalDate date, int value);
+
+    long countBySubjectIdAndStudentGroupId(Long subjectId, Long groupId);
 }

@@ -20,6 +20,9 @@ public class AdminController {
         this.userService = userService;
     }
 
+    /**
+     * Сменить пароль пользователя
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/change/password")
     public void changeUserPassword(@RequestBody ChangePasswordDto dto) {

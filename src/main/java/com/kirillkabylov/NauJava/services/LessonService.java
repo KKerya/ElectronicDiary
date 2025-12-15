@@ -18,6 +18,4 @@ public interface LessonService {
     List<Lesson> getLessonsByGroupIdBetweenDates(Long groupId, LocalDate startDate, LocalDate endDate);
 
     List<Lesson> getLessonForTeacher(Long teacherId, Long subjectId, Long groupId);
-
-    List<Student> getStudentsForLesson(Long lessonId);
 }

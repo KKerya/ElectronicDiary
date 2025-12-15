@@ -32,6 +32,9 @@ public class AttendanceController {
         this.lessonService = lessonService;
     }
 
+    /**
+     * Получить все посещения студента
+     */
     @GetMapping("/my-attendance/")
     @PreAuthorize("hasRole('STUDENT')")
     public List<AttendanceDto> getAllAttendance(@AuthenticationPrincipal UserDetails user) {
@@ -48,6 +51,10 @@ public class AttendanceController {
     }
 
 
+    /**
+     * Получить все посещения студента по конкретному предмету
+     * @param subjectId id предмета
+     */
     @GetMapping("/my-attendance/subject/{subjectId}")
     @PreAuthorize("hasRole('STUDENT')")
     public List<AttendanceDto> getAllAttendance(@AuthenticationPrincipal UserDetails user, @PathVariable Long subjectId) {
@@ -63,6 +70,10 @@ public class AttendanceController {
                 .toList();
     }
 
+    /**
+     * Получить все посещения по студенту
+     * @param studentId id студента
+     */
     @GetMapping("/for-admin/my-attendance/student/{studentId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public List<AttendanceDto> getAllAttendance(@PathVariable Long studentId) {
@@ -77,6 +88,9 @@ public class AttendanceController {
                 .toList();
     }
 
+    /**
+     * Создать посещение
+     */
     @PostMapping("/create")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public AttendanceDto createAttendance(@RequestBody AttendanceCreateRequest request) {
@@ -97,12 +111,18 @@ public class AttendanceController {
         );
     }
 
+    /**
+     * удалить посещение
+     */
     @DeleteMapping("delete/{attendanceId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public void deleteAttendance(@PathVariable Long attendanceId) {
         attendanceService.deleteAttendance(attendanceId);
     }
 
+    /**
+     * Получить список посещении студентов по занятию
+     */
     @GetMapping("/students/{lessonId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public List<StudentAttendanceDto> getStudentsByLesson(@PathVariable Long lessonId) {

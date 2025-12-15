@@ -21,18 +21,27 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
+    /**
+     * Создание предмета
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public void createSubject(@RequestBody Map<String, String> request) {
         subjectService.createSubject(request.get("name").trim());
     }
 
+    /**
+     * Установить предмет учителю
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/set")
     public void setSubjectTeacher(@RequestBody TeacherSubjectDTO request) {
         subjectService.setSubjectTeacher(request.subjectId(), request.teacherId());
     }
 
+    /**
+     * Удалить предмет у учителя
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove")
     public void removeSubjectFromTeacher(@RequestBody TeacherSubjectDTO request) {

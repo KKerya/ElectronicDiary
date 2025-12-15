@@ -28,8 +28,8 @@ public class Lesson {
     @Column
     private LocalDateTime startTime;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Homework> homeworkList = new ArrayList<>();
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Homework homework;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attendance> attendances = new ArrayList<>();
@@ -56,16 +56,6 @@ public class Lesson {
                 ", startTime=" + startTime +
                 ", durationMinutes=" + durationMinutes +
                 '}';
-    }
-
-    public void addHomework(Homework homework) {
-        homeworkList.add(homework);
-        homework.setLesson(this);
-    }
-
-    public void removeHomework(Homework homework) {
-        homeworkList.remove(homework);
-        homework.setLesson(null);
     }
 
 
@@ -113,12 +103,12 @@ public class Lesson {
         this.durationMinutes = durationMinutes;
     }
 
-    public List<Homework> getHomeworkList() {
-        return homeworkList;
+    public Homework getHomework() {
+        return homework;
     }
 
-    public void setHomeworkList(List<Homework> homeworkList) {
-        this.homeworkList = homeworkList;
+    public void setHomework(Homework homework) {
+        this.homework = homework;
     }
 
     public List<Attendance> getAttendances() {

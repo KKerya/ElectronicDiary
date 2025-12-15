@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e6f2e6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #d9f2d9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2e7d32;
+}
+
+.selectors {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.selectors select, .selectors button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #2e7d32;
+    font-size: 14px;
+}
+
+.selectors button {
+    background-color: #2e7d32;
+    color: white;
+    cursor: pointer;
+}
+
+.selectors button:hover {
+    background-color: #1b5e20;
+}
+
+.result p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+#distributionTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#distributionTable th, #distributionTable td {
+    border: 1px solid #2e7d32;
+    padding: 8px;
+    text-align: center;
+}
+
+#distributionTable th {
+    background-color: #2e7d32;
+    color: white;
+}
+
+#distributionTable tr:nth-child(even) {
+    background-color: #c8e6c9;
+}
+
+

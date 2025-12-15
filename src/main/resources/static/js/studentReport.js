@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch(`/api/grade/average?subjectId=${subjectId}`)
+        fetch(`/api/grade/student/average?subjectId=${subjectId}`)
             .then(response => response.json())
             .then(avg => {
                 document.getElementById('average').textContent = `Средняя оценка: ${avg.toFixed(2)}`;

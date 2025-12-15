@@ -86,8 +86,4 @@ public class LessonServiceImpl implements LessonService {
         return lessonRepository.findByTeacherIdAndGroupIdAndSubjectId(teacherId, groupId, subjectId);
     }
 
-    @Override
-    public List<Student> getStudentsForLesson(Long lessonId){
-        return lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson with id - " + lessonId + " not found")).getGroup().getStudents();
-    }
 }

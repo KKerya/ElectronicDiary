@@ -1,5 +1,6 @@
 package com.kirillkabylov.NauJava.services;
 
+import com.kirillkabylov.NauJava.config.GradeProperties;
 import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
@@ -11,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -29,17 +31,19 @@ public class GradeServiceImpl implements GradeService {
     private final GroupRepository groupRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final GradeProperties gradeProperties;
 
     @Autowired
     public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules,
                             StudentRepository studentRepository, GroupRepository groupRepository,
-                            SubjectRepository subjectRepository, TeacherRepository teacherRepository) {
+                            SubjectRepository subjectRepository, TeacherRepository teacherRepository, GradeProperties gradeProperties) {
         this.gradeRepository = gradeRepository;
         this.gradeRules = gradeRules;
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
+        this.gradeProperties = gradeProperties;
     }
 
     @Override
@@ -160,5 +164,26 @@ public class GradeServiceImpl implements GradeService {
                 .mapToInt(Grade::getValue)
                 .average()
                 .orElse(0.0);
+    }
+
+    @Override
+    public double getAverage(Long teacherId, Long subjectId, Long groupId) {
+        return gradeRepository.findAllByTeacherIdAndSubjectIdAndStudentGroupId(teacherId, subjectId, groupId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    public long getGradesCount(Long subjectId, Long groupId) {
+        return gradeRepository.countBySubjectIdAndStudentGroupId(subjectId, groupId);
+    }
+
+    @Override
+    public Map<Integer, Long> getGradeDistribution(Long subjectId, Long groupId) {
+        List<Grade> grades =  getGradesBySubjectAndGroup(subjectId, groupId);
+        return grades.stream()
+                .collect(Collectors.groupingBy(Grade::getValue, Collectors.counting()));
     }
 }
