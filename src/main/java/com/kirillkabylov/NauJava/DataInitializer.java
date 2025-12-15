@@ -26,27 +26,27 @@ public class DataInitializer implements CommandLineRunner {
     private final AdminRepository adminRepository;
     private final UserService userService;
     private final StudentService studentService;
-    private final GroupRepository groupRepository;
     private final TeacherService teacherService;
-    private final SubjectRepository subjectRepository;
     private final AttendanceService attendanceService;
     private final LessonService lessonService;
+    private final SubjectService subjectService;
+    private final GroupService groupService;
 
     @Autowired
     public DataInitializer(UserRepository userRepository, AdminService adminService, AdminRepository adminRepository,
-                           UserService userService, StudentService studentService, GroupRepository groupRepository,
-                           TeacherService teacherService, SubjectRepository subjectRepository, AttendanceService attendanceService,
-                           LessonService lessonService) {
+                           UserService userService, StudentService studentService, TeacherService teacherService,
+                           AttendanceService attendanceService, LessonService lessonService, SubjectService subjectService,
+                           GroupService groupService) {
         this.userRepository = userRepository;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
         this.userService = userService;
         this.studentService = studentService;
-        this.groupRepository = groupRepository;
         this.teacherService = teacherService;
-        this.subjectRepository = subjectRepository;
         this.attendanceService = attendanceService;
         this.lessonService = lessonService;
+        this.subjectService = subjectService;
+        this.groupService = groupService;
     }
 
     @Override
@@ -55,13 +55,13 @@ public class DataInitializer implements CommandLineRunner {
             userService.createUser("TestUser1", "Alica Alisovna", "123123");
             userService.createUser("TestUser2", "Ivan Ivanov", "123123");
 
-            Subject subject = subjectRepository.save(new Subject("Math"));
-            Subject subject1 = subjectRepository.save(new Subject("Rus"));
+            Subject subject = subjectService.createSubject("Math");
+            Subject subject1 = subjectService.createSubject("Rus");
 
             Teacher teacher = teacherService.createTeacher("TestTeacher1", "Teacher Teacher", "123123", List.of(subject.getId()));
             Teacher teacher2 = teacherService.createTeacher("TestTeacher2", "Teacher Teacher", "123123", List.of(subject1.getId()));
 
-            Group group = groupRepository.save(new Group("11A", teacher));
+            Group group = groupService.createGroup("11A", teacher);
             Student student1 = studentService.createStudent("TestStudent1", "Sasha Aleksandrov", "123123", group);
             studentService.createStudent("TestStudent2", "Masha Aleksandrova", "123123", group);
 

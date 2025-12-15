@@ -53,6 +53,7 @@ public class AttendanceController {
 
     /**
      * Получить все посещения студента по конкретному предмету
+     *
      * @param subjectId id предмета
      */
     @GetMapping("/my-attendance/subject/{subjectId}")
@@ -72,6 +73,7 @@ public class AttendanceController {
 
     /**
      * Получить все посещения по студенту
+     *
      * @param studentId id студента
      */
     @GetMapping("/for-admin/my-attendance/student/{studentId}")

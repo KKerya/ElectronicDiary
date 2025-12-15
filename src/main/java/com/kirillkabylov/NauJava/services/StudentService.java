@@ -2,12 +2,15 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
-import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Сервис для управления студентами.
+ * Содержит методы для создания, обновления, удаления и получения студентов.
+ */
 public interface StudentService {
     /**
      * Удаляет студента и все его оценки

@@ -16,8 +16,8 @@
         <select id="groupSelect" required>
             <option value="">-- Выберите группу --</option>
             <option th:each="g : ${groups}"
-                    th:value="${g.id}"
-                    th:text="${g.name}">
+                    th:text="${g.name}"
+                    th:value="${g.id}">
             </option>
         </select>
 
@@ -25,8 +25,8 @@
         <select id="subjectSelect" required>
             <option value="">-- Выберите предмет --</option>
             <option th:each="s : ${subjects}"
-                    th:value="${s.id}"
-                    th:text="${s.name}">
+                    th:text="${s.name}"
+                    th:value="${s.id}">
             </option>
         </select>
 
@@ -34,26 +34,26 @@
         <select id="teacherSelect" required>
             <option value="">-- Выберите учителя --</option>
             <option th:each="t : ${teachers}"
-                    th:value="${t.id}"
-                    th:text="${t.fullName}">
+                    th:text="${t.fullName}"
+                    th:value="${t.id}">
             </option>
         </select>
 
         <label for="startTime">Дата и время:</label>
-        <input type="datetime-local" id="startTime" required>
+        <input id="startTime" required type="datetime-local">
 
         <label class="checkbox">
-            <input type="checkbox" id="wholeYear">
+            <input id="wholeYear" type="checkbox">
             Поставить на весь учебный год (34 недели)
         </label>
 
-        <button type="submit" id="createBtn">Создать урок</button>
+        <button id="createBtn" type="submit">Создать урок</button>
 
-        <p id="result" class="message"></p>
+        <p class="message" id="result"></p>
 
     </form>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script th:src="@{/js/createLesson.js}"></script>

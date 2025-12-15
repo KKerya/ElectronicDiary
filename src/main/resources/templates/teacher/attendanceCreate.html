@@ -9,15 +9,15 @@
 
 <h2>Ставим посещаемость</h2>
 
-<a href="/" class="main-menu-btn">На главное меню</a>
+<a class="main-menu-btn" href="/">На главное меню</a>
 
 <div class="selectors">
     <label>Предмет:
         <select id="subjectSelect">
             <option value="">-- Выберите предмет --</option>
             <option th:each="subject : ${subjects}"
-                    th:value="${subject.id}"
-                    th:text="${subject.name}">
+                    th:text="${subject.name}"
+                    th:value="${subject.id}">
             </option>
         </select>
     </label>
@@ -25,10 +25,10 @@
     <label>Дата занятия:
         <select id="lessonSelect">
             <option value="">-- Выберите занятие --</option>
-            <option th:each="lesson : ${lessons}"
-                    th:value="${lesson.id}"
+            <option th:data-subject-id="${lesson.subjectId}"
+                    th:each="lesson : ${lessons}"
                     th:text="${#temporals.format(lesson.startTime, 'dd.MM.yyyy HH:mm')}"
-                    th:data-subject-id="${lesson.subjectId}">
+                    th:value="${lesson.id}">
             </option>
         </select>
     </label>

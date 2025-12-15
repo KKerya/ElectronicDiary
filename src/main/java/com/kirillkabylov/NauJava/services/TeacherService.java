@@ -67,7 +67,7 @@ public interface TeacherService {
      * @param studentId id студента
      * @param subjectId id предмета
      * @param teacherId id учителя
-     * @param date дата
+     * @param date      дата
      */
     Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date);
 

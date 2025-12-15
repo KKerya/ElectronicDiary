@@ -20,6 +20,7 @@ public class HomeController {
 
     /**
      * Главное меню
+     *
      * @param model
      * @param userDetails пользователь
      */

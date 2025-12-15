@@ -28,7 +28,7 @@ public class HomeworkServiceImpl implements HomeworkService {
             throw new RuntimeException("Некорректное значение дедлайна");
         }
 
-        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(()-> new EntityNotFoundException("Lesson with id - " + lessonId + " not found"));
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson with id - " + lessonId + " not found"));
         Homework homework = new Homework(lesson, deadline, LocalDateTime.now(), description);
         lesson.setHomework(homework);
         lessonRepository.save(lesson);
@@ -36,7 +36,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public List<Homework> getHomeworkForStudentBySubject(Long studentId, Long subjectId){
+    public List<Homework> getHomeworkForStudentBySubject(Long studentId, Long subjectId) {
         return homeworkRepository.findByLessonGroupStudentsIdAndLessonSubjectId(studentId, subjectId);
     }
 }

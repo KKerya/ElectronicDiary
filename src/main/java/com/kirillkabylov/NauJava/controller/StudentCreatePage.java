@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.services.GroupService;
-import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

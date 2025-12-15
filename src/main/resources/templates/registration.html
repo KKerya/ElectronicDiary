@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+>
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
@@ -13,20 +13,20 @@
 
     <div class="message" th:if="${message}" th:text="${message}"></div>
 
-    <form th:action="@{/registration}" method="post" autocomplete="off">
-        <input type="text" style="display:none" autocomplete="username">
-        <input type="password" style="display:none" autocomplete="new-password">
+    <form autocomplete="off" method="post" th:action="@{/registration}">
+        <input autocomplete="username" style="display:none" type="text">
+        <input autocomplete="new-password" style="display:none" type="password">
 
         <label>ФИО:
-            <input type="text" name="fullName" required autocomplete="name"/>
+            <input autocomplete="name" name="fullName" required type="text"/>
         </label>
 
         <label>Логин:
-            <input type="text" name="login" required autocomplete="username"/>
+            <input autocomplete="username" name="login" required type="text"/>
         </label>
 
         <label>Пароль:
-            <input type="password" name="password" required autocomplete="new-password"/>
+            <input autocomplete="new-password" name="password" required type="password"/>
         </label>
 
         <input type="submit" value="Зарегистрироваться"/>

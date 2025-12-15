@@ -11,7 +11,8 @@ public interface UserUpdateCommand<Type1 extends UserEntity> {
 
     /**
      * Обновляем пользователя
-     * @param user пользователь
+     *
+     * @param user     пользователь
      * @param newValue новое значение
      */
     void execute(Type1 user, Object newValue);

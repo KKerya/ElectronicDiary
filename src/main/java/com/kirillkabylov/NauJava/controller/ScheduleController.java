@@ -36,9 +36,10 @@ public class ScheduleController {
 
     /**
      * Получить расписание на неделю
-     * @param groupId id группы
+     *
+     * @param groupId    id группы
      * @param weekNumber номер недели
-     * @param user пользователь
+     * @param user       пользователь
      */
     @GetMapping("/group/{groupId}/week/{weekNumber}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER') or hasRole('ADMIN')")

@@ -26,7 +26,8 @@ public class Homework {
     @JsonIgnore
     private Lesson lesson;
 
-    public Homework() { }
+    public Homework() {
+    }
 
     public Homework(Lesson lesson, LocalDateTime deadline, LocalDateTime createdAt, String description) {
         this.lesson = lesson;

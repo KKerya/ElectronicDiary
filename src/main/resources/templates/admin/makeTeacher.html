@@ -11,12 +11,12 @@
 
     <form id="makeTeacherForm">
         <label for="login">Логин пользователя:</label>
-        <input type="text" id="login" name="login" placeholder="Введите логин" required>
+        <input id="login" name="login" placeholder="Введите логин" required type="text">
 
         <label for="subjects">Выберите предметы:</label>
-        <select id="subjects" name="subjects" multiple size="5">
+        <select id="subjects" multiple name="subjects" size="5">
             <th:block th:each="subject : ${subjects}">
-                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
             </th:block>
         </select>
 
@@ -25,7 +25,7 @@
 
     <div id="resultMessage"></div>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script th:src="@{/js/makeTeacher.js}"></script>

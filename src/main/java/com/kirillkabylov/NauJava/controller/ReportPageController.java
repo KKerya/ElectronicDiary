@@ -1,6 +1,5 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.services.GroupService;
 import com.kirillkabylov.NauJava.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class ReportPageController {
 
     @GetMapping("/teacher")
     @PreAuthorize("hasRole('TEACHER')")
-    public String teacherReportPage(@AuthenticationPrincipal UserDetails userDetails, Model model){
+    public String teacherReportPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("subjects", subjectService.getSubjectsByTeacherLogin(userDetails.getUsername()));
         model.addAttribute("groups", groupService.getAllGroups());
         return "teacher/teacherReport";

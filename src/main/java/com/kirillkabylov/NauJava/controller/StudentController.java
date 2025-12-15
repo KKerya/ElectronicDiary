@@ -2,7 +2,6 @@ package com.kirillkabylov.NauJava.controller;
 
 import com.kirillkabylov.NauJava.domain.UserEntity;
 import com.kirillkabylov.NauJava.dto.StudentDto;
-import com.kirillkabylov.NauJava.services.LessonService;
 import com.kirillkabylov.NauJava.services.StudentService;
 import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +22,22 @@ public class StudentController {
         this.userService = userService;
     }
 
+    /**
+     * Создать студента
+     *
+     * @param login   логин пользователя
+     * @param groupId id группы
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public void createStudent(@RequestParam String login, @RequestParam Long groupId) {
-        UserEntity user= userService.getByLogin(login);
+        UserEntity user = userService.getByLogin(login);
         studentService.promoteToStudent(user, groupId);
     }
 
     /**
      * Получить студентов
+     *
      * @param lessonId id занятия
      */
     @GetMapping("/by-lesson")
@@ -44,12 +50,13 @@ public class StudentController {
 
     /**
      * Получить студентов
+     *
      * @param groupId id группы
      * @return
      */
     @GetMapping("/by-group")
     @PreAuthorize("hasRole('TEACHER')")
-    public List<StudentDto> getStudentsByGroup(@RequestParam Long groupId){
+    public List<StudentDto> getStudentsByGroup(@RequestParam Long groupId) {
         return studentService.getStudentsByGroupId(groupId).stream()
                 .map(student -> new StudentDto(student.getId(), student.getFullName(), student.getGroup().getName()))
                 .toList();

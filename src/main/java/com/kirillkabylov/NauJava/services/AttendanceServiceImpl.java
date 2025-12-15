@@ -53,6 +53,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceRepository.save(attendance);
     }
 
+    @Override
     public void updateAttendanceStatus(Attendance attendance, AttendanceStatus status) {
         attendance.setStatus(status);
     }

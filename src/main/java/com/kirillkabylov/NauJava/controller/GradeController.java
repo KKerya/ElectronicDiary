@@ -14,9 +14,7 @@ import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,8 +45,9 @@ public class GradeController {
 
     /**
      * Получить оценки группы за определенную дату
+     *
      * @param groupId id группы
-     * @param month год и месяц
+     * @param month   год и месяц
      */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @GetMapping("/group-month")
@@ -79,9 +78,10 @@ public class GradeController {
 
     /**
      * Получить оценки
+     *
      * @param subjectId id предмета
-     * @param groupId id группы
-     * @param user пользователь
+     * @param groupId   id группы
+     * @param user      пользователь
      */
     @GetMapping
     public List<GradeDto> getGradesForStudentOrTeacher(
@@ -120,6 +120,7 @@ public class GradeController {
 
     /**
      * Создать оценку
+     *
      * @param request
      */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
@@ -137,7 +138,8 @@ public class GradeController {
 
     /**
      * Среднее арифметическое оценок пользователя
-     * @param user пользователь
+     *
+     * @param user      пользователь
      * @param subjectId id предмета
      * @return
      */
@@ -147,6 +149,13 @@ public class GradeController {
         return gradeService.getAverage(userId, subjectId);
     }
 
+    /**
+     * Средняя оценка по предмету в группе
+     *
+     * @param user      пользователь (учитель)
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @GetMapping("teacher/average")
     public double getAverageForTeacher(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId, @RequestParam Long groupId) {
@@ -154,12 +163,24 @@ public class GradeController {
         return gradeService.getAverage(userId, subjectId, groupId);
     }
 
+    /**
+     * Получить количество оценок по предмету у группы
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @GetMapping("subject/count")
     public long getCountGrades(@RequestParam Long subjectId, @RequestParam Long groupId) {
         return gradeService.getGradesCount(subjectId, groupId);
     }
 
+    /**
+     * Получить распределение по оценкам по предмету у группы
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @GetMapping("subject/distribution")
     public List<GradeDistributionDto> getDistribution(@RequestParam Long subjectId, @RequestParam Long groupId) {

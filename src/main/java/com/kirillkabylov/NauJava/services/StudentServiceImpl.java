@@ -4,7 +4,9 @@ import com.kirillkabylov.NauJava.command.UserUpdateCommand;
 import com.kirillkabylov.NauJava.database.GroupRepository;
 import com.kirillkabylov.NauJava.database.LessonRepository;
 import com.kirillkabylov.NauJava.database.StudentRepository;
-import com.kirillkabylov.NauJava.domain.*;
+import com.kirillkabylov.NauJava.domain.Group;
+import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -78,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Студент с таким логином уже существует");
         }
-        Group group = groupRepository.findById(groupId).orElseThrow(()-> new EntityNotFoundException("Group with id - " + groupId + " not found"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group with id - " + groupId + " not found"));
         Student student = new Student(login, fullName, password, group);
         studentRepository.save(student);
 
@@ -128,7 +130,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getStudentsByLesson(Long lessonId){
+    public List<Student> getStudentsByLesson(Long lessonId) {
         return lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson with id - " + lessonId + " not found")).getGroup().getStudents();
     }
 }

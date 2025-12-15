@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Управление предметами</title>
     <link rel="stylesheet" th:href="@{/css/adminPage.css}">
 </head>
@@ -12,7 +12,7 @@
     <h1>Создать новый предмет</h1>
     <form id="subjectForm">
         <label for="subjectName">Название предмета:</label>
-        <input type="text" id="subjectName" name="subjectName" required>
+        <input id="subjectName" name="subjectName" required type="text">
         <button type="submit">Создать</button>
     </form>
     <p id="subjectMessage"></p>
@@ -25,7 +25,7 @@
         <select id="teacherSelect" required>
             <option value="">-- Выберите учителя --</option>
             <th:block th:each="teacher : ${teachers}">
-                <option th:value="${teacher.id}" th:text="${teacher.fullName}"></option>
+                <option th:text="${teacher.fullName}" th:value="${teacher.id}"></option>
             </th:block>
         </select>
 
@@ -33,7 +33,7 @@
         <select id="subjectSelect" required>
             <option value="">-- Выберите предмет --</option>
             <th:block th:each="subject : ${subjects}">
-                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
             </th:block>
         </select>
 
@@ -47,7 +47,7 @@
         <select id="teacherSelectRemove" required>
             <option value="">-- Выберите учителя --</option>
             <th:block th:each="teacher : ${teachers}">
-                <option th:value="${teacher.id}" th:text="${teacher.fullName}"></option>
+                <option th:text="${teacher.fullName}" th:value="${teacher.id}"></option>
             </th:block>
         </select>
 
@@ -55,15 +55,15 @@
         <select id="subjectSelectRemove" required>
             <option value="">-- Выберите предмет --</option>
             <th:block th:each="subject : ${subjects}">
-                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
             </th:block>
         </select>
 
-        <button type="submit" class="remove-btn">Удалить предмет</button>
+        <button class="remove-btn" type="submit">Удалить предмет</button>
     </form>
     <p id="removeMessage"></p>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script th:src="@{/js/manageSubject.js}"></script>

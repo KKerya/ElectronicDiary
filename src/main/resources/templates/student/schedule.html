@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/schedule.css}">
 </head>
 <body>
-<a href="/" class="home-btn">На главную</a>
+<a class="home-btn" href="/">На главную</a>
 
 <h2>Расписание на неделю</h2>
 
@@ -14,14 +14,14 @@
     <label>Выберите неделю:
         <select id="weekSelect">
             <option th:each="week : ${weeks}"
-                    th:value="${week.number}"
-                    th:text="${week.displayName}">
+                    th:text="${week.displayName}"
+                    th:value="${week.number}">
             </option>
         </select>
     </label>
 </div>
 
-<div id="scheduleContainer" class="schedule-grid"></div>
+<div class="schedule-grid" id="scheduleContainer"></div>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

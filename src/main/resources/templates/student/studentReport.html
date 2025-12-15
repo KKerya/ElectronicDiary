@@ -14,17 +14,17 @@
     <form>
         <label for="subjectSelect">Выберите предмет:</label>
         <select id="subjectSelect">
-            <option value="" disabled selected>Выберите предмет</option>
+            <option disabled selected value="">Выберите предмет</option>
             <th:block th:each="subject : ${subjects}">
-                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
             </th:block>
         </select>
-        <button type="button" id="getAverageBtn">Cформировать</button>
+        <button id="getAverageBtn" type="button">Cформировать</button>
     </form>
 
     <div id="average"></div>
 
-    <div id="attendance" class="attendance-box" style="display: none;">
+    <div class="attendance-box" id="attendance" style="display: none;">
         <h3>Посещаемость</h3>
         <p>Всего занятий: <span id="totalClasses">0</span></p>
         <p>Присутствовал: <span id="presentCount">0</span></p>

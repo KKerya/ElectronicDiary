@@ -1,6 +1,5 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.database.UserRepository;
 import com.kirillkabylov.NauJava.dto.CreateLessonRequest;
 import com.kirillkabylov.NauJava.dto.LessonDto;
 import com.kirillkabylov.NauJava.services.LessonService;
@@ -28,6 +27,7 @@ public class LessonController {
 
     /**
      * Создать занятие
+     *
      * @param request
      */
     @PostMapping("/create")
@@ -39,9 +39,10 @@ public class LessonController {
 
     /**
      * Получить занятие
+     *
      * @param subjectId id предмета
-     * @param groupId id группы
-     * @param user пользователь
+     * @param groupId   id группы
+     * @param user      пользователь
      */
     @GetMapping("/api/lessons")
     @PreAuthorize("hasRole('TEACHER')")

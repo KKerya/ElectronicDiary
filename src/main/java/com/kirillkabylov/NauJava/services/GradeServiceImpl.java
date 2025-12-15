@@ -17,12 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-/**
- * Реализация сервиса для управления оценками.
- * Сервис предоставляет операции для создания, удаления, нахождения и смены оценки
- * взаимодействуя с {@link GradeRepository} для выполнения операций с базой данных.
- */
 @Service
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
@@ -57,7 +51,7 @@ public class GradeServiceImpl implements GradeService {
         }
 
         Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectIdAndDate(studentId, subjectId, date);
-        if (grade.isPresent()){
+        if (grade.isPresent()) {
             grade.get().setValue(value);
             return gradeRepository.save(grade.get());
         }
@@ -70,12 +64,14 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepository.save(createdGrade);
     }
 
+
     @Override
     public Grade getGrade(long studentId, Subject subject, int value, LocalDate date) {
         return gradeRepository
                 .findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date)
                 .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
     }
+
 
     public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDate date) {
         return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date);
@@ -85,6 +81,7 @@ public class GradeServiceImpl implements GradeService {
     public Optional<Grade> findById(long id) {
         return gradeRepository.findById(id);
     }
+
 
     @Override
     public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDate date) {
@@ -175,6 +172,7 @@ public class GradeServiceImpl implements GradeService {
                 .orElse(0.0);
     }
 
+
     @Override
     public long getGradesCount(Long subjectId, Long groupId) {
         return gradeRepository.countBySubjectIdAndStudentGroupId(subjectId, groupId);
@@ -182,7 +180,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Map<Integer, Long> getGradeDistribution(Long subjectId, Long groupId) {
-        List<Grade> grades =  getGradesBySubjectAndGroup(subjectId, groupId);
+        List<Grade> grades = getGradesBySubjectAndGroup(subjectId, groupId);
         return grades.stream()
                 .collect(Collectors.groupingBy(Grade::getValue, Collectors.counting()));
     }

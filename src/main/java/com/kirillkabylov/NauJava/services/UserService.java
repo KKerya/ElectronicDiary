@@ -30,7 +30,18 @@ public interface UserService {
      */
     UserEntity getByLogin(String login);
 
+    /**
+     * Удалить пользователя
+     *
+     * @param user ссылка на пользователя
+     */
     void deleteUser(UserEntity user);
 
+    /**
+     * Поменять пароль
+     *
+     * @param login       логин
+     * @param newPassword новый пароль
+     */
     void changePassword(String login, String newPassword);
 }

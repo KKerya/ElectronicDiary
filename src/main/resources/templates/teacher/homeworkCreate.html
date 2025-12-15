@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Создать домашнее задание</title>
-    <link rel="stylesheet" href="/css/homeworkCreate.css">
+    <link href="/css/homeworkCreate.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -15,8 +15,8 @@
             <select id="subject" name="subjectId" required>
                 <option value="">-- Выберите предмет --</option>
                 <option th:each="subject : ${subjects}"
-                        th:value="${subject.id}"
-                        th:text="${subject.name}"></option>
+                        th:text="${subject.name}"
+                        th:value="${subject.id}"></option>
             </select>
         </div>
 
@@ -25,8 +25,8 @@
             <select id="group" name="groupId" required>
                 <option value="">-- Выберите группу --</option>
                 <option th:each="group : ${groups}"
-                        th:value="${group.id}"
-                        th:text="${group.name}"></option>
+                        th:text="${group.name}"
+                        th:value="${group.id}"></option>
             </select>
         </div>
 
@@ -44,7 +44,7 @@
 
         <div class="form-group">
             <label for="deadline">Дедлайн:</label>
-            <input type="datetime-local" id="deadline" name="deadline" required>
+            <input id="deadline" name="deadline" required type="datetime-local">
         </div>
 
         <button type="submit">Создать</button>
@@ -52,7 +52,7 @@
 
     <div id="message" style="margin-top:20px; color:green;"></div>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script src="/js/homeworkCreate.js"></script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Отчёт преподавателя</title>
-    <link rel="stylesheet" href="/css/teacherReport.css">
+    <link href="/css/teacherReport.css" rel="stylesheet">
 </head>
 <body>
 
@@ -14,16 +14,16 @@
         <select id="subjectSelect">
             <option value="">-- Предмет --</option>
             <option th:each="s : ${subjects}"
-                    th:value="${s.id}"
-                    th:text="${s.name}">
+                    th:text="${s.name}"
+                    th:value="${s.id}">
             </option>
         </select>
 
         <select id="groupSelect">
             <option value="">-- Группа --</option>
             <option th:each="g : ${groups}"
-                    th:value="${g.id}"
-                    th:text="${g.name}">
+                    th:text="${g.name}"
+                    th:value="${g.id}">
             </option>
         </select>
 

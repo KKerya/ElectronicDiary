@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Домашние задания</title>
-    <link rel="stylesheet" href="/css/homeworkView.css">
+    <link href="/css/homeworkView.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -14,8 +14,8 @@
         <select id="subject" required>
             <option value="">-- Выберите предмет --</option>
             <option th:each="subject : ${subjects}"
-                    th:value="${subject.id}"
-                    th:text="${subject.name}"></option>
+                    th:text="${subject.name}"
+                    th:value="${subject.id}"></option>
         </select>
     </div>
 
@@ -23,7 +23,7 @@
         <p>Выберите предмет, чтобы увидеть домашние задания.</p>
     </div>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script src="/js/homeworkView.js"></script>

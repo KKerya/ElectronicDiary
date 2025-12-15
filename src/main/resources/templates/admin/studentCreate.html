@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Создать студента</title>
-    <link rel="stylesheet" href="/css/studentCreate.css">
+    <link href="/css/studentCreate.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -11,7 +11,7 @@
 
     <div class="form-group">
         <label for="login">Логин:</label>
-        <input type="text" id="login" required>
+        <input id="login" required type="text">
     </div>
 
     <div class="form-group">
@@ -19,8 +19,8 @@
         <select id="group" required>
             <option value="">-- Выберите группу --</option>
             <option th:each="group : ${groups}"
-                    th:value="${group.id}"
-                    th:text="${group.name}"></option>
+                    th:text="${group.name}"
+                    th:value="${group.id}"></option>
         </select>
     </div>
 
@@ -28,7 +28,7 @@
 
     <div id="message"></div>
 
-    <a href="/" class="main-menu-btn">Главное меню</a>
+    <a class="main-menu-btn" href="/">Главное меню</a>
 </div>
 
 <script src="/js/studentCreate.js"></script>
