@@ -47,9 +47,6 @@ Before launching, make sure that you have installed:
   spring.datasource.username=your_username
   
   spring.datasource.password=your_password
-5. Build the project:
-
-  mvn clean install
-6. Launch the app:
-
-  mvn spring-boot:run
+  
+5. Build the project: mvn clean install
+6. Launch the app: mvn spring-boot:run
