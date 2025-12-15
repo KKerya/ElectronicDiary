@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание оценок</title>
+    <link rel="stylesheet" th:href="@{/css/createGrade.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Создание оценок</h1>
+
+    <label>Предмет:
+        <select id="subjectSelect">
+            <option value="">-- Выберите предмет --</option>
+            <option th:each="subject : ${subjects}" th:text="${subject.name}" th:value="${subject.id}"></option>
+        </select>
+    </label>
+
+    <label>Группа:
+        <select id="groupSelect">
+            <option value="">-- Выберите группу --</option>
+            <option th:each="group : ${groups}" th:text="${group.name}" th:value="${group.id}"></option>
+        </select>
+    </label>
+
+    <label>Занятие:
+        <select id="lessonSelect">
+            <option value="">-- Сначала выберите предмет и группу --</option>
+        </select>
+    </label>
+
+    <button id="loadStudentsBtn">Загрузить студентов</button>
+
+    <table id="studentsTable" style="display:none;">
+        <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Оценка</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <a class="main-menu-btn" href="/">На главное меню</a>
+</div>
+
+<script th:src="@{/js/createGrade.js}"></script>
+</body>
+</html>

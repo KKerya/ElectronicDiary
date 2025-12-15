@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание на неделю</title>
+    <link rel="stylesheet" th:href="@{/css/schedule.css}">
+</head>
+<body>
+<a class="home-btn" href="/">На главную</a>
+
+<h2>Расписание на неделю</h2>
+
+<div class="week-selector">
+    <label>Выберите неделю:
+        <select id="weekSelect">
+            <option th:each="week : ${weeks}"
+                    th:text="${week.displayName}"
+                    th:value="${week.number}">
+            </option>
+        </select>
+    </label>
+</div>
+
+<div class="schedule-grid" id="scheduleContainer"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const groupId = [[${groupId}]];
+    /*]]>*/
+</script>
+
+<script th:src="@{/js/schedule.js}"></script>
+</body>
+</html>

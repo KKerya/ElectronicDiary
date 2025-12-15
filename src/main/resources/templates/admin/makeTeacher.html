@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Назначить учителем</title>
+    <link rel="stylesheet" th:href="@{/css/adminPage.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Назначить учителем</h1>
+
+    <form id="makeTeacherForm">
+        <label for="login">Логин пользователя:</label>
+        <input id="login" name="login" placeholder="Введите логин" required type="text">
+
+        <label for="subjects">Выберите предметы:</label>
+        <select id="subjects" multiple name="subjects" size="5">
+            <th:block th:each="subject : ${subjects}">
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
+            </th:block>
+        </select>
+
+        <button type="submit">Сделать учителем</button>
+    </form>
+
+    <div id="resultMessage"></div>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script th:src="@{/js/makeTeacher.js}"></script>
+</body>
+</html>

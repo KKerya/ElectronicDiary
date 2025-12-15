@@ -1,5 +1,6 @@
 package com.kirillkabylov.NauJava.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,11 +21,13 @@ public class Homework {
     @Column
     private LocalDateTime deadline;
 
-    @ManyToOne
-    @JoinColumn(name = "lesson_id")
+    @OneToOne
+    @JoinColumn(name = "lesson_id", unique = true)
+    @JsonIgnore
     private Lesson lesson;
 
-    public Homework() {}
+    public Homework() {
+    }
 
     public Homework(Lesson lesson, LocalDateTime deadline, LocalDateTime createdAt, String description) {
         this.lesson = lesson;
@@ -33,13 +36,39 @@ public class Homework {
         this.description = description;
     }
 
-    public Long getId() { return id; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public Lesson getLesson() { return lesson; }
-    public void setLesson(Lesson lesson) { this.lesson = lesson; }
-    public LocalDateTime getDeadline() { return deadline; }
-    public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
 }

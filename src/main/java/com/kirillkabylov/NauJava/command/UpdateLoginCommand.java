@@ -4,6 +4,7 @@ import com.kirillkabylov.NauJava.domain.UserEntity;
 
 /**
  * Обновление логина у пользователя
+ *
  * @param <T> тип пользователя
  */
 public class UpdateLoginCommand<T extends UserEntity> implements UserUpdateCommand<T> {

@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("grade")
-public class GradeViewController {
+public class GradePageController {
     private final SubjectService subjectService;
     private final GroupService groupService;
     private final StudentService studentService;
     private final GradeProperties gradeProperties;
 
     @Autowired
-    public GradeViewController(SubjectService subjectService, GroupService groupService, StudentService studentService, GradeProperties gradeProperties) {
+    public GradePageController(SubjectService subjectService, GroupService groupService, StudentService studentService, GradeProperties gradeProperties) {
         this.subjectService = subjectService;
         this.groupService = groupService;
         this.studentService = studentService;
         this.gradeProperties = gradeProperties;
     }
 
-    @GetMapping("/view")
+    @GetMapping("/page")
     public String gradesPage(Model model, @AuthenticationPrincipal UserDetails user) {
         model.addAttribute("subjects", subjectService.getAllSubjects());
         boolean isTeacher = user.getAuthorities().stream()
@@ -46,13 +46,12 @@ public class GradeViewController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('TEACHER')")
-    public String createGradePage(Model model) {
+    public String createGradePage(@AuthenticationPrincipal UserDetails user, Model model) {
         model.addAttribute("minScore", gradeProperties.getMinScore());
         model.addAttribute("maxScore", gradeProperties.getMaxScore());
-        model.addAttribute("subjects", subjectService.getAllSubjects());
+        model.addAttribute("subjects", subjectService.getSubjectsByTeacherLogin(user.getUsername()));
         model.addAttribute("groups", groupService.getAllGroups());
-        model.addAttribute("students", studentService.getAllStudents());
 
-        return "createGrade";
+        return "teacher/createGrade";
     }
 }

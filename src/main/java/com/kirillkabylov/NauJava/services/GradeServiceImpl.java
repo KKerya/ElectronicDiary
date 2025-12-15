@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.GradeNotFoundException;
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
+import com.kirillkabylov.NauJava.config.GradeProperties;
 import com.kirillkabylov.NauJava.database.*;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
@@ -12,15 +11,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-
-/**
- * Реализация сервиса для управления оценками.
- * Сервис предоставляет операции для создания, удаления, нахождения и смены оценки
- * взаимодействуя с {@link GradeRepository} для выполнения операций с базой данных.
- */
 @Service
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
@@ -29,45 +25,68 @@ public class GradeServiceImpl implements GradeService {
     private final GroupRepository groupRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final GradeProperties gradeProperties;
 
     @Autowired
     public GradeServiceImpl(GradeRepository gradeRepository, List<GradeRule> gradeRules,
                             StudentRepository studentRepository, GroupRepository groupRepository,
-                            SubjectRepository subjectRepository, TeacherRepository teacherRepository) {
+                            SubjectRepository subjectRepository, TeacherRepository teacherRepository, GradeProperties gradeProperties) {
         this.gradeRepository = gradeRepository;
         this.gradeRules = gradeRules;
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
+        this.gradeProperties = gradeProperties;
     }
 
     @Override
-    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDateTime dateTime) {
-        Student student = studentRepository.findById(studentId).orElseThrow( () -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow( () -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow( () -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
-        Grade grade = new Grade(value, student, subject, teacher, dateTime);
-        for (GradeRule rule : gradeRules) {
-            rule.validate(grade);
+    public Grade createGrade(Long studentId, int value, Long subjectId, Long teacherId, LocalDate date) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student with id - " + studentId + " not found"));
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new EntityNotFoundException("Subject with id - " + studentId + " not found"));
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new EntityNotFoundException("Teacher with id - " + studentId + " not found"));
+
+        if (gradeRepository.existsByStudentAndSubjectAndDateAndValue(student, subject, date, value)) {
+            throw new RuntimeException("Такая оценка уже поставлена");
         }
 
-        return gradeRepository.save(grade);
+        Optional<Grade> grade = gradeRepository.findByStudentIdAndSubjectIdAndDate(studentId, subjectId, date);
+        if (grade.isPresent()) {
+            grade.get().setValue(value);
+            return gradeRepository.save(grade.get());
+        }
+
+        Grade createdGrade = new Grade(value, student, subject, teacher, date);
+        for (GradeRule rule : gradeRules) {
+            rule.validate(createdGrade);
+        }
+
+        return gradeRepository.save(createdGrade);
+    }
+
+
+    @Override
+    public Grade getGrade(long studentId, Subject subject, int value, LocalDate date) {
+        return gradeRepository
+                .findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date)
+                .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
+    }
+
+
+    public Optional<Grade> findGrade(long studentId, Subject subject, int value, LocalDate date) {
+        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, date);
     }
 
     @Override
-    public Grade findGrade(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        return gradeRepository.findByStudentIdAndSubjectIdAndValueAndDate(studentId, subject.getId(), value, dateTime).orElseThrow(GradeNotFoundException::new);
+    public Optional<Grade> findById(long id) {
+        return gradeRepository.findById(id);
     }
 
-    @Override
-    public Grade findById(long id) {
-        return gradeRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-    }
 
     @Override
-    public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDateTime dateTime) {
-        gradeRepository.delete(findGrade(studentId, subject, value, dateTime));
+    public void deleteGradeFromStudent(long studentId, Subject subject, int value, LocalDate date) {
+        Optional<Grade> grade = findGrade(studentId, subject, value, date);
+        grade.ifPresent(gradeRepository::delete);
     }
 
     @Override
@@ -82,7 +101,9 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void changeGradeValue(Grade grade, int newValue) {
-        Grade existingGrade = gradeRepository.findById(grade.getId()).orElseThrow(GradeNotFoundException::new);
+        Grade existingGrade = gradeRepository
+                .findById(grade.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Grade with not found"));
 
         existingGrade.setValue(newValue);
         for (GradeRule rule : gradeRules) {
@@ -119,7 +140,48 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDateTime start, LocalDateTime end) {
+    public List<Grade> getGradesByGroupIdAndDateBetween(Long groupId, LocalDate start, LocalDate end) {
         return gradeRepository.findGradesByGroupAndDate(groupId, start, end);
+    }
+
+    @Override
+    public double getAverage(Long studentId, Long subjectId) {
+        return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    public double getAverage(String login, Long subjectId) {
+        Long studentId = studentRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Student with login - " + login + " not found")).getId();
+        return gradeRepository.findAllByStudentIdAndSubjectId(studentId, subjectId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    public double getAverage(Long teacherId, Long subjectId, Long groupId) {
+        return gradeRepository.findAllByTeacherIdAndSubjectIdAndStudentGroupId(teacherId, subjectId, groupId)
+                .stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
+
+    @Override
+    public long getGradesCount(Long subjectId, Long groupId) {
+        return gradeRepository.countBySubjectIdAndStudentGroupId(subjectId, groupId);
+    }
+
+    @Override
+    public Map<Integer, Long> getGradeDistribution(Long subjectId, Long groupId) {
+        List<Grade> grades = getGradesBySubjectAndGroup(subjectId, groupId);
+        return grades.stream()
+                .collect(Collectors.groupingBy(Grade::getValue, Collectors.counting()));
     }
 }

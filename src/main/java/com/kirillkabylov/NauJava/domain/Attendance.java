@@ -22,12 +22,21 @@ public class Attendance {
     @Column(nullable = false)
     private AttendanceStatus status;
 
-    public Attendance(){}
+    public Attendance() {
+    }
 
-    public Attendance(AttendanceStatus status, Lesson lesson, Student student) {
+    public Attendance(Lesson lesson, Student student, AttendanceStatus status) {
         this.status = status;
         this.lesson = lesson;
         this.student = student;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public AttendanceStatus getStatus() {

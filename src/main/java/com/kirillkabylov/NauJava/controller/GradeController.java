@@ -1,25 +1,24 @@
 package com.kirillkabylov.NauJava.controller;
 
+import com.kirillkabylov.NauJava.config.GradeProperties;
 import com.kirillkabylov.NauJava.domain.Grade;
 import com.kirillkabylov.NauJava.domain.Student;
 import com.kirillkabylov.NauJava.domain.Teacher;
 import com.kirillkabylov.NauJava.dto.GradeCreateRequest;
+import com.kirillkabylov.NauJava.dto.GradeDistributionDto;
 import com.kirillkabylov.NauJava.dto.GradeDto;
 import com.kirillkabylov.NauJava.dto.StudentGradesDto;
 import com.kirillkabylov.NauJava.services.GradeService;
-import com.kirillkabylov.NauJava.services.StudentService;
 import com.kirillkabylov.NauJava.services.TeacherService;
+import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,25 +28,34 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/grade")
+@PreAuthorize("hasRole('TEACHER') or hasRole('STUDENT') or hasRole('ADMIN')")
 public class GradeController {
     private final GradeService gradeService;
-    private final StudentService studentService;
     private final TeacherService teacherService;
+    private final UserService userService;
+    private final GradeProperties gradeProperties;
 
     @Autowired
-    public GradeController(GradeService gradeService, StudentService studentService, TeacherService teacherService) {
+    public GradeController(GradeService gradeService, TeacherService teacherService, UserService userService, GradeProperties gradeProperties) {
         this.gradeService = gradeService;
-        this.studentService = studentService;
         this.teacherService = teacherService;
+        this.userService = userService;
+        this.gradeProperties = gradeProperties;
     }
 
+    /**
+     * Получить оценки группы за определенную дату
+     *
+     * @param groupId id группы
+     * @param month   год и месяц
+     */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @GetMapping("/group-month")
     public List<StudentGradesDto> getGradesByGroupAndMonth(
             @RequestParam Long groupId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
-        LocalDateTime start = month.atDay(1).atStartOfDay();
-        LocalDateTime end = month.atEndOfMonth().atTime(23, 59, 59);
+        LocalDate start = month.atDay(1);
+        LocalDate end = month.atEndOfMonth();
 
         List<Grade> grades = gradeService.getGradesByGroupIdAndDateBetween(groupId, start, end);
 
@@ -68,6 +76,13 @@ public class GradeController {
         return result;
     }
 
+    /**
+     * Получить оценки
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     * @param user      пользователь
+     */
     @GetMapping
     public List<GradeDto> getGradesForStudentOrTeacher(
             @RequestParam(required = false) Long subjectId,
@@ -98,27 +113,84 @@ public class GradeController {
                         g.getStudent().getFullName(),
                         g.getTeacher().getFullName(),
                         g.getValue(),
-                        g.getDate().toLocalDate().atTime(LocalTime.now())
+                        g.getDate()
                 ))
                 .toList();
     }
 
+    /**
+     * Создать оценку
+     *
+     * @param request
+     */
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @PostMapping("/create")
-    public Grade createGrade(@RequestBody GradeCreateRequest request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String login = auth.getName();
-        if (login == null) {
-            throw new RuntimeException("Not authorized");
-        }
-        Teacher teacher = teacherService.getByLogin(login);
-
+    public Grade createGrade(@AuthenticationPrincipal UserDetails user, @RequestBody GradeCreateRequest request) {
+        Teacher teacher = teacherService.getByLogin(user.getUsername());
         return gradeService.createGrade(
                 request.studentId(),
                 request.value(),
                 request.subjectId(),
                 teacher.getId(),
-                request.date().atTime(0, 0)
+                request.date()
         );
     }
 
+    /**
+     * Среднее арифметическое оценок пользователя
+     *
+     * @param user      пользователь
+     * @param subjectId id предмета
+     * @return
+     */
+    @GetMapping("student/average")
+    public double getAverageForStudent(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId) {
+        Long userId = userService.getByLogin(user.getUsername()).getId();
+        return gradeService.getAverage(userId, subjectId);
+    }
+
+    /**
+     * Средняя оценка по предмету в группе
+     *
+     * @param user      пользователь (учитель)
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    @GetMapping("teacher/average")
+    public double getAverageForTeacher(@AuthenticationPrincipal UserDetails user, @RequestParam Long subjectId, @RequestParam Long groupId) {
+        Long userId = userService.getByLogin(user.getUsername()).getId();
+        return gradeService.getAverage(userId, subjectId, groupId);
+    }
+
+    /**
+     * Получить количество оценок по предмету у группы
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    @GetMapping("subject/count")
+    public long getCountGrades(@RequestParam Long subjectId, @RequestParam Long groupId) {
+        return gradeService.getGradesCount(subjectId, groupId);
+    }
+
+    /**
+     * Получить распределение по оценкам по предмету у группы
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     */
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    @GetMapping("subject/distribution")
+    public List<GradeDistributionDto> getDistribution(@RequestParam Long subjectId, @RequestParam Long groupId) {
+        Map<Integer, Long> counts = gradeService.getGradeDistribution(subjectId, groupId);
+
+        List<GradeDistributionDto> distribution = new ArrayList<>();
+        for (int i = gradeProperties.getMinScore(); i <= gradeProperties.getMaxScore(); i++) {
+            distribution.add(new GradeDistributionDto(i, counts.getOrDefault(i, 0L)));
+        }
+
+        return distribution;
+    }
 }

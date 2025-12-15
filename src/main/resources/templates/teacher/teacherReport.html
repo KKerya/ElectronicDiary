@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчёт преподавателя</title>
+    <link href="/css/teacherReport.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h1>Отчёт по предмету</h1>
+
+    <div class="selectors">
+        <select id="subjectSelect">
+            <option value="">-- Предмет --</option>
+            <option th:each="s : ${subjects}"
+                    th:text="${s.name}"
+                    th:value="${s.id}">
+            </option>
+        </select>
+
+        <select id="groupSelect">
+            <option value="">-- Группа --</option>
+            <option th:each="g : ${groups}"
+                    th:text="${g.name}"
+                    th:value="${g.id}">
+            </option>
+        </select>
+
+        <button id="loadBtn">Сформировать</button>
+        <button id="homeBtn" onclick="window.location.href='/'">На главную</button>
+    </div>
+
+    <div class="result">
+        <p>Средняя оценка: <span id="average">—</span></p>
+        <p>Общее количество оценок: <span id="totalCount">—</span></p>
+
+        <table id="distributionTable">
+            <thead>
+            <tr>
+                <th>Оценка</th>
+                <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/teacherReport.js"></script>
+</body>
+</html>

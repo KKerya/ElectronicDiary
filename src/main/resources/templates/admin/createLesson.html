@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать урок</title>
+    <link rel="stylesheet" th:href="@{/css/adminPage.css}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Создание урока</h1>
+
+    <form id="lessonForm">
+
+        <label for="groupSelect">Группа:</label>
+        <select id="groupSelect" required>
+            <option value="">-- Выберите группу --</option>
+            <option th:each="g : ${groups}"
+                    th:text="${g.name}"
+                    th:value="${g.id}">
+            </option>
+        </select>
+
+        <label for="subjectSelect">Предмет:</label>
+        <select id="subjectSelect" required>
+            <option value="">-- Выберите предмет --</option>
+            <option th:each="s : ${subjects}"
+                    th:text="${s.name}"
+                    th:value="${s.id}">
+            </option>
+        </select>
+
+        <label for="teacherSelect">Учитель:</label>
+        <select id="teacherSelect" required>
+            <option value="">-- Выберите учителя --</option>
+            <option th:each="t : ${teachers}"
+                    th:text="${t.fullName}"
+                    th:value="${t.id}">
+            </option>
+        </select>
+
+        <label for="startTime">Дата и время:</label>
+        <input id="startTime" required type="datetime-local">
+
+        <label class="checkbox">
+            <input id="wholeYear" type="checkbox">
+            Поставить на весь учебный год (34 недели)
+        </label>
+
+        <button id="createBtn" type="submit">Создать урок</button>
+
+        <p class="message" id="result"></p>
+
+    </form>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script th:src="@{/js/createLesson.js}"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои посещения</title>
+    <link href="/css/attendanceCreate.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Мои посещения</h1>
+
+    <label for="subjectSelect">Выберите предмет:</label>
+    <select id="subjectSelect">
+        <option value="">-- Выберите предмет --</option>
+        <th:block th:each="subject : ${subjects}">
+            <option th:text="${subject.name}" th:value="${subject.id}"></option>
+        </th:block>
+    </select>
+
+    <button id="loadAttendanceBtn">Сформировать таблицу</button>
+
+    <div id="message" style="margin-top: 15px; font-weight: bold;"></div>
+
+    <table id="attendanceTable">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script src="/js/attendance.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "tbl_groups")
 public class Group {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column
@@ -22,7 +22,7 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Student> students = new ArrayList<>();
 
-    public Group(){
+    public Group() {
     }
 
     public Group(String name) {
@@ -42,7 +42,11 @@ public class Group {
         return name;
     }
 
-    public Teacher teacher(){
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Teacher teacher() {
         return teacher;
     }
 
@@ -54,11 +58,7 @@ public class Group {
         this.students = students;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setTeacher(Teacher teacher){
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 

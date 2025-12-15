@@ -1,8 +1,8 @@
 package com.kirillkabylov.NauJava.services;
 
-import com.kirillkabylov.NauJava.Exceptions.UserNotFoundException;
 import com.kirillkabylov.NauJava.database.AdminRepository;
 import com.kirillkabylov.NauJava.domain.Admin;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import java.util.Optional;
 /**
  * Реализация сервиса для управления учетными записями администраторов.
  * Сервис предоставляет операции для создания и удаления администраторов,
- *  взаимодействуя с {@link AdminRepository} для выполнения операций с базой данных.
+ * взаимодействуя с {@link AdminRepository} для выполнения операций с базой данных.
  */
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
@@ -27,7 +27,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void createAdmin(String login, String fullName, String password) {
-        if (adminRepository.findByLogin(login).isPresent()){
+        if (adminRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("Админ с таким логином уже существует");
         }
         adminRepository.save(new Admin(login, fullName, passwordEncoder.encode(password)));
@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
         if (admin.isPresent()) {
             adminRepository.delete(admin.get());
         } else {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException("Admin with id - " + id + " not found");
         }
     }
 }

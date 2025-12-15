@@ -18,11 +18,16 @@ public class HomeController {
         this.userService = userService;
     }
 
+    /**
+     * Главное меню
+     *
+     * @param model
+     * @param userDetails пользователь
+     */
     @GetMapping("/home")
     public String homePage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
-
-        UserEntity user = userService.findByLogin(username);
+        UserEntity user = userService.getByLogin(username);
 
         boolean isAdmin = userDetails.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -33,7 +38,7 @@ public class HomeController {
         boolean isStudent = userDetails.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
 
-        model.addAttribute("username", username);
+        model.addAttribute("username", user.getFullName());
         model.addAttribute("isTeacher", isTeacher);
         model.addAttribute("isStudent", isStudent);
         model.addAttribute("isAdmin", isAdmin);

@@ -1,7 +1,6 @@
 package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,11 +13,13 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String groupName;
+    @ManyToOne
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private Group group;
 
-    @Column
-    private String subject;
+    @ManyToOne
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    private Subject subject;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
@@ -27,20 +28,29 @@ public class Lesson {
     @Column
     private LocalDateTime startTime;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Homework> homeworkList = new ArrayList<>();
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Homework homework;
 
-    @Value("${lesson.max-duration:45}")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attendance> attendances = new ArrayList<>();
+
     private int durationMinutes;
 
     public Lesson() {
+    }
+
+    public Lesson(Group group, Subject subject, Teacher teacher, LocalDateTime startTime) {
+        this.group = group;
+        this.subject = subject;
+        this.teacher = teacher;
+        this.startTime = startTime;
     }
 
     @Override
     public String toString() {
         return "Lesson{" +
                 "id=" + id +
-                ", groupName='" + groupName + '\'' +
+                ", groupName='" + group.getName() + '\'' +
                 ", subject='" + subject + '\'' +
                 ", teacher=" + teacher +
                 ", startTime=" + startTime +
@@ -48,63 +58,64 @@ public class Lesson {
                 '}';
     }
 
-    public Lesson(String groupName, String subject, Teacher teacher, LocalDateTime startTime) {
-        this.groupName = groupName;
-        this.subject = subject;
-        this.teacher = teacher;
-        this.startTime = startTime;
-    }
-
-    public void addHomework(Homework homework) {
-        homeworkList.add(homework);
-        homework.setLesson(this);
-    }
-
-    public void removeHomework(Homework homework) {
-        homeworkList.remove(homework);
-        homework.setLesson(null);
-    }
-
 
     public Long getId() {
         return id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public Group getGroup() {
+        return group;
     }
 
-    public String getSubject() {
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Subject getSubject() {
         return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public Teacher getTeacher() {
         return teacher;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public int getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public List<Homework> getHomeworkList() { return homeworkList; }
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public Homework getHomework() {
+        return homework;
+    }
+
+    public void setHomework(Homework homework) {
+        this.homework = homework;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
 }

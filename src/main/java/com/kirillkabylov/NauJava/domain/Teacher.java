@@ -2,13 +2,19 @@ package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("TEACHER")
 public class Teacher extends UserEntity {
-    @OneToMany(cascade = {CascadeType.MERGE})
-    private List<Subject> subjects;
+    @ManyToMany
+    @JoinTable(
+            name = "subject_teacher",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private List<Subject> subjects = new ArrayList<>();
 
     public Teacher() {
     }
@@ -19,7 +25,7 @@ public class Teacher extends UserEntity {
 
     public Teacher(String login, String fullName, String password, List<Subject> subjects) {
         super(login, fullName, password);
-        this.subjects = subjects;
+        this.subjects = subjects == null ? new ArrayList<>() : new ArrayList<>(subjects);
     }
 
     public List<Subject> getSubjects() {

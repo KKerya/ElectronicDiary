@@ -2,7 +2,7 @@ package com.kirillkabylov.NauJava.domain;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tbl_grades")
@@ -27,12 +27,12 @@ public class Grade {
     private Teacher teacher;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     public Grade() {
     }
 
-    public Grade(int value, Student student, Subject subject, Teacher teacher, LocalDateTime date) {
+    public Grade(int value, Student student, Subject subject, Teacher teacher, LocalDate date) {
         this.value = value;
         this.student = student;
         this.subject = subject;
@@ -72,10 +72,13 @@ public class Grade {
         this.student = student;
     }
 
-    public Subject getSubject() { return subject;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubject(Subject subject) { this.subject = subject;}
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 
     public Teacher getTeacher() {
         return teacher;
@@ -85,11 +88,11 @@ public class Grade {
         this.teacher = teacher;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

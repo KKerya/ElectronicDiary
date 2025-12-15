@@ -13,7 +13,7 @@
 <p th:if="${error}" th:text="${error}"></p>
 
 <form method="get" th:action="@{/report/view}">
-    <input type="hidden" name="id" th:value="${reportId}">
+    <input name="id" th:value="${reportId}" type="hidden">
     <button type="submit">Обновить</button>
 </form>
 

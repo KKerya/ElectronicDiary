@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать студента</title>
+    <link href="/css/studentCreate.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Создать студента</h1>
+
+    <div class="form-group">
+        <label for="login">Логин:</label>
+        <input id="login" required type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="group">Группа:</label>
+        <select id="group" required>
+            <option value="">-- Выберите группу --</option>
+            <option th:each="group : ${groups}"
+                    th:text="${group.name}"
+                    th:value="${group.id}"></option>
+        </select>
+    </div>
+
+    <button id="createBtn">Создать студента</button>
+
+    <div id="message"></div>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script src="/js/studentCreate.js"></script>
+</body>
+</html>

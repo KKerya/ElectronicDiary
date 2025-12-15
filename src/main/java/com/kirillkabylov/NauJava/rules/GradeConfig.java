@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- *
  * Конфигурационный класс Spring для регистрации правил проверки оценок.
  * Содержит настройки допустимого диапазона оценок и создает список
  * всех правил валидации, применяемых к объектам {@link Grade}

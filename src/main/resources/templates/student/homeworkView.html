@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашние задания</title>
+    <link href="/css/homeworkView.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Домашние задания</h1>
+
+    <div class="form-group">
+        <label for="subject">Предмет:</label>
+        <select id="subject" required>
+            <option value="">-- Выберите предмет --</option>
+            <option th:each="subject : ${subjects}"
+                    th:text="${subject.name}"
+                    th:value="${subject.id}"></option>
+        </select>
+    </div>
+
+    <div id="homeworkList">
+        <p>Выберите предмет, чтобы увидеть домашние задания.</p>
+    </div>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script src="/js/homeworkView.js"></script>
+</body>
+</html>

@@ -22,26 +22,26 @@ public class LoginLogoutSeleniumTest {
     int port;
 
     @BeforeAll
-    static void setUp(){
+    static void setUp() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
-    void setupTest(){
+    void setupTest() {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
     @Test
-    void loginAndLogoutTest(){
+    void loginAndLogoutTest() {
         driver.get("http://localhost:" + port + "/login");
 
         WebElement usernameField = wait.until(
@@ -59,9 +59,9 @@ public class LoginLogoutSeleniumTest {
         loginButton.click();
 
         WebElement nameLabel = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("userFullNameLabel"))
+                ExpectedConditions.visibilityOfElementLocated(By.tagName("h1"))
         );
-        Assertions.assertEquals("Alica Alisovna", nameLabel.getText());
+        Assertions.assertEquals("Добро пожаловать, Alica Alisovna!", nameLabel.getText());
 
         driver.get("http://localhost:" + port + "/logout");
         WebElement logoutButton = wait.until(

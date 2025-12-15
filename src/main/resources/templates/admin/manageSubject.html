@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Управление предметами</title>
+    <link rel="stylesheet" th:href="@{/css/adminPage.css}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Создать новый предмет</h1>
+    <form id="subjectForm">
+        <label for="subjectName">Название предмета:</label>
+        <input id="subjectName" name="subjectName" required type="text">
+        <button type="submit">Создать</button>
+    </form>
+    <p id="subjectMessage"></p>
+
+    <hr>
+
+    <h1>Назначить учителя на предмет</h1>
+    <form id="teacherForm">
+        <label for="teacherSelect">Выберите учителя:</label>
+        <select id="teacherSelect" required>
+            <option value="">-- Выберите учителя --</option>
+            <th:block th:each="teacher : ${teachers}">
+                <option th:text="${teacher.fullName}" th:value="${teacher.id}"></option>
+            </th:block>
+        </select>
+
+        <label for="subjectSelect">Выберите предмет:</label>
+        <select id="subjectSelect" required>
+            <option value="">-- Выберите предмет --</option>
+            <th:block th:each="subject : ${subjects}">
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
+            </th:block>
+        </select>
+
+        <button type="submit">Назначить учителя</button>
+    </form>
+    <p id="teacherMessage"></p>
+
+    <h1>Удалить предмет у учителя</h1>
+    <form id="removeForm">
+        <label for="teacherSelectRemove">Выберите учителя:</label>
+        <select id="teacherSelectRemove" required>
+            <option value="">-- Выберите учителя --</option>
+            <th:block th:each="teacher : ${teachers}">
+                <option th:text="${teacher.fullName}" th:value="${teacher.id}"></option>
+            </th:block>
+        </select>
+
+        <label for="subjectSelectRemove">Выберите предмет:</label>
+        <select id="subjectSelectRemove" required>
+            <option value="">-- Выберите предмет --</option>
+            <th:block th:each="subject : ${subjects}">
+                <option th:text="${subject.name}" th:value="${subject.id}"></option>
+            </th:block>
+        </select>
+
+        <button class="remove-btn" type="submit">Удалить предмет</button>
+    </form>
+    <p id="removeMessage"></p>
+
+    <a class="main-menu-btn" href="/">Главное меню</a>
+</div>
+
+<script th:src="@{/js/manageSubject.js}"></script>
+</body>
+</html>

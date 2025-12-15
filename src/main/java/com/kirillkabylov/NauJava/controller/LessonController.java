@@ -1,27 +1,65 @@
 package com.kirillkabylov.NauJava.controller;
 
-import com.kirillkabylov.NauJava.database.LessonRepository;
-import com.kirillkabylov.NauJava.domain.Lesson;
+import com.kirillkabylov.NauJava.dto.CreateLessonRequest;
+import com.kirillkabylov.NauJava.dto.LessonDto;
+import com.kirillkabylov.NauJava.services.LessonService;
+import com.kirillkabylov.NauJava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("custom/lessons")
+@RequestMapping("api/lesson")
 public class LessonController {
-    private final LessonRepository lessonRepository;
+    private final LessonService lessonService;
+    private final UserService userService;
 
     @Autowired
-    public LessonController(LessonRepository lessonRepository) {
-        this.lessonRepository = lessonRepository;
+    public LessonController(LessonService lessonService, UserService userService) {
+        this.lessonService = lessonService;
+        this.userService = userService;
     }
 
-    @GetMapping
-    public List<Lesson> getLessonsByTeacherName(@RequestParam String name) {
-        return lessonRepository.findLessonByTeacherName(name);
+    /**
+     * Создать занятие
+     *
+     * @param request
+     */
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createLesson(@RequestBody CreateLessonRequest request) {
+        lessonService.createLesson(request.groupId(), request.subjectId(), request.teacherId(), request.startTime(), request.wholeYear());
+        return ResponseEntity.ok("OK");
+    }
+
+    /**
+     * Получить занятие
+     *
+     * @param subjectId id предмета
+     * @param groupId   id группы
+     * @param user      пользователь
+     */
+    @GetMapping("/api/lessons")
+    @PreAuthorize("hasRole('TEACHER')")
+    public List<LessonDto> getLessons(
+            @RequestParam Long subjectId,
+            @RequestParam Long groupId,
+            @AuthenticationPrincipal UserDetails user) {
+        Long teacherId = userService.getByLogin(user.getUsername()).getId();
+        return lessonService.getLessonForTeacher(teacherId, subjectId, groupId)
+                .stream()
+                .map(lesson -> new LessonDto(
+                        lesson.getId(),
+                        lesson.getStartTime(),
+                        lesson.getSubject().getId(),
+                        lesson.getGroup().getId(),
+                        lesson.getDurationMinutes()
+                ))
+                .toList();
     }
 }

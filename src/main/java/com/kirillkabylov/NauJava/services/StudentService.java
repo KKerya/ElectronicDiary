@@ -2,44 +2,62 @@ package com.kirillkabylov.NauJava.services;
 
 import com.kirillkabylov.NauJava.domain.Group;
 import com.kirillkabylov.NauJava.domain.Student;
+import com.kirillkabylov.NauJava.domain.UserEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Сервис для управления студентами.
+ * Содержит методы для создания, обновления, удаления и получения студентов.
+ */
 public interface StudentService {
     /**
      * Удаляет студента и все его оценки
      * Transaction операция
+     *
      * @param student студент
      */
     @Transactional
     void deleteStudent(Student student);
 
+    @Transactional
+    void promoteToStudent(UserEntity user, Long groupId);
+
+    @Transactional
+    Student createStudentWithoutEncodingPassword(String login, String fullName, String password, Long groupId);
+
     /**
      * Создать нового студента
-     * @param login     логин
-     * @param fullName  полное имя (ФИО)
-     * @param password  пароль
-     * @param group номер класса
+     *
+     * @param login    логин
+     * @param fullName полное имя (ФИО)
+     * @param password пароль
+     * @param group    номер класса
      */
-    void createStudent(String login, String fullName, String password, Group group);
+    Student createStudent(String login, String fullName, String password, Group group);
 
     /**
      * Находит студента по id
+     *
      * @param id id
      */
-    Student findById(Long id);
+    Student getById(Long id);
 
     /**
      * Обновляет поле студента
+     *
      * @param id       id Студента
      * @param field    поле для обновление
      * @param newValue новое значение поля
      */
     void updateStudent(Long id, String field, Object newValue);
 
-    List<Student> getStudentByGroupId(Long groupId);
+    List<Student> getStudentsByGroupId(Long groupId);
 
     List<Student> getAllStudents();
+
+    Student getByLogin(String login);
+
+    List<Student> getStudentsByLesson(Long lessonId);
 }

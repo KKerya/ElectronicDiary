@@ -7,4 +7,5 @@ public record GradeCreateRequest(
         Long subjectId,
         int value,
         LocalDate date
-) {}
+) {
+}

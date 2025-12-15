@@ -67,7 +67,7 @@ public class ReportServiceImpl implements ReportService {
                 final long[] timeStudents = new long[1];
                 Thread studentThread = new Thread(() -> {
                     long start = System.currentTimeMillis();
-                    studentsList[0] = (List<Student>) studentRepository.findAll();
+                    studentsList[0] = studentRepository.findAll();
                     timeStudents[0] = System.currentTimeMillis() - start;
                 });
 
@@ -125,7 +125,7 @@ public class ReportServiceImpl implements ReportService {
         long timeStudents = Long.parseLong(parts[3].split(":")[1]);
         long totalTime = Long.parseLong(parts[4].split(":")[1]);
 
-        List<Student> students = (List<Student>) studentRepository.findAll();
+        List<Student> students = studentRepository.findAll();
         return new ReportDto(userCount, students, timeUsers, timeStudents, totalTime);
     }
 }
